@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,26 +12,19 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:id="@+id/Principal"
     >
-    <TextView
-        android:layout_width="0dp"
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="15sp"
-        android:text="Mi UTN"
-        android:gravity="center"
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/iconprofile"
-        android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
-        />
-</LinearLayout>
-
+        android:layout_marginTop="5dp"
+        android:hint="Busca Apuntes"
+        android:textAlignment="center"
+        app:menu="@menu/menu_search_bar"
+        android:textAppearance="@style/Widget.Material3.SearchBar"
+        app:layout_anchor="@id/DivPrin" />
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,21 +34,15 @@
         android:id="@+id/DivPrin"
         android:layout_marginTop="5px"
         />
-
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragmentPrincipalx"/>
+</LinearLayout>
     <androidx.constraintlayout.widget.Barrier
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="left" />
-
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:hint="Busca Apuntes"
-        android:textAlignment="center"
-        android:textAppearance="@style/Widget.Material3.SearchBar"
-        app:layout_anchor="@id/DivPrin" />
 
     <LinearLayout
         android:layout_width="match_parent"

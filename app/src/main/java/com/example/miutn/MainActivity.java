@@ -1,5 +1,7 @@
 package com.example.miutn;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -140,6 +142,11 @@ public void linkElement(){
     RecyclerMismateriasHoy.setLayoutManager(new LinearLayoutManager(this));
     sideSheetContainer=findViewById(R.id.sideSheetContainer);
     extendedFloatingActionButton=findViewById(R.id.fab);
+    //FragmentManager fragmentManager = getFragmentManager();
+    //FragmentTransaction transaction = fragmentManager.beginTransaction();
+    principalFragment fragment= new principalFragment();
+    getSupportFragmentManager().beginTransaction().add(R.id.fragmentPrincipalx,fragment).commit();
+//    transaction.add(R.id.fragmentPrincipal, fragment);
 //TODO Terminar esto que es para añadir mas materias
     //Tengo que  Mostrar todas las materias posibles horarios y sedes
 
