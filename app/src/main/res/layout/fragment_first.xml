@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    >
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:hint="Busca Apuntes"
+        android:textAlignment="center"
+        android:textAppearance="@style/Widget.Material3.SearchBar"
+        app:layout_anchor="@id/DivPrin" />
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/Principal"
+        app:layout_anchorGravity="bottom"
+        android:layout_gravity="top"
+        android:id="@+id/DivPrin"
+        android:layout_marginTop="5px"
+        />
+    <LinearLayout
+        android:layout_marginTop="5px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_anchor="@id/search_bar"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus Apuntes"
+            android:layout_gravity="center"
+            />
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/Principal"
+            android:layout_gravity="top"
+            android:layout_marginTop="5px"
+            />
+    </LinearLayout>
+
+</LinearLayout>

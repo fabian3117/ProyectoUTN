@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="end"
+    style="@style/Widget.Material3.SideSheet.Modal"
+    app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10px"
+    android:gravity="center">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:textAlignment="center"
+    >
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:id="@+id/nameClass"
+        app:chipIcon="@drawable/clased"
+        android:layout_height="wrap_content"
+        android:layout_margin="10px"
+        android:text="Nombre de clase"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/classCampus"
+        android:layout_margin="10px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sede de cursada"/>
+    <com.google.android.material.chip.Chip
+        android:id="@+id/sedechip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:chipIcon="@drawable/house"
+        android:text="Sede"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_margin="10px"
+        android:layout_height="wrap_content"
+        android:text="Horario"
+        android:id="@+id/classHours"
+        />
+</LinearLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_margin="10px"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:contentDescription="Aca tendria que ir el Temario de la materia"
+        android:text="Temario"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/RecyclerTemario"
+        />
+
+</LinearLayout>
