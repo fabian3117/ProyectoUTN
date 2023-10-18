@@ -13,8 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/Principal"
-    >
+    android:id="@+id/Principal">
     <com.google.android.material.search.SearchBar
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
@@ -32,8 +31,7 @@
         app:layout_anchorGravity="bottom"
         android:layout_gravity="top"
         android:id="@+id/DivPrin"
-        android:layout_marginTop="5px"
-        />
+        android:layout_marginTop="5px" />
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,57 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="left" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="130dp"
-        app:layout_anchor="@id/search_bar"
-        >
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Tus materias hoy"
-    android:layout_gravity="center"
-    />
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/Principal"
-            app:layout_anchorGravity="bottom"
-            android:layout_gravity="top"
-            app:dividerInsetStart="16dp"
-            app:dividerInsetEnd="16dp"
-            android:layout_marginTop="5px"
-            />
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/RecyclerMismateriasHoy"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tus materias"
-            android:layout_gravity="center"
-            />
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/Principal"
-            app:layout_anchorGravity="bottom"
-            android:layout_gravity="top"
-            app:dividerInsetStart="16dp"
-            app:dividerInsetEnd="16dp"
-            android:layout_marginTop="5px"
-            />
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/RecyclerMismaterias"
-            />
-    </LinearLayout>
     <FrameLayout
         android:id="@+id/sideSheetContainer"
         android:layout_width="match_parent"
@@ -106,8 +53,7 @@
         android:visibility="gone">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,24 +71,22 @@
     </FrameLayout>
     <com.google.android.material.tabs.TabLayout
         android:layout_height="wrap_content"
+        android:id="@+id/tabSelector"
         android:layout_width="match_parent"
-        android:layout_gravity="bottom|center"
-        >
+        android:layout_gravity="bottom|center">
     <com.google.android.material.tabs.TabItem
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Principal"
-        />
+        android:text="Principal" />
     <com.google.android.material.tabs.TabItem
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mis materias"
-        />
+
+        android:text="Mis materias" />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Perfil"
-            />
+            android:text="Perfil" />
 </com.google.android.material.tabs.TabLayout>
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
@@ -154,5 +98,4 @@
         android:contentDescription="Añadir materia"
         android:text="Añadir materia"
         app:icon="@drawable/add_icon" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

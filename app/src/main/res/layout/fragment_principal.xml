@@ -3,12 +3,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".principalFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+<androidx.constraintlayout.widget.Barrier
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+app:barrierDirection="left" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="10px"
+    app:layout_anchor="@id/search_bar"
+    >
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Tus materias hoy"
+    android:layout_gravity="center"
+    />
+<com.google.android.material.divider.MaterialDivider
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_anchor="@id/Principal"
+    app:layout_anchorGravity="bottom"
+    android:layout_gravity="top"
+    app:dividerInsetStart="16dp"
+    app:dividerInsetEnd="16dp"
+    android:layout_marginTop="5px"
+    />
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/RecyclerMismateriasHoy"
+    />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Tus materias"
+    android:layout_gravity="center"
+    />
+<com.google.android.material.divider.MaterialDivider
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_anchor="@id/Principal"
+    app:layout_anchorGravity="bottom"
+    android:layout_gravity="top"
+    app:dividerInsetStart="16dp"
+    app:dividerInsetEnd="16dp"
+    android:layout_marginTop="5px"
+    />
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/RecyclerMismaterias"
+    />
+</LinearLayout>
 
 </FrameLayout>

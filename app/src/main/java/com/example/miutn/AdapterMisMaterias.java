@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.miutn.network.models.MateriasCursando;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import org.w3c.dom.Text;
 
@@ -76,12 +78,13 @@ private int position;
                     LayoutInflater inflater=(LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View view=inflater.inflate(R.layout.tryshide,null);
                     Chip textView=view.findViewById(R.id.nameClass);
+
                     textView.setText(materiaName.getText());
                     TextView textView1=view.findViewById(R.id.classCampus);
                     textView1.setText(Materias.get(position).getDia());
                     Chip sede=view.findViewById(R.id.sedechip);
                     sede.setText(Materias.get(position).getSede());
-                    TextView classHours=view.findViewById(R.id.classHours);
+                    Chip classHours=view.findViewById(R.id.classHours);
                     classHours.setText(Materias.get(position).getHorario());
                     RecyclerView recyclerViewTemario=view.findViewById(R.id.RecyclerTemario);
                     adapterTemario adapterTemario=new adapterTemario(Materias.get(position).getMateria().getProgramaAnalitico());

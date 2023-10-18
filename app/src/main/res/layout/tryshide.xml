@@ -14,8 +14,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:textAlignment="center"
-    >
+    android:textAlignment="center">
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:id="@+id/nameClass"
@@ -23,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10px"
         android:text="Nombre de clase"/>
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.chip.Chip
         android:id="@+id/classCampus"
         android:layout_margin="10px"
         android:layout_width="wrap_content"
@@ -35,7 +34,7 @@
         android:layout_height="wrap_content"
         app:chipIcon="@drawable/house"
         android:text="Sede"/>
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_margin="10px"
         android:layout_height="wrap_content"

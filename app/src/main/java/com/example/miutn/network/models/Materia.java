@@ -19,6 +19,15 @@ public class Materia {
     private ArrayList<String> materiasAprobadasFinal;
     private ArrayList<Temario> programaAnalitico;
 
+    public Materia() {
+        programaAnalitico=new ArrayList<>();
+        materiasAprobadas=new ArrayList<>();
+        materiasCursadas=new ArrayList<>();
+        materiasAprobadasFinal=new ArrayList<>();
+        materiasCursadasFinal=new ArrayList<>();
+        carreras=new ArrayList<>();
+    }
+
     public ArrayList<Temario> getProgramaAnalitico() {
         return programaAnalitico;
     }
