@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
+import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
 
 import java.text.SimpleDateFormat;
@@ -38,41 +39,25 @@ public class principalFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView RecyclerMismaterias;
     private RecyclerView RecyclerMismateriasHoy;
+    private RecyclerView RecyclerProximasFechas;
     AdapterMisMaterias adapterMisMaterias=new AdapterMisMaterias();
     AdapterMisMaterias adapterMisMateriasHoy=new AdapterMisMaterias();
     ArrayList<MateriasCursando> materias= new ArrayList<>();
     ArrayList<MateriasCursando> materiashoy=new ArrayList<>();
+    //AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
+    AdapterProximasFechas adapterProximasFechas;
     Retrofit retrofit = RetrofitClient.getClient();
 
     ApiService apiService = retrofit.create(ApiService.class);
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public principalFragment() {
         // Required empty public constructor
     }
-    public static principalFragment newInstance(String param1, String param2) {
-        principalFragment fragment = new principalFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("Fragment","ENTRO");
-        Bundle arg= getArguments();
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-          //  materiashoy=getArguments().getParcelable("materiasHoy");
-
-        }
         //TODO MODIFICAR
         String profileTest="FEDE";
         Call<ArrayList<MateriasCursando>> call = apiService.obtenerMaterias(profileTest);
@@ -160,6 +145,18 @@ public class principalFragment extends Fragment {
         RecyclerMismateriasHoy = v.findViewById(R.id.RecyclerMismateriasHoy);
         RecyclerMismateriasHoy.setAdapter(adapterMisMateriasHoy);
         RecyclerMismateriasHoy.setLayoutManager(new LinearLayoutManager(v.getContext()));
+        RecyclerProximasFechas=v.findViewById(R.id.RecyclerProximasFechas);
+        FechasExamenes fechasExamenes=new FechasExamenes();
+        fechasExamenes.setFecha(new Date());
+        Materia materia=new Materia();
+        materia.setNombre("TEST FINAL");
+        fechasExamenes.setMateria(materia);
+        ArrayList<FechasExamenes>fechasExamenes1=new ArrayList<>();
+        fechasExamenes1.add(fechasExamenes);
+        adapterProximasFechas=new AdapterProximasFechas(fechasExamenes1);
+        RecyclerProximasFechas.setAdapter(adapterProximasFechas);
+        RecyclerProximasFechas.setLayoutManager(new LinearLayoutManager(v.getContext()));
+
        // sideSheetContainer = v.findViewById(R.id.sideSheetContainer);
         //extendedFloatingActionButton = v.findViewById(R.id.fab);
     }

@@ -58,6 +58,29 @@ app:barrierDirection="left" />
     android:layout_height="wrap_content"
     android:id="@+id/RecyclerMismaterias"
     />
+
+    <com.google.android.material.textview.MaterialTextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Proximas fechas examen"
+    android:layout_gravity="center"
+    />
+<com.google.android.material.divider.MaterialDivider
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_anchor="@id/Principal"
+    app:layout_anchorGravity="bottom"
+    android:layout_gravity="top"
+    app:dividerInsetStart="16dp"
+    app:dividerInsetEnd="16dp"
+    android:layout_marginTop="5px"
+    />
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/RecyclerProximasFechas"
+    />
+
 </LinearLayout>
 
 </FrameLayout>

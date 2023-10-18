@@ -28,4 +28,7 @@ public class Temario {
     public void setApunte(String apunte) {
         this.apunte = apunte;
     }
+
+    public Temario() {
+    }
 }
