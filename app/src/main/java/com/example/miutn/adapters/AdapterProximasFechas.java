@@ -1,15 +1,18 @@
-package com.example.miutn;
+package com.example.miutn.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
+import com.example.miutn.network.models.FechasExamenes;
+import com.example.miutn.R;
 
 import java.util.ArrayList;
 
@@ -37,8 +40,14 @@ public class AdapterProximasFechas extends RecyclerView.Adapter<AdapterProximasF
 
     @Override
     public void onBindViewHolder(@NonNull AdapterProximasFechas.ViewHolder holder, int position) {
-    holder.proximaFechaExamenFecha.setText(fechasExamenes.get(position).getFecha().toString());
+    holder.proximaFechaExamenFecha.setText(fechasExamenes.get(position).getFecha());
     holder.proximaFechaExamenMateria.setText(fechasExamenes.get(position).getMateria().getNombre());
+    holder.cardFechaExamen.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.e("TOCO","ELEMENTO : "+fechasExamenes.get(position).getFecha());
+        }
+    });
     }
 
 
@@ -50,11 +59,13 @@ public class AdapterProximasFechas extends RecyclerView.Adapter<AdapterProximasF
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView proximaFechaExamenMateria;
         TextView proximaFechaExamenFecha;
+        CardView cardFechaExamen;
         public ViewHolder(@NonNull View itemView) {
 
             super(itemView);
             proximaFechaExamenMateria=itemView.findViewById(R.id.proximaFechaExamenMateria);
             proximaFechaExamenFecha=itemView.findViewById(R.id.proximaFechaExamenFecha);
+            cardFechaExamen=itemView.findViewById(R.id.cardFechaExamen);
         }
     }
 }

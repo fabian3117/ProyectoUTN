@@ -8,16 +8,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10px"
-    android:layout_margin="15px"
-    >
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:id="@+id/materiaName"
-    >
+    android:layout_margin="15px">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:layout_margin="15px"
+        android:background="#008000"
+        android:id="@+id/imageView"
+        android:src="@drawable/counter_1"
+        />
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/chipAnio"
 
-</TextView>
+        android:layout_margin="5px"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/materiaName"
+            android:text="TestNameMatery"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/materiaSede"
+            android:text="TestNameMatery"
+            />
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
 </LinearLayout>

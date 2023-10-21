@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ChipsProfileGrupo">
+        <item name="chipStyle">@style/ChipThin</item>
+    </style>
+
+    <style name="ChipThin">
+        <item name="android:background">@drawable/chip_background_thin</item>
+        <item name="android:textColor">#FFF</item>
+    </style>
+
+    <style name="TextosPrincipales">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+</resources>

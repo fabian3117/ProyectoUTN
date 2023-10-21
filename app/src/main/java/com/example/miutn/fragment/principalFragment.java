@@ -1,4 +1,4 @@
-package com.example.miutn;
+package com.example.miutn.fragment;
 
 import android.os.Bundle;
 
@@ -11,10 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.miutn.network.models.FechasExamenes;
+import com.example.miutn.R;
+import com.example.miutn.adapters.AdapterMisMaterias;
+import com.example.miutn.adapters.AdapterProximasFechas;
+import com.example.miutn.adapters.AdapterTemaHoy;
+import com.example.miutn.enums.Cuatrimestres;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.Temario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,11 +44,11 @@ public class principalFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView RecyclerMismaterias;
-    private RecyclerView RecyclerMismateriasHoy;
-    private RecyclerView RecyclerProximasFechas;
+    private RecyclerView RecyclerMismaterias,RecyclerMismateriasHoy,RecyclerProximasFechas,RecyclerTemasHoy;
     AdapterMisMaterias adapterMisMaterias=new AdapterMisMaterias();
     AdapterMisMaterias adapterMisMateriasHoy=new AdapterMisMaterias();
+    //AdapterTemaHoy adapterTemaHoy=new AdapterTemaHoy();
+    AdapterTemaHoy adapterTemaHoy;
     ArrayList<MateriasCursando> materias= new ArrayList<>();
     ArrayList<MateriasCursando> materiashoy=new ArrayList<>();
     //AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
@@ -85,6 +92,24 @@ public class principalFragment extends Fragment {
                 // Maneja errores de red o excepciones, por ejemplo, mostrando un mensaje de error.
                 Log.e("MIRA","FALLO SEGUNDA FORMA");
                 Log.e("MIRA",t.getMessage());
+                MateriasCursando materiasCursando=new MateriasCursando();
+                Materia materia=new Materia();
+                materia.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
+                materia.setAnio(1);
+                materia.setNombre("Informatica 1");
+                materiasCursando.setMateria(materia);
+                materiasCursando.setDia("Jueves");
+                materiasCursando.setAula("S51");
+                materiasCursando.setHorario("T2");
+                materiasCursando.setSede("Campus");
+                Temario temario=new Temario();
+                temario.setTema("Introduccion Informatica 1");
+                temario.setApunte("https://www.google.com.ar");
+                ArrayList<Temario> programaAnal=new ArrayList<>();
+                programaAnal.add(temario);
+                materia.setProgramaAnalitico(programaAnal);
+                materias.add(materiasCursando);
+                adapterMisMaterias.setData(materias);
                 // Log.e("MIRA",t.getCause().toString());
             }
         });
@@ -124,6 +149,20 @@ public class principalFragment extends Fragment {
                 // Maneja errores de red o excepciones, por ejemplo, mostrando un mensaje de error.
                 Log.e("MIRA","FALLO SEGUNDA FORMA");
                 Log.e("MIRA",t.getMessage());
+                MateriasCursando materiasCursando=new MateriasCursando();
+                materiasCursando.setHorario("T1");
+                materiasCursando.setSede("Campus");
+                materiasCursando.setAula("S55");
+                Materia materia=new Materia();
+                materia.setNombre("Fisica 1");
+                materia.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
+
+                materiasCursando.setDia("Lunes");
+                materiasCursando.setMateria(materia);
+                materiashoy.add(materiasCursando);
+                adapterMisMateriasHoy.setData(materiashoy);
+
+
                 // Log.e("MIRA",t.getCause().toString());
             }
         });
@@ -146,12 +185,26 @@ public class principalFragment extends Fragment {
         RecyclerMismateriasHoy.setAdapter(adapterMisMateriasHoy);
         RecyclerMismateriasHoy.setLayoutManager(new LinearLayoutManager(v.getContext()));
         RecyclerProximasFechas=v.findViewById(R.id.RecyclerProximasFechas);
+        RecyclerTemasHoy=v.findViewById(R.id.RecyclerTemasHoy);
+       ArrayList<Temario> temarios=new ArrayList<>();
+        for(int i=0;i<5;i++){
+            Temario temario= new Temario();
+            temario.setApunte("https://www.google.com.ar");
+            temario.setTema("Issue : "+i);
+            temarios.add(temario);
+        }
+        adapterTemaHoy=new AdapterTemaHoy(temarios);
+        RecyclerTemasHoy.setAdapter(adapterTemaHoy);
+        LinearLayoutManager linearLayout=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        RecyclerTemasHoy.setLayoutManager(linearLayout);
         FechasExamenes fechasExamenes=new FechasExamenes();
-        fechasExamenes.setFecha(new Date());
+        String testFecha="18/10/2023";
+        fechasExamenes.setFecha(testFecha);
         Materia materia=new Materia();
         materia.setNombre("TEST FINAL");
         fechasExamenes.setMateria(materia);
         ArrayList<FechasExamenes>fechasExamenes1=new ArrayList<>();
+        fechasExamenes1.add(fechasExamenes);
         fechasExamenes1.add(fechasExamenes);
         adapterProximasFechas=new AdapterProximasFechas(fechasExamenes1);
         RecyclerProximasFechas.setAdapter(adapterProximasFechas);

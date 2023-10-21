@@ -26,6 +26,7 @@ public class Materia {
         materiasAprobadasFinal=new ArrayList<>();
         materiasCursadasFinal=new ArrayList<>();
         carreras=new ArrayList<>();
+        anio=0;
     }
 
     public ArrayList<Temario> getProgramaAnalitico() {

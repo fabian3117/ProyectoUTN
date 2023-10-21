@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_avatar"
         android:title="Avatar"
-        android:icon="@drawable/profile_icon"
-        app:showAsAction="always" />
+        android:icon="@drawable/profilepic"
+        app:showAsAction="ifRoom" />
 
 </menu>

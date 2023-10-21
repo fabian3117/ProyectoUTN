@@ -11,4 +11,9 @@ public enum Carreras {
     public String getValorAsociado() {
         return valor;
     }
+
+    @Override
+    public String toString() {
+        return valor;
+    }
 }

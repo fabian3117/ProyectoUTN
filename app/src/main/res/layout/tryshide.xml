@@ -8,26 +8,38 @@
     style="@style/Widget.Material3.SideSheet.Modal"
     app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10px"
+    android:padding="100px"
     android:gravity="center">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="horizontal"
     android:textAlignment="center">
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        app:lineSpacing="10px"
+        android:foregroundGravity="center"
+        app:singleLine="true"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:id="@+id/nameClass"
         app:chipIcon="@drawable/clased"
         android:layout_height="wrap_content"
         android:layout_margin="10px"
-        android:text="Nombre de clase"/>
+        android:text="{ClassName}"/>
     <com.google.android.material.chip.Chip
         android:id="@+id/classCampus"
         android:layout_margin="10px"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sede de cursada"/>
+        app:chipIcon="@drawable/day"
+        android:text="day"/>
     <com.google.android.material.chip.Chip
         android:id="@+id/sedechip"
         android:layout_width="wrap_content"
@@ -39,18 +51,26 @@
         android:layout_margin="10px"
         android:layout_height="wrap_content"
         android:text="Horario"
+        app:chipIcon="@drawable/hours"
         android:id="@+id/classHours"
         />
+
+    </com.google.android.material.chip.ChipGroup>
+
 </LinearLayout>
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
+        android:layout_marginTop="2px"
+        android:layout_marginBottom="2px"
+        android:layout_marginVertical="5px"
         android:layout_height="wrap_content"/>
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_margin="10px"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:contentDescription="Aca tendria que ir el Temario de la materia"
+        android:textStyle="bold"
+        android:contentDescription="@string/aca_tendria_que_ir_el_temario_de_la_materia"
         android:text="Temario"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

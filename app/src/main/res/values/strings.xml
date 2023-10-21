@@ -45,4 +45,12 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="barrabusqueda">Busca apuntes</string>
+    <string name="principalTextInicio">Tus materias hoy</string>
+    <string name="principalTextSegundo">Tus materias</string>
+    <string name="principalTextProximasFechas">Proximas fechas examen</string>
+    <string name="temas_a_ver_hoy">Temas a ver hoy</string>
+    <string name="listado_de_materias_que_se_pueden_cursar">Listado de materias que se pueden cursar</string>
+    <string name="muestra_las_materias_que_puedo_cursar">Muestra las materias que puedo cursar</string>
+    <string name="aca_tendria_que_ir_el_temario_de_la_materia">Aca tendria que ir el Temario de la materia</string>
 </resources>

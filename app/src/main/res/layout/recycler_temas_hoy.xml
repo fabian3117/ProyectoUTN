@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="10px"
+    app:cardElevation="10px"
+    android:layout_margin="1dp"
+    android:layout_marginLeft="10px"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10px"
+        android:orientation="vertical">
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10px"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@drawable/download"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/nameIssueToday"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginLeft="15px"
+            android:text="{NameTeme}"/>
+    </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10px"
+            android:id="@+id/descriptionIssueToday"
+            android:text="{Description of issue}"
+            />
+        <Button
+            android:layout_margin="10px"
+            android:id="@+id/downloadIssueToday"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="10px"
+            android:text="Descargar apunte"
+
+            />
+    <Button
+        android:layout_width="match_parent"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_height="match_parent"
+        android:elevation="10px"
+        android:text="{Visto}"
+        android:id="@+id/seenIssueToday"
+        android:layout_gravity="center"
+        />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

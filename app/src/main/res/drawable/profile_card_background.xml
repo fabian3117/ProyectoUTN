@@ -1,0 +1,14 @@
+<!-- card_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#3498DB" /> <!-- Color de fondo base -->
+            <corners android:radius="4dp" /> <!-- Radio de las esquinas -->
+        </shape>
+    </item>
+    <item android:right="0dp" android:left="0dp" android:top="0dp" android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E74C3C" /> <!-- Color de fondo del porcentaje -->
+        </shape>
+    </item>
+</layer-list>

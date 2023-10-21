@@ -12,6 +12,16 @@ import lombok.Setter;
 public class Temario {
     private String tema;
     private String apunte;
+    private String description;
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getTema() {
         return tema;
@@ -30,5 +40,8 @@ public class Temario {
     }
 
     public Temario() {
+        this.tema = "tema";
+        this.apunte = "apunte";
+        this.description = "description";
     }
 }

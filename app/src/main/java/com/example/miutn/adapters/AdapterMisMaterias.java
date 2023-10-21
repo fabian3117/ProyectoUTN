@@ -1,9 +1,10 @@
-package com.example.miutn;
+package com.example.miutn.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,13 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.miutn.R;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.Temario;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.timepicker.MaterialTimePicker;
-import com.google.android.material.timepicker.TimeFormat;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -54,6 +53,8 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
     //-->   This i'm make link elemento to position of my Array <--
         holder.materiaName.setText(Materias.get(position).getMateria().getNombre()); //-->   Link my content with my element
         holder.position=position;
+        holder.materiaSede.setText(Materias.get(position).getSede());
+        holder.chipAnio.setText(String.valueOf(Materias.get(position).getMateria().getAnio()));
     }
 
     @Override
@@ -63,12 +64,18 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 private TextView materiaName;
+private TextView materiaSede;
 private LinearLayout linearLayout;
+private ImageView imageView;
+private Chip chipAnio;
 private int position;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             materiaName=itemView.findViewById(R.id.materiaName);
             linearLayout=itemView.findViewById(R.id.parentMatery);
+            materiaSede=itemView.findViewById(R.id.materiaSede);
+            imageView=itemView.findViewById(R.id.imageView);
+            chipAnio=itemView.findViewById(R.id.chipAnio);
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -87,6 +94,14 @@ private int position;
                     Chip classHours=view.findViewById(R.id.classHours);
                     classHours.setText(Materias.get(position).getHorario());
                     RecyclerView recyclerViewTemario=view.findViewById(R.id.RecyclerTemario);
+                    ArrayList<Temario>temarios=new ArrayList<>();
+                    for(int a=0;a<5;a++){
+                        Temario temario=new Temario();
+                        temario.setApunte("https://www.google.com.ar");
+                        temario.setTema("Tema" +a);
+                        temarios.add(temario);
+                    }
+                    Materias.get(position).getMateria().setProgramaAnalitico(temarios);
                     adapterTemario adapterTemario=new adapterTemario(Materias.get(position).getMateria().getProgramaAnalitico());
                     recyclerViewTemario.setAdapter(adapterTemario);
 

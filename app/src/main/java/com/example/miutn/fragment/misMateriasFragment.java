@@ -1,4 +1,4 @@
-package com.example.miutn;
+package com.example.miutn.fragment;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.miutn.R;
+import com.example.miutn.adapters.AdapterMisMaterias;
 import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
 import com.example.miutn.network.models.Temario;
@@ -47,7 +49,6 @@ public class misMateriasFragment extends Fragment {
         materia.setCuatri(1);
         materiasCursando.setSede("Campus");
         materiasCursando.setAula("S05");
-
         Temario temario=new Temario();
         temario.setApunte("https://www.google.com.ar");
         temario.setTema("APUNTE 1");

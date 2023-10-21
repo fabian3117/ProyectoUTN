@@ -4,11 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".principalFragment">
-<androidx.constraintlayout.widget.Barrier
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-app:barrierDirection="left" />
+    tools:context=".fragment.principalFragment">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,8 +15,9 @@ app:barrierDirection="left" />
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Tus materias hoy"
+    android:text="@string/principalTextInicio"
     android:layout_gravity="center"
+    android:textStyle="bold"
     />
 <com.google.android.material.divider.MaterialDivider
     android:layout_width="wrap_content"
@@ -37,10 +34,37 @@ app:barrierDirection="left" />
     android:layout_height="wrap_content"
     android:id="@+id/RecyclerMismateriasHoy"
     />
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/Principal"
+        app:layout_anchorGravity="bottom"
+        android:layout_gravity="top"
+        app:dividerInsetStart="16dp"
+        app:dividerInsetEnd="16dp"
+        android:layout_marginTop="5px"
+        />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Apuntes"
+    style="@style/TextosPrincipales"
+    />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_marginVertical="10px"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/temas_a_ver_hoy"
+        android:id="@+id/RecyclerTemasHoy"
+        android:orientation="horizontal"
+        android:scrollbars="horizontal"
+        android:padding="10px"
+        />
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Tus materias"
+    android:text="@string/principalTextSegundo"
+    android:textStyle="bold"
     android:layout_gravity="center"
     />
 <com.google.android.material.divider.MaterialDivider
@@ -58,11 +82,11 @@ app:barrierDirection="left" />
     android:layout_height="wrap_content"
     android:id="@+id/RecyclerMismaterias"
     />
-
     <com.google.android.material.textview.MaterialTextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Proximas fechas examen"
+    android:text="@string/principalTextProximasFechas"
+    android:textStyle="bold"
     android:layout_gravity="center"
     />
 <com.google.android.material.divider.MaterialDivider

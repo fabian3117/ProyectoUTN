@@ -55,4 +55,13 @@ public class MateriasCursando {
     public void setSede(String sede) {
         this.sede = sede;
     }
+
+
+    public MateriasCursando() {
+        this.materia = new Materia();
+        this.aula = "";
+        this.dia = "";
+        this.horario = "";
+        this.sede = "";
+    }
 }

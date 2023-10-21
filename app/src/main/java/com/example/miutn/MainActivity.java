@@ -2,21 +2,20 @@ package com.example.miutn;
 
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 
+import com.example.miutn.adapters.AdapterAgregaMateria;
+import com.example.miutn.adapters.AdapterMisMaterias;
 import com.example.miutn.enums.Carreras;
+import com.example.miutn.fragment.misMateriasFragment;
+import com.example.miutn.fragment.perfilFragment;
+import com.example.miutn.fragment.principalFragment;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.Materia;
-import com.example.miutn.network.models.MateriasCursando;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.sidesheet.SideSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,29 +23,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.databinding.ActivityMainBinding;
+import com.google.android.material.search.SearchBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabSelector;
     private RecyclerView RecyclerMismaterias;
     private RecyclerView RecyclerMismateriasHoy;
+    Snackbar snackbar;
+
     AdapterMisMaterias adapterMisMaterias=new AdapterMisMaterias();
     AdapterMisMaterias adapterMisMateriasHoy=new AdapterMisMaterias();
     FrameLayout sideSheetContainer;
     Retrofit retrofit = RetrofitClient.getClient();
     ExtendedFloatingActionButton extendedFloatingActionButton;
     ApiService apiService = retrofit.create(ApiService.class);
+    BottomSheetDialog sideSheetDialog;
     ArrayList<Materia> materiasCursadas=new ArrayList<>();
     ArrayList<Materia> programaAnal=new ArrayList<>();  //-->   Todas las materias de mi carrera    <---
 
@@ -78,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         linkElement();
         CargaFragment();
+        View v=findViewById(R.id.ParentView);
+       snackbar= Snackbar.make(v,"",Snackbar.LENGTH_LONG);
+
         binding.tabSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -89,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case 1: //-->   Tocamos Mis materias    <--
                         misMateriasFragment fragmentMisMat= new misMateriasFragment();
+
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPrincipalx,fragmentMisMat).commit();
                         break;
                     case 2: //-->   Tocamos Perfil  <--
@@ -207,6 +204,16 @@ public void linkElement(){
                     picker.show(getSupportFragmentManager(),"tag");
                 }
             });
+            bottomSheetView.findViewById(R.id.buttonSaveNewClass).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("Toco","GUARDAR");
+                    sideSheetDialog.dismiss();
+                    snackbar.setText("Guardando");
+                    //-->   Recolectar datos y guardar  <--
+                    snackbar.show();
+                }
+            });
             RecyclerView recyclerView=bottomSheetView.findViewById(R.id.listaMateriaPuedeCursar);
             ArrayList<String> test=new ArrayList<>();
             test.add("INFO1");
@@ -215,7 +222,7 @@ public void linkElement(){
             AdapterAgregaMateria adapterAgregaMateria=new AdapterAgregaMateria(PuedoCursar(materiasCursadas,programaAnal));
             recyclerView.setAdapter(adapterAgregaMateria);
             recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
-            BottomSheetDialog sideSheetDialog=new BottomSheetDialog(MainActivity.this);
+            sideSheetDialog=new BottomSheetDialog(MainActivity.this);
             sideSheetDialog.setContentView(bottomSheetView);
 //            sideSheetDialog.setContentView(R.layout.side_new_class);
             sideSheetDialog.show();

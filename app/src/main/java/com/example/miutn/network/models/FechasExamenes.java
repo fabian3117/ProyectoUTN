@@ -1,18 +1,18 @@
-package com.example.miutn;
+package com.example.miutn.network.models;
 
 import com.example.miutn.network.models.Materia;
 
 import java.util.Date;
 
 public class FechasExamenes {
-    private Date Fecha;
+    private String Fecha;
     private Materia materia;
 
-    public Date getFecha() {
+    public String getFecha() {
         return Fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         Fecha = fecha;
     }
 

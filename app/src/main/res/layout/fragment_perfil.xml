@@ -5,67 +5,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:foregroundGravity="center"
+    android:layout_marginTop="100px"
     android:padding="10px"
-    tools:context=".perfilFragment">
-
+    tools:context=".fragment.perfilFragment">
     <!-- Contenedor principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_color_card_profile"
+        android:orientation="vertical">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="50px"
+    android:layout_margin="20px"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="5pt"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Imagen de perfil -->
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/profile_icon"
-            android:layout_gravity="center"
-            />
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5px"
+        android:layout_margin="20px"
+        android:orientation="horizontal">
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:id="@+id/profilePic"
+        android:src="@drawable/profilepic"
+        android:layout_margin="10px"
+        />
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:id="@+id/profileName"
+        android:text="{UserName}"
+        android:lineSpacingExtra="3sp"
+        android:layout_gravity="center"
+        />
+</LinearLayout>
 
-        <!-- Nombre de perfil -->
-        <com.google.android.material.chip.Chip
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_gravity="center"
-            android:text="ProfileName"
-            />
-        <!-- Legajo -->
-        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/numberLegajo"
+            android:text="{Legajo}" />
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Legajo"
-            />
-        <!-- Usuario SIU -->
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="USER SIU"
-            />
-
-        <!-- Carrera -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Carrera"
-                android:layout_marginEnd="50px"
-                />
+            app:singleLine="true"
+            style="@style/ChipsProfileGrupo"
+            android:foregroundGravity="center"
+            android:padding="50px"
+            android:layout_height="wrap_content">
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Carrera"/>
-        </LinearLayout>
+                android:id="@+id/chipProfileCorreo"
+                android:text="{Correo}"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/carrera"
+                android:text="{Ingenieria}"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userSIU"
+                android:text="{Siu USER}"/>
+        </com.google.android.material.chip.ChipGroup>
+</androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+        <!-- Imagen de perfil -->
+
+        <!-- Nombre de perfil -->
+
+        <!-- Legajo -->
+        <!-- Usuario SIU -->
+
+
+        <!-- Carrera -->
 
         <!-- Tarjetas de información -->
         <LinearLayout
@@ -73,13 +105,15 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <!-- Tarjeta 1: Materias Aprobadas -->
             <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:cardCornerRadius="8dp"
+                app:cardUseCompatPadding="true"
+                android:id="@+id/CardTest"
                 app:cardBackgroundColor="@color/color_card_perfil"
                 android:layout_margin="5dp">
 
@@ -88,8 +122,17 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
-
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        app:chipCornerRadius="100px"
+                        android:textSize="15sp"
+                        android:id="@+id/chipProfileMateriasAprobadas"
+                        app:chipIcon="@drawable/counter_1"
+                        />
                     <ImageView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/house"
@@ -98,58 +141,71 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Materias \n Aprobadas"
+                        android:text="Materias Aprobadas"
+                        android:textColor="@color/color_text_card_profile"
                         android:textAlignment="center"
                         />
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
             <!-- Tarjeta 2: Finales Restantes -->
             <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/color_card_perfil"
                 android:layout_margin="5dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
-
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        app:chipCornerRadius="100px"
+                        android:textSize="15sp"
+                        android:id="@+id/chipProfileFinalesRestantes"
+                        app:chipIcon="@drawable/counter_1"
+                        />
                     <ImageView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/house"
                         />
-
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Finales \n Restantes"
+                        android:textColor="@color/color_text_card_profile"
+                        android:text="Finales Restantes"
                         android:textAlignment="center"
                         />
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
             <!-- Tarjeta 3: Podes Cursar -->
             <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/color_card_perfil"
                 android:layout_margin="5dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
-
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:id="@+id/chipProfilePodesCursar"
+                        app:chipCornerRadius="100px"
+                        android:textSize="15sp"
+                        app:chipIcon="@drawable/counter_1"
+                        />
                     <ImageView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/house"
@@ -158,7 +214,8 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Podes \n Cursar"
+                        android:text="Podes Cursar"
+                        android:textColor="@color/color_text_card_profile"
                         android:textAlignment="center"
                         />
                 </LinearLayout>
@@ -167,14 +224,12 @@
         </LinearLayout>
 
         <!-- Correo -->
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Correo"
-            />
 
+        <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:background="#00000000"
+        />
     </LinearLayout>
 
 </FrameLayout>
