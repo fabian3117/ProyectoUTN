@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="color_card_perfil">#49626D</color>
+    <color name="color_text_card_profile">#FFF</color>
+    <color name="chip_diselect">#B8EAFF</color>
+    <color name="color_primary_morado">#8B418F</color>
+    <color name="background_color_card_profile">#041217</color>
+</resources>
