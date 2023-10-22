@@ -1,16 +1,20 @@
 package com.example.miutn.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.miutn.ControlDatos;
 import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.R;
 import com.example.miutn.adapters.AdapterMisMaterias;
@@ -23,6 +27,11 @@ import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
 import com.example.miutn.network.models.Temario;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,34 +42,40 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link principalFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class principalFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private RecyclerView RecyclerMismaterias,RecyclerMismateriasHoy,RecyclerProximasFechas,RecyclerTemasHoy;
     AdapterMisMaterias adapterMisMaterias=new AdapterMisMaterias();
+    ArrayList<Temario> temarios=new ArrayList<>();
     AdapterMisMaterias adapterMisMateriasHoy=new AdapterMisMaterias();
     //AdapterTemaHoy adapterTemaHoy=new AdapterTemaHoy();
-    AdapterTemaHoy adapterTemaHoy;
+    AdapterTemaHoy adapterTemaHoy=new AdapterTemaHoy();
     ArrayList<MateriasCursando> materias= new ArrayList<>();
     ArrayList<MateriasCursando> materiashoy=new ArrayList<>();
     //AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
-    AdapterProximasFechas adapterProximasFechas;
+    AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
     Retrofit retrofit = RetrofitClient.getClient();
 
     ApiService apiService = retrofit.create(ApiService.class);
-
     public principalFragment() {
         // Required empty public constructor
     }
+public void ActualizacionDatosContenidosAdapterTemario(ArrayList<Temario> apuntesHoyRecomendaciones){
+        //-->   Vamos a actualizar los adapters <--
+    adapterTemaHoy.setData(apuntesHoyRecomendaciones);
 
+}
+public void ActualizacionDatosContenidosAdapterMaterias(ArrayList<MateriasCursando> mt){
+    materias=mt;
+    adapterMisMaterias.setData(materias);
+}
+public void ActualizacionDatosContenidosAdapterFechasEx(ArrayList<FechasExamenes>fechasExamenes){
+        adapterProximasFechas.setData(fechasExamenes);
+}
+public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<MateriasCursando> mathoy){
+     materiashoy=mathoy;
+     adapterMisMateriasHoy.setData(mathoy);
+}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +87,8 @@ public class principalFragment extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<MateriasCursando>> call, Response<ArrayList<MateriasCursando>> response) {
                 if (response.isSuccessful()) {
+                    //-->   Si tenemos exito mostramos lo que nos retorno el servidor   <--
+
                     //ArrayList<MateriasCursando> materias = response.body();
                     materias=response.body();
                     ArrayList<String> nameMatery=new ArrayList<>();
@@ -92,6 +109,8 @@ public class principalFragment extends Fragment {
                 // Maneja errores de red o excepciones, por ejemplo, mostrando un mensaje de error.
                 Log.e("MIRA","FALLO SEGUNDA FORMA");
                 Log.e("MIRA",t.getMessage());
+                //-->   Obtengo de sharedPreference la informacion  <--
+
                 MateriasCursando materiasCursando=new MateriasCursando();
                 Materia materia=new Materia();
                 materia.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
@@ -108,9 +127,6 @@ public class principalFragment extends Fragment {
                 ArrayList<Temario> programaAnal=new ArrayList<>();
                 programaAnal.add(temario);
                 materia.setProgramaAnalitico(programaAnal);
-                materias.add(materiasCursando);
-                adapterMisMaterias.setData(materias);
-                // Log.e("MIRA",t.getCause().toString());
             }
         });
         Date date=new Date();
@@ -149,21 +165,6 @@ public class principalFragment extends Fragment {
                 // Maneja errores de red o excepciones, por ejemplo, mostrando un mensaje de error.
                 Log.e("MIRA","FALLO SEGUNDA FORMA");
                 Log.e("MIRA",t.getMessage());
-                MateriasCursando materiasCursando=new MateriasCursando();
-                materiasCursando.setHorario("T1");
-                materiasCursando.setSede("Campus");
-                materiasCursando.setAula("S55");
-                Materia materia=new Materia();
-                materia.setNombre("Fisica 1");
-                materia.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
-
-                materiasCursando.setDia("Lunes");
-                materiasCursando.setMateria(materia);
-                materiashoy.add(materiasCursando);
-                adapterMisMateriasHoy.setData(materiashoy);
-
-
-                // Log.e("MIRA",t.getCause().toString());
             }
         });
     }
@@ -186,27 +187,13 @@ public class principalFragment extends Fragment {
         RecyclerMismateriasHoy.setLayoutManager(new LinearLayoutManager(v.getContext()));
         RecyclerProximasFechas=v.findViewById(R.id.RecyclerProximasFechas);
         RecyclerTemasHoy=v.findViewById(R.id.RecyclerTemasHoy);
-       ArrayList<Temario> temarios=new ArrayList<>();
-        for(int i=0;i<5;i++){
-            Temario temario= new Temario();
-            temario.setApunte("https://www.google.com.ar");
-            temario.setTema("Issue : "+i);
-            temarios.add(temario);
-        }
-        adapterTemaHoy=new AdapterTemaHoy(temarios);
+        //-->    TODO Aca esta la obtencion de apuntes para hoy/recomendados <--
+        temarios=ControlDatos.ObtenerRecomendaciones(v.getContext());
         RecyclerTemasHoy.setAdapter(adapterTemaHoy);
         LinearLayoutManager linearLayout=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         RecyclerTemasHoy.setLayoutManager(linearLayout);
-        FechasExamenes fechasExamenes=new FechasExamenes();
-        String testFecha="18/10/2023";
-        fechasExamenes.setFecha(testFecha);
-        Materia materia=new Materia();
-        materia.setNombre("TEST FINAL");
-        fechasExamenes.setMateria(materia);
-        ArrayList<FechasExamenes>fechasExamenes1=new ArrayList<>();
-        fechasExamenes1.add(fechasExamenes);
-        fechasExamenes1.add(fechasExamenes);
-        adapterProximasFechas=new AdapterProximasFechas(fechasExamenes1);
+
+       // adapterProximasFechas=new AdapterProximasFechas(fechasExamenes1);
         RecyclerProximasFechas.setAdapter(adapterProximasFechas);
         RecyclerProximasFechas.setLayoutManager(new LinearLayoutManager(v.getContext()));
 

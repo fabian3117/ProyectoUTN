@@ -1,11 +1,12 @@
 package com.example.miutn.network.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import lombok.Data;
 
 @Data
-public class Materia {
+public class Materia  implements Serializable {
     private String id;
     private String nombre;
     private int anio;

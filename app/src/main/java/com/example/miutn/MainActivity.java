@@ -2,17 +2,24 @@ package com.example.miutn;
 
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.example.miutn.adapters.AdapterAgregaMateria;
 import com.example.miutn.adapters.AdapterMisMaterias;
 import com.example.miutn.enums.Carreras;
+import com.example.miutn.enums.Cuatrimestres;
 import com.example.miutn.fragment.misMateriasFragment;
 import com.example.miutn.fragment.perfilFragment;
 import com.example.miutn.fragment.principalFragment;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
+import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.Materia;
+import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.Temario;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -46,15 +53,12 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
     //TODO : MODIFICAR SEGURIDAD PARA UTILIZAR HTTPS
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private TabLayout tabSelector;
-    private RecyclerView RecyclerMismaterias;
-    private RecyclerView RecyclerMismateriasHoy;
     Snackbar snackbar;
+    principalFragment fragment= new principalFragment();
+    misMateriasFragment fragmentMisMat= new misMateriasFragment();
+    perfilFragment framentProfile= new perfilFragment();
 
-    AdapterMisMaterias adapterMisMaterias=new AdapterMisMaterias();
-    AdapterMisMaterias adapterMisMateriasHoy=new AdapterMisMaterias();
     FrameLayout sideSheetContainer;
     Retrofit retrofit = RetrofitClient.getClient();
     ExtendedFloatingActionButton extendedFloatingActionButton;
@@ -73,23 +77,23 @@ public class MainActivity extends AppCompatActivity {
         CargaFragment();
         View v=findViewById(R.id.ParentView);
        snackbar= Snackbar.make(v,"",Snackbar.LENGTH_LONG);
+        CargaInicialDatos();
 
         binding.tabSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0: //-->   Tocamos Principal   <--
-                        principalFragment fragment= new principalFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPrincipalx,fragment).commit();
                         break;
 
                     case 1: //-->   Tocamos Mis materias    <--
-                        misMateriasFragment fragmentMisMat= new misMateriasFragment();
+
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPrincipalx,fragmentMisMat).commit();
                         break;
                     case 2: //-->   Tocamos Perfil  <--
-                        perfilFragment framentProfile= new perfilFragment();
+
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPrincipalx,framentProfile).commit();
 
                         break;
@@ -144,7 +148,86 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+public void CargaInicialDatos(){
+        //-->   Tenemos internet?   <--
+    if(ConexionInternetDisponible()){
+        //-->   Verifico datos en SharedPreference  <--
+        //-->   Verifico ObtenerRecomendaciones     <---
+        Log.e("ENTRO","CARGA");
+        ArrayList<Temario> recomendaciones=ControlDatos.ObtenerRecomendaciones(this);
+        ArrayList<FechasExamenes> fechasExamenes=ControlDatos.ObtencionFechasExamenes(this);
+        ArrayList<MateriasCursando> materiasCursando=ControlDatos.ObtencionObtenerMateriasCursando(this);
 
+        //-->   Si no esta vacio lo tengo que mostrar en el fragment principal por que esta opcion se ejecutara mas rapido de lo que cambio de fragment <--
+        //-->   TODO Añadir un splash a fin de garantizar esto  <--
+        if(recomendaciones!=null){
+            fragment.ActualizacionDatosContenidosAdapterTemario(recomendaciones);
+        }
+        if(!fechasExamenes.isEmpty()){
+            fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
+        }
+        else{
+            //-->   Cargo datos de pruebas  <--
+            FechasExamenes fechasExamen=new FechasExamenes();
+            String testFecha="18/10/2023";
+            fechasExamen.setFecha(testFecha);
+            Materia materia=new Materia();
+            materia.setNombre("TEST FINAL");
+            fechasExamen.setMateria(materia);
+            ArrayList<FechasExamenes>fechasExamenes1=new ArrayList<>();
+            fechasExamenes1.add(fechasExamen);
+            fechasExamenes1.add(fechasExamen);
+            ControlDatos.GuardarFechasExamenes(this,fechasExamenes1);
+            fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes1);
+        }
+        if(!materiasCursando.isEmpty()){
+            //-->   Tengo que verificar cuales materias de las que curso efectivamente se cursan hoy    <--
+            String dia="Lunes"; //TODO MODIFICAR ESTO
+            ArrayList<MateriasCursando> deHoy=new ArrayList<>();
+            fragment.ActualizacionDatosContenidosAdapterMaterias(materiasCursando);
+            for(MateriasCursando materiaHoyy : materiasCursando){
+            if(materiaHoyy.getDia().equals(dia)){
+                deHoy.add(materiaHoyy);
+            }
+            }
+            fragment.ActualizacionDatosContenidosAdapterMaterias(materiasCursando);
+            fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
+        }
+        else{
+            //-->   Carga de datos de prueba    <--
+            MateriasCursando materiasCursa=new MateriasCursando();
+            MateriasCursando materiasCursa1=new MateriasCursando();
+            materiasCursa.setHorario("T1");
+            materiasCursa.setSede("Campus");
+            materiasCursa.setAula("S55");
+            Materia materia=new Materia();
+            Materia materia1=new Materia();
+            materia1.setNombre("INFORMATICA 1");
+            materia1.setAnio(1);
+            materia.setNombre("Fisica 1");
+            materia.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
+            materia1.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
+            materiasCursa1.setMateria(materia1);
+            materiasCursa1.setDia("Martes");
+            materiasCursa.setDia("Lunes");
+            materiasCursa.setMateria(materia);
+            ArrayList<MateriasCursando> buf=new ArrayList<>();
+            buf.add(materiasCursa);
+            buf.add(materiasCursa1);
+            ControlDatos.GuardarMateriasCursando(this,buf);
+        }
+    }
+
+
+}
+public boolean ConexionInternetDisponible(){
+    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    if (connectivityManager != null) {
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    return false;
+}
 
 
 public void linkElement(){
@@ -239,7 +322,7 @@ public ArrayList<String> PuedoCursar(ArrayList<Materia> misMaterias, ArrayList<M
         return salida;
 }
 public void CargaFragment(){
-    principalFragment fragment= new principalFragment();
+
     getSupportFragmentManager().beginTransaction().add(R.id.fragmentPrincipalx,fragment).commit();
 
 }

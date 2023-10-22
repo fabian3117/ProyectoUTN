@@ -1,5 +1,7 @@
 package com.example.miutn.network.models;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +11,7 @@ import lombok.Setter;
 @Data
 @Setter
 @Getter
-public class Temario {
+public class Temario implements Serializable {
     private String tema;
     private String apunte;
     private String description;

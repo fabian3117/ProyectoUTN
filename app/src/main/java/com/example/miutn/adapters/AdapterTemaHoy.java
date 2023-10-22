@@ -30,6 +30,7 @@ public class AdapterTemaHoy extends RecyclerView.Adapter<AdapterTemaHoy.ViewHold
     }
 
     public AdapterTemaHoy() {
+        temarios=new ArrayList<>();
     }
 
     @NonNull

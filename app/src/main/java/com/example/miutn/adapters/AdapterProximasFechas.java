@@ -27,6 +27,10 @@ public class AdapterProximasFechas extends RecyclerView.Adapter<AdapterProximasF
     public AdapterProximasFechas(ArrayList<FechasExamenes> fechasExamenes) {
         this.fechasExamenes = fechasExamenes;
     }
+    public void setData(ArrayList<FechasExamenes>fechasExamenes){
+        this.fechasExamenes=fechasExamenes;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override

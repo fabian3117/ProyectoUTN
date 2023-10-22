@@ -1,6 +1,8 @@
 package com.example.miutn.network.models;
 
-public class MateriasCursando {
+import java.io.Serializable;
+
+public class MateriasCursando implements Serializable {
     String id;
     private Materia materia;
     private String aula;

@@ -1,5 +1,6 @@
 package com.example.miutn.network.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import lombok.Data;
@@ -7,8 +8,8 @@ import lombok.Data;
 /**
  * This is model of profile
  */
-@Data
-public class Profile {
+
+public class Profile  implements Serializable {
     private ArrayList<MateriasCursando> materiasCursandos;
     private ArrayList<MateriasCursando> materiasCursadasAprobadas;
     private ArrayList<MateriasCursando> materiasCursadasRegularizadas;
