@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parentMatery"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:layout_height="wrap_content">
 <androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="450dp"
+    android:id="@+id/cardView"
+    android:layout_height="match_parent"
     android:padding="10px"
+    app:cardCornerRadius="50dp"
     android:layout_margin="15px">
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:textAlignment="center"
         android:layout_margin="15px"
         android:background="#008000"
         android:id="@+id/imageView"
+        app:srcCompat="@drawable/vector_background"
         android:src="@drawable/counter_1"
+        />
+    <View
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:background="#000"
+        android:id="@+id/viewTest"
         />
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:text="1"
         android:id="@+id/chipAnio"

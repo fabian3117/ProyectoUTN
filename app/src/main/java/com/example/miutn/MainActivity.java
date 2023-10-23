@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         linkElement();
         CargaFragment();
         View v=findViewById(R.id.ParentView);
-       snackbar= Snackbar.make(v,"",Snackbar.LENGTH_LONG);
+        snackbar= Snackbar.make(v,"",Snackbar.LENGTH_LONG);
         CargaInicialDatos();
 
         binding.tabSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -240,6 +240,12 @@ public void CargaInicialDatos(){
             ControlDatos.GuardarProfile(this,profile);
         }
         framentProfile.ActualizacionDatosContenidosAdapterProfile(profile);
+    }
+    else {
+        //-->   TODO Revisar funcion de verificacion de internet y este orden de codigo esta invertido  <--
+        //--> En caso de tener internet <--
+        //-->   Hilo y a consultar API  <--
+
     }
 
 

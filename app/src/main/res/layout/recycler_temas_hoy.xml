@@ -43,20 +43,20 @@
             android:text="{Description of issue}"
             />
         <Button
-            android:layout_margin="10px"
+            android:layout_margin="25dp"
             android:id="@+id/downloadIssueToday"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="10px"
+            android:elevation="10dp"
             android:text="Descargar apunte"
-
+            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
             />
     <Button
         android:layout_width="match_parent"
-        style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_height="match_parent"
-        android:elevation="10px"
+        android:elevation="10dp"
         android:text="{Visto}"
+        android:layout_margin="30dp"
         android:id="@+id/seenIssueToday"
         android:layout_gravity="center"
         />

@@ -9,6 +9,15 @@ public class MateriasCursando implements Serializable {
     private String dia;
     private String horario;
     private String sede;
+    private int temasVistos;
+
+    public int getTemasVistos() {
+        return temasVistos;
+    }
+
+    public void setTemasVistos(int temasVistos) {
+        this.temasVistos = temasVistos;
+    }
 
     public String getId() {
         return id;
@@ -65,5 +74,6 @@ public class MateriasCursando implements Serializable {
         this.dia = "";
         this.horario = "";
         this.sede = "";
+        temasVistos=0;
     }
 }

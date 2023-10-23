@@ -1,5 +1,6 @@
 package com.example.miutn.adapters;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,16 +67,29 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
     public class ViewHolder extends RecyclerView.ViewHolder {
 private TextView materiaName;
 private TextView materiaSede;
+private CardView cardView;
 private LinearLayout linearLayout;
 private ImageView imageView;
 private Chip chipAnio;
+private View viewTest;
+private float porcentaje=80f;
 private int position;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             materiaName=itemView.findViewById(R.id.materiaName);
             linearLayout=itemView.findViewById(R.id.parentMatery);
             materiaSede=itemView.findViewById(R.id.materiaSede);
+            cardView=itemView.findViewById(R.id.cardView);
             imageView=itemView.findViewById(R.id.imageView);
+            viewTest=itemView.findViewById(R.id.viewTest);
+            ViewGroup.LayoutParams params = viewTest.getLayoutParams();
+            ViewGroup.LayoutParams paramsCard = cardView.getLayoutParams();
+            params.width= (int) (paramsCard.width *(porcentaje/100));
+            viewTest.setLayoutParams(params);
+            viewTest.requestLayout();
+            // imageView.setY(cardView.getY());
+            int porcentaje = 90; // Debes configurar este valor según tu lógica
+
             chipAnio=itemView.findViewById(R.id.chipAnio);
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
