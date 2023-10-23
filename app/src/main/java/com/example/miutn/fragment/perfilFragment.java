@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.example.miutn.R;
 import com.example.miutn.enums.Carreras;
+import com.example.miutn.network.models.Profile;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textview.MaterialTextView;
 
 public class perfilFragment extends Fragment {
+    Profile profile=new Profile();
 private ImageView profilePic;
 
 private MaterialTextView profileName;
@@ -57,30 +59,24 @@ private Chip chipProfileMateriasAprobadas,chipProfileFinalesRestantes,chipProfil
         chipProfileCorreo=v.findViewById(R.id.chipProfileCorreo);
         CardTest=v.findViewById(R.id.CardTest);
         CargaTestData();
-      //  ajustarPorcentaje(.10);
         return v;
     }
     void CargaTestData(){
-        numberLegajo.setText("1648408");
-        userSIU.setText("fabian3117");
-        profileName.setText("Federico Gonzalez");
-        carrera.setText(Carreras.Electronica.toString());
-        chipProfileFinalesRestantes.setText("22");
+        numberLegajo.setText(profile.getNumberLegajo());
+        userSIU.setText(profile.getUserSIU());
+        profileName.setText(profile.getName());
+        carrera.setText(profile.getCarrera());
+        chipProfileFinalesRestantes.setText(String.valueOf(profile.getMateriasCursadasRegularizadas().size()-profile.getMateriasCursadasAprobadas().size()));
+        chipProfileMateriasAprobadas.setText(String.valueOf(profile.getMateriasCursadasAprobadas().size()));
+        chipProfileCorreo.setText(String.valueOf(profile.getName()));
         chipProfilePodesCursar.setText("5");
-        chipProfileMateriasAprobadas.setText("10");
-        chipProfileCorreo.setText("fabian3117@frba.utn.edu.ar");
+
+
     }
-    void ajustarPorcentaje(double porc){
-        GradientDrawable fondoPorcentaje = new GradientDrawable();
-        fondoPorcentaje.setColor(getResources().getColor(R.color.colorPorcentaje)); // Cambia el color según tus necesidades
-        fondoPorcentaje.setCornerRadii(new float[] { 0, 0, 0, 0, 0, 0, 0, 0 });
-        fondoPorcentaje.setSize((int) (CardTest.getWidth() * (porc / 100.0)), CardTest.getHeight());
 
-        // Establecer el fondo del CardView
-        CardTest.setBackground(fondoPorcentaje);
 
-        int totalAncho = CardTest.getWidth();
-        int anchoPorcentaje = (totalAncho * porcentaje) / 100;
-
+    public void ActualizacionDatosContenidosAdapterProfile(Profile profile) {
+        this.profile=profile;
+       // CargaTestData();
     }
 }

@@ -201,7 +201,7 @@ public class ControlDatos {
 public static Profile ObtencionPerfil(Context context){
         Profile salida=new Profile();
         SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
-        String listaSerializada  = sharedPreferences.getString(sharedPreferenceKeyObtenerMateriasCursando, null);
+        String listaSerializada  = sharedPreferences.getString(sharedPreferenceKeyObtenerProfile, null);
         if (listaSerializada != null) {
             try {
                 byte[] listaBytes = Base64.decode(listaSerializada, Base64.DEFAULT);

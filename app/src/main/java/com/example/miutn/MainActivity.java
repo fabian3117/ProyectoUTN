@@ -11,6 +11,7 @@ import com.example.miutn.adapters.AdapterAgregaMateria;
 import com.example.miutn.adapters.AdapterMisMaterias;
 import com.example.miutn.enums.Carreras;
 import com.example.miutn.enums.Cuatrimestres;
+import com.example.miutn.enums.Sedes;
 import com.example.miutn.fragment.misMateriasFragment;
 import com.example.miutn.fragment.perfilFragment;
 import com.example.miutn.fragment.principalFragment;
@@ -19,6 +20,7 @@ import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.Profile;
 import com.example.miutn.network.models.Temario;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     ExtendedFloatingActionButton extendedFloatingActionButton;
     ApiService apiService = retrofit.create(ApiService.class);
     BottomSheetDialog sideSheetDialog;
+    Profile profile=new Profile();
     ArrayList<Materia> materiasCursadas=new ArrayList<>();
     ArrayList<Materia> programaAnal=new ArrayList<>();  //-->   Todas las materias de mi carrera    <---
 
@@ -157,7 +160,7 @@ public void CargaInicialDatos(){
         ArrayList<Temario> recomendaciones=ControlDatos.ObtenerRecomendaciones(this);
         ArrayList<FechasExamenes> fechasExamenes=ControlDatos.ObtencionFechasExamenes(this);
         ArrayList<MateriasCursando> materiasCursando=ControlDatos.ObtencionObtenerMateriasCursando(this);
-
+        profile=ControlDatos.ObtencionPerfil(this);
         //-->   Si no esta vacio lo tengo que mostrar en el fragment principal por que esta opcion se ejecutara mas rapido de lo que cambio de fragment <--
         //-->   TODO Añadir un splash a fin de garantizar esto  <--
         if(recomendaciones!=null){
@@ -216,6 +219,27 @@ public void CargaInicialDatos(){
             buf.add(materiasCursa1);
             ControlDatos.GuardarMateriasCursando(this,buf);
         }
+        if(profile.getName().isEmpty()){
+            //-->   Cargo datos test    <--
+            profile.setCarrera(Carreras.Electronica.getValorAsociado());
+            profile.setName("Federico Gonzalez");
+            profile.setCorreoInstitucional("fabian3117@frba.utn.edu.ar");
+            profile.setNumberLegajo("1648408");
+            profile.setUserSIU("fabian3117");
+            ArrayList<MateriasCursando> materiasCursadas=new ArrayList<>();
+            MateriasCursando test=new MateriasCursando();
+            Materia materia=new Materia();
+            test.setDia("Martes");
+            test.setAula("S55");
+            materia.setNombre("F1");
+            test.setMateria(materia);
+            test.setSede(Sedes.Campus.getValorAsociado());
+            materiasCursadas.add(test);
+            profile.setMateriasCursandos(materiasCursadas);
+            profile.setMateriasCursadasAprobadas(materiasCursadas);
+            ControlDatos.GuardarProfile(this,profile);
+        }
+        framentProfile.ActualizacionDatosContenidosAdapterProfile(profile);
     }
 
 
