@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
 import com.example.miutn.network.models.MateriasCursando;
-import com.example.miutn.network.models.NMateria;
 import com.example.miutn.network.models.NMateriasCursando;
 import com.example.miutn.network.models.NprogramaAnalitico;
 import com.example.miutn.network.models.Temario;
@@ -32,22 +31,20 @@ import java.util.ArrayList;
 
 public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.ViewHolder> {
     private ArrayList<NMateriasCursando> Materias=new ArrayList<>();
-    private ArrayList<NMateria> ProgramaAnalitico=new ArrayList<>();
-
     //private Context context;
 
 
-    public AdapterMisMaterias(ArrayList<NMateriasCursando> materias,ArrayList<NMateria> programaCarrera) {
+    public AdapterMisMaterias(ArrayList<NMateriasCursando> materias) {
         Materias = materias;
-        ProgramaAnalitico=programaCarrera;
     }
+
+
     public AdapterMisMaterias() {
         Materias = new ArrayList<NMateriasCursando>();
-        ProgramaAnalitico=new ArrayList<>();
     }
     public void setData(ArrayList<NMateriasCursando> newData){
         Materias=newData;
-        notifyDataSetChanged();
+           notifyDataSetChanged();
     }
 
     @NonNull
@@ -63,15 +60,15 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
     @Override
     public void onBindViewHolder(@NonNull AdapterMisMaterias.ViewHolder holder, int position) {
     //-->   This i'm make link elemento to position of my Array <--
-        holder.materiaName.setText(ProgramaAnalitico.get(position).getName()); //-->   Link my content with my element
+        holder.materiaName.setText(Materias.get(position).getMateria().getName()); //-->   Link my content with my element
         holder.position=position;
-//        holder.materiaSede.setText(Materias.get(position).getHorario().getSede().getValorAsociado());
+        holder.materiaSede.setText(Materias.get(position).getHorario().getSede().getValorAsociado());
         holder.chipAnio.setText(String.valueOf(Materias.get(position).getMateria().getAnio()));
     }
 
     @Override
     public int getItemCount() {
-        return ProgramaAnalitico.size();
+        return Materias.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
