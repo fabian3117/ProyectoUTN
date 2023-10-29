@@ -1,15 +1,12 @@
 package com.example.miutn.enums;
 
-public enum Cuatrimestres {
-    PrimerCuatrimestre(1),
-    SegundoCuatrimestre(2),
-
-    Anual(3) ;
-
+public enum Modalidad {
+    Virtual(1),
+    Presencial(2),
+    Hibrido(3);
     private int valor;
-    Cuatrimestres(int valor){
+    Modalidad(int valor){
         this.valor=valor;
     }
     public int getValorAsociado(){return valor;}
-
 }

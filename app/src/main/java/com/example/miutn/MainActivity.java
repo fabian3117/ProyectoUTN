@@ -3,14 +3,17 @@ package com.example.miutn;
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.miutn.adapters.AdapterAgregaMateria;
 import com.example.miutn.adapters.AdapterMisMaterias;
 import com.example.miutn.enums.Carreras;
 import com.example.miutn.enums.Cuatrimestres;
+import com.example.miutn.enums.Modalidad;
 import com.example.miutn.enums.Sedes;
 import com.example.miutn.fragment.misMateriasFragment;
 import com.example.miutn.fragment.perfilFragment;
@@ -18,14 +21,22 @@ import com.example.miutn.fragment.principalFragment;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.FechasExamenes;
+import com.example.miutn.network.models.Horarios;
 import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.NMateria;
+import com.example.miutn.network.models.NMateriasCursando;
+import com.example.miutn.network.models.NprogramaAnalitico;
+import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Profile;
 import com.example.miutn.network.models.Temario;
+import com.example.miutn.network.services.ManejadorNuevaMateria;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -38,6 +49,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.databinding.ActivityMainBinding;
 import com.google.android.material.search.SearchBar;
+import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -45,7 +57,14 @@ import com.google.android.material.timepicker.TimeFormat;
 
 import android.widget.FrameLayout;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     Snackbar snackbar;
+    Perfil perfil=new Perfil();
     principalFragment fragment= new principalFragment();
     misMateriasFragment fragmentMisMat= new misMateriasFragment();
     perfilFragment framentProfile= new perfilFragment();
@@ -73,15 +93,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Intent intent= new Intent(this, MainActivity2.class);
+        //startActivity(intent);
         linkElement();
         CargaFragment();
         View v=findViewById(R.id.ParentView);
+        SearchBar views=findViewById(R.id.search_bar);
+        SearchView view1=findViewById(R.id.SearchView);
+        view1.setupWithSearchBar(views);
         snackbar= Snackbar.make(v,"",Snackbar.LENGTH_LONG);
-        CargaInicialDatos();
 
+        binding.lottieAnimationMajor.setVisibility(View.GONE);
         binding.tabSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -91,14 +115,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 1: //-->   Tocamos Mis materias    <--
-
-
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPrincipalx,fragmentMisMat).commit();
                         break;
                     case 2: //-->   Tocamos Perfil  <--
-
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPrincipalx,framentProfile).commit();
-
                         break;
                     default:
                         break;
@@ -115,51 +135,98 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        Call<ArrayList<Materia>> programa= apiService.obtenerMateriasProgramaAnal(Carreras.Electronica.getValorAsociado());
-        programa.enqueue(new Callback<ArrayList<Materia>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Materia>> call, Response<ArrayList<Materia>> response) {
-                if(response.isSuccessful()){
-                    programaAnal=response.body();
-                    programaAnal.forEach(materia -> {
-                        Log.e("PRIMER",materia.getNombre());
-                    });
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<Materia>> call, Throwable t) {
-
-            }
-        });
-        Call<ArrayList<Materia>> obtenerMateriasCursadas=apiService.obtenerMateriasCursadas("FEDE");
-        obtenerMateriasCursadas.enqueue(new Callback<ArrayList<Materia>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Materia>> call, Response<ArrayList<Materia>> response) {
-                if(response.isSuccessful()){
-                    materiasCursadas=response.body();
-                    materiasCursadas.forEach(materia -> {
-                        Log.e("MIRAs",materia.getNombre());
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Materia>> call, Throwable t) {
-
-            }
-        });
+        CargaInicialTest();
 
     }
+    public void CargaInicialTest(){
+
+        if(ConexionInternetDisponible()){
+            Carreras ele=Carreras.Electronica;
+            apiService.obtenerMateriasProgramaAnal(ele).enqueue(new Callback<ArrayList<NMateria>>() {
+                @Override
+                public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
+                if(response.isSuccessful()){
+                    for(NMateria materia: response.body()){
+                        Log.e("MIRA",materia.getName());
+                    }
+                    ControlDatos.GuardarProgramaAnalitico(response.body(),getApplicationContext());
+                    fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(response.body());
+                }
+                else{
+                    Log.e("PROGrama anal","otro fallo");
+                }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
+                Log.e("Error programa Anal",t.getMessage());
+                }
+            });
+
+            apiService.descargaPerfil("TS").enqueue(new Callback<Perfil>() {
+                @Override
+                public void onResponse(Call<Perfil> call, Response<Perfil> response) {
+                    if(response.isSuccessful()){
+                        perfil=response.body();
+                        ControlDatos.GuardarProfile(getApplicationContext(),profile);
+                        ObtencionMateriasHoy(perfil);
+                    }
+            else {
+                snackbar.setText("Error en obtencion de datos de servidor");
+                snackbar.show();
+            }
+            fragment.ActualizacionDatosContenidosAdapterMaterias(perfil.getMateriasCursando());
+            ArrayList<NMateria> analiticos=ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
+            ArrayList<NMateriasCursando> example=new ArrayList<>();
+
+            fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias(analiticos,perfil.getMateriasCursando());
+            framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
+                }
+                @Override
+                public void onFailure(Call<Perfil> call, Throwable t) {
+                    Log.e("ERORR CONEXION WEB",t.getMessage());
+                    snackbar.setText("Error en conexion a servidor verificar");
+                    snackbar.show();
+                    perfil=ControlDatos.ObtenerPerfil(getApplicationContext());
+                    ObtencionMateriasHoy(perfil);
+                    framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
+                    fragment.ActualizacionDatosContenidosAdapterMaterias(perfil.getMateriasCursando());
+                }
+            });
+        }
+        else if(!ControlDatos.ExistePerfil(getApplicationContext())){
+            //-->   No tenemos nada <--
+            //-->   Pantalla Inicio seccion <--
+            Intent intent=new Intent(getApplicationContext(), Login.class);
+            getApplicationContext().startActivity(intent);
+            finish();   //-->   Finalizo esta actividad <--
+        }
+        ArrayList<Temario> recomendaciones=ControlDatos.ObtenerRecomendaciones(this);
+        ArrayList<FechasExamenes> fechasExamenes=ControlDatos.ObtencionFechasExamenes(this);
+        fragment.ActualizacionDatosContenidosAdapterTemario(recomendaciones);
+        fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
+    }
+    public void ObtencionMateriasHoy(Perfil perfil){
+        Calendar calendar=Calendar.getInstance();
+        String dia = new SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.getTime());
+        ArrayList<NMateriasCursando> deHoy=new ArrayList<>();
+        for(NMateriasCursando materiaHoyy : perfil.getMateriasCursando()){
+           /* if(materiaHoyy.getHorario().getDia().equals(dia)){
+                deHoy.add(materiaHoyy);
+            }*/
+        }
+        fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
+    }
 public void CargaInicialDatos(){
-        //-->   Tenemos internet?   <--
+    //-->   Tenemos internet?   <--
     if(ConexionInternetDisponible()){
         //-->   Verifico datos en SharedPreference  <--
         //-->   Verifico ObtenerRecomendaciones     <---
         Log.e("ENTRO","CARGA");
         ArrayList<Temario> recomendaciones=ControlDatos.ObtenerRecomendaciones(this);
         ArrayList<FechasExamenes> fechasExamenes=ControlDatos.ObtencionFechasExamenes(this);
-        ArrayList<MateriasCursando> materiasCursando=ControlDatos.ObtencionObtenerMateriasCursando(this);
+        ArrayList<NMateriasCursando> materiasCursando=ControlDatos.ObtencionObtenerMateriasCursando(this);
         profile=ControlDatos.ObtencionPerfil(this);
         //-->   Si no esta vacio lo tengo que mostrar en el fragment principal por que esta opcion se ejecutara mas rapido de lo que cambio de fragment <--
         //-->   TODO Añadir un splash a fin de garantizar esto  <--
@@ -186,38 +253,13 @@ public void CargaInicialDatos(){
         if(!materiasCursando.isEmpty()){
             //-->   Tengo que verificar cuales materias de las que curso efectivamente se cursan hoy    <--
             String dia="Lunes"; //TODO MODIFICAR ESTO
-            ArrayList<MateriasCursando> deHoy=new ArrayList<>();
-            fragment.ActualizacionDatosContenidosAdapterMaterias(materiasCursando);
-            for(MateriasCursando materiaHoyy : materiasCursando){
-            if(materiaHoyy.getDia().equals(dia)){
+            ArrayList<NMateriasCursando> deHoy=new ArrayList<>();
+          //  fragment.ActualizacionDatosContenidosAdapterMaterias(materiasCursando);
+            for(NMateriasCursando materiaHoyy : materiasCursando){
+            if(materiaHoyy.getHorario().getDia().equals(dia)){
                 deHoy.add(materiaHoyy);
             }
             }
-            fragment.ActualizacionDatosContenidosAdapterMaterias(materiasCursando);
-            fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
-        }
-        else{
-            //-->   Carga de datos de prueba    <--
-            MateriasCursando materiasCursa=new MateriasCursando();
-            MateriasCursando materiasCursa1=new MateriasCursando();
-            materiasCursa.setHorario("T1");
-            materiasCursa.setSede("Campus");
-            materiasCursa.setAula("S55");
-            Materia materia=new Materia();
-            Materia materia1=new Materia();
-            materia1.setNombre("INFORMATICA 1");
-            materia1.setAnio(1);
-            materia.setNombre("Fisica 1");
-            materia.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
-            materia1.setCuatri(Cuatrimestres.PrimerCuatrimestre.getValorAsociado());
-            materiasCursa1.setMateria(materia1);
-            materiasCursa1.setDia("Martes");
-            materiasCursa.setDia("Lunes");
-            materiasCursa.setMateria(materia);
-            ArrayList<MateriasCursando> buf=new ArrayList<>();
-            buf.add(materiasCursa);
-            buf.add(materiasCursa1);
-            ControlDatos.GuardarMateriasCursando(this,buf);
         }
         if(profile.getName().isEmpty()){
             //-->   Cargo datos test    <--
@@ -239,7 +281,7 @@ public void CargaInicialDatos(){
             profile.setMateriasCursadasAprobadas(materiasCursadas);
             ControlDatos.GuardarProfile(this,profile);
         }
-        framentProfile.ActualizacionDatosContenidosAdapterProfile(profile);
+//        framentProfile.ActualizacionDatosContenidosAdapterProfile(profile);
     }
     else {
         //-->   TODO Revisar funcion de verificacion de internet y este orden de codigo esta invertido  <--
@@ -251,29 +293,24 @@ public void CargaInicialDatos(){
 
 }
 public boolean ConexionInternetDisponible(){
-    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    if (connectivityManager != null) {
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-    return false;
+    ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 }
-
-
 public void linkElement(){
-
+    String horaInicio="";
+    String horaFin="";
     sideSheetContainer=findViewById(R.id.sideSheetContainer);
     extendedFloatingActionButton=findViewById(R.id.fab);
-
+    ArrayList<String> diasCursa=new ArrayList<>();
 //TODO Terminar esto que es para añadir mas materias
-    //Tengo que  Mostrar todas las materias posibles horarios y sedes
-
     extendedFloatingActionButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             LayoutInflater inflater=LayoutInflater.from(v.getContext());
             View bottomSheetView = inflater.inflate(R.layout.side_new_class, null);
             Chip selectorHoursInit=bottomSheetView.findViewById(R.id.chipClassInit);
+            //selectorHoursInit.setOnCheckedChangeListener(new ConfiguracionRelojes(selectorHoursInit,getSupportFragmentManager()));
             selectorHoursInit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -289,6 +326,7 @@ public void linkElement(){
                         @Override
                         public void onClick(View v) {
                             Log.e("mira","HS:MM "+picker.getHour()+":"+picker.getMinute());
+                          //  horaInicio=""+picker.getHour()+":"+picker.getMinute();
                             selectorHoursInit.setText("Inicio "+picker.getHour()+":"+picker.getMinute());
                         }
                     });
@@ -320,10 +358,66 @@ public void linkElement(){
             bottomSheetView.findViewById(R.id.buttonSaveNewClass).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("Toco","GUARDAR");
                     sideSheetDialog.dismiss();
                     snackbar.setText("Guardando");
                     //-->   Recolectar datos y guardar  <--
+                    Chip campus= bottomSheetView.findViewById(R.id.chipNewClassCampus);
+                    Chip medrano= bottomSheetView.findViewById(R.id.chipNewClassMedrano);
+                    String sedeCursa=(campus.isChecked()?"Campus":(medrano.isChecked()?"Medrano":""));
+                    Log.e("Toco","GUARDAR : "+sedeCursa);
+                    String Dia;
+                    ChipGroup chipGroup=bottomSheetView.findViewById(R.id.chipGroupDiaNewClass);
+                    if(chipGroup.getCheckedChipIds().isEmpty()){
+                        snackbar.setText("Error Ingresar dia");
+                        snackbar.show();
+                        return;
+                    }
+                    for( Integer dk :chipGroup.getCheckedChipIds()){
+                        String d="";
+                        switch (dk){
+                            case 1:
+                                d="Lunes";
+                                break;
+                            case 2:
+                                d="Martes";
+                                break;
+                            case 3:
+                                d="Miercoles";
+                                break;
+                            case 4:
+                                d="Jueves";
+                                break;
+                            case 5:
+                                d="Vierenes";
+                                break;
+                            case 6:
+                                d="Sabado";
+                                break;
+                        }
+                        Log.e("CAMBIO OPCION", d);
+                        diasCursa.add(d);
+                    }
+                    String horaIn=selectorHoursInit.getText().toString().replace("Inicio ","");
+                    String horaFn=chipClassFinish.getText().toString().replace("Fin ","");
+                    RecyclerView view=bottomSheetView.findViewById(R.id.listaMateriaPuedeCursar);
+                    AdapterAgregaMateria adapterAgregaMateria=(AdapterAgregaMateria) view.getAdapter();
+                    String materiaName=adapterAgregaMateria.getMateriaSeleccionada();
+                    Log.e("SALIDA",materiaName);
+                    NMateria materia=new NMateria();
+                    Horarios horario=new Horarios();
+                    horario.setDia((!diasCursa.isEmpty())?diasCursa.get(0):"");
+                    horario.setHoraInicio(horaIn);
+                    horario.setHoraFin(horaFn);
+                    materia.setName(materiaName);
+                    NMateriasCursando toServer=new NMateriasCursando();
+                    toServer.setHorario(horario);
+                    toServer.setMateria(materia);
+                   // TODO Falta enviar a servidor y guardar    <---
+                        //-->   Esto deberia ir en segundo plano
+
+                    apiService.guardarNuevaMateria("NUEVO",toServer).enqueue( new ControlaGuardado(getApplicationContext()));
+
+
                     snackbar.show();
                 }
             });
@@ -337,7 +431,6 @@ public void linkElement(){
             recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
             sideSheetDialog=new BottomSheetDialog(MainActivity.this);
             sideSheetDialog.setContentView(bottomSheetView);
-//            sideSheetDialog.setContentView(R.layout.side_new_class);
             sideSheetDialog.show();
         }
     });

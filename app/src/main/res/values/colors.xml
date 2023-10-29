@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_card_perfil">#92B3A8</color>
-    <color name="color_text_card_profile">#FFFF</color>
+    <color name="color_text_card_profile">#000</color>
     <color name="background_color_card_profile">#DEEEE9</color>
     <color name="color_primary_morado">#8B418F</color>
     <color name="chip_diselect">#B8EAFF</color>

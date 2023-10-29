@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:http="http://schemas.android.com/apk/res-auto">
 
     <style name="ChipsProfileGrupo">
         <item name="chipStyle">@style/ChipThin</item>
@@ -14,6 +14,18 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="chipPersonalizados">
+        <item name="android:checkable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="cardProfile">
+        <item name="android:height">100dp</item>
+        <item name="android:layout_height">100dp</item>
 
     </style>
 </resources>

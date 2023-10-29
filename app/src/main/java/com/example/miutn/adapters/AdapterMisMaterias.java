@@ -2,9 +2,14 @@ package com.example.miutn.adapters;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.NMateria;
+import com.example.miutn.network.models.NMateriasCursando;
+import com.example.miutn.network.models.NprogramaAnalitico;
 import com.example.miutn.network.models.Temario;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
@@ -23,21 +31,23 @@ import com.google.android.material.chip.Chip;
 import java.util.ArrayList;
 
 public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.ViewHolder> {
-    private ArrayList<MateriasCursando> Materias;
+    private ArrayList<NMateriasCursando> Materias=new ArrayList<>();
+    private ArrayList<NMateria> ProgramaAnalitico=new ArrayList<>();
+
     //private Context context;
 
 
-    public AdapterMisMaterias(ArrayList<MateriasCursando> materias) {
+    public AdapterMisMaterias(ArrayList<NMateriasCursando> materias,ArrayList<NMateria> programaCarrera) {
         Materias = materias;
+        ProgramaAnalitico=programaCarrera;
     }
-
-
     public AdapterMisMaterias() {
-        Materias = new ArrayList<MateriasCursando>();
+        Materias = new ArrayList<NMateriasCursando>();
+        ProgramaAnalitico=new ArrayList<>();
     }
-    public void setData(ArrayList<MateriasCursando> newData){
+    public void setData(ArrayList<NMateriasCursando> newData){
         Materias=newData;
-           notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -53,15 +63,15 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
     @Override
     public void onBindViewHolder(@NonNull AdapterMisMaterias.ViewHolder holder, int position) {
     //-->   This i'm make link elemento to position of my Array <--
-        holder.materiaName.setText(Materias.get(position).getMateria().getNombre()); //-->   Link my content with my element
+        holder.materiaName.setText(ProgramaAnalitico.get(position).getName()); //-->   Link my content with my element
         holder.position=position;
-        holder.materiaSede.setText(Materias.get(position).getSede());
+//        holder.materiaSede.setText(Materias.get(position).getHorario().getSede().getValorAsociado());
         holder.chipAnio.setText(String.valueOf(Materias.get(position).getMateria().getAnio()));
     }
 
     @Override
     public int getItemCount() {
-        return Materias.size();
+        return ProgramaAnalitico.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +82,7 @@ private LinearLayout linearLayout;
 private ImageView imageView;
 private Chip chipAnio;
 private View viewTest;
-private float porcentaje=80f;
+private float porcentaje=50f;
 private int position;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,16 +90,27 @@ private int position;
             linearLayout=itemView.findViewById(R.id.parentMatery);
             materiaSede=itemView.findViewById(R.id.materiaSede);
             cardView=itemView.findViewById(R.id.cardView);
-            imageView=itemView.findViewById(R.id.imageView);
             viewTest=itemView.findViewById(R.id.viewTest);
+            if(porcentaje<45){
+                materiaName.setTextColor(Color.parseColor("#000000"));
+            }
             ViewGroup.LayoutParams params = viewTest.getLayoutParams();
             ViewGroup.LayoutParams paramsCard = cardView.getLayoutParams();
             params.width= (int) (paramsCard.width *(porcentaje/100));
-            viewTest.setLayoutParams(params);
-            viewTest.requestLayout();
-            // imageView.setY(cardView.getY());
-            int porcentaje = 90; // Debes configurar este valor según tu lógica
-
+            int nuevoAncho = (int) (paramsCard.width * (porcentaje / 100));
+            ValueAnimator animator = ValueAnimator.ofInt(0, nuevoAncho);
+            animator.setInterpolator(new LinearInterpolator());
+            animator.setDuration(1000); // Establece la duración de la animación en milisegundos
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int animatedValue = (int) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams params = viewTest.getLayoutParams();
+                    params.width = animatedValue;
+                    viewTest.setLayoutParams(params);
+                }
+            });
+            animator.start();
             chipAnio=itemView.findViewById(R.id.chipAnio);
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,11 +124,11 @@ private int position;
 
                     textView.setText(materiaName.getText());
                     TextView textView1=view.findViewById(R.id.classCampus);
-                    textView1.setText(Materias.get(position).getDia());
+                    textView1.setText(Materias.get(position).getHorario().getDia());
                     Chip sede=view.findViewById(R.id.sedechip);
-                    sede.setText(Materias.get(position).getSede());
+                    sede.setText(Materias.get(position).getHorario().getSede().getValorAsociado());
                     Chip classHours=view.findViewById(R.id.classHours);
-                    classHours.setText(Materias.get(position).getHorario());
+                    classHours.setText(Materias.get(position).getHorario().getHoraFin());
                     RecyclerView recyclerViewTemario=view.findViewById(R.id.RecyclerTemario);
                     ArrayList<Temario>temarios=new ArrayList<>();
                     for(int a=0;a<5;a++){
@@ -116,8 +137,10 @@ private int position;
                         temario.setTema("Tema" +a);
                         temarios.add(temario);
                     }
-                    Materias.get(position).getMateria().setProgramaAnalitico(temarios);
-                    adapterTemario adapterTemario=new adapterTemario(Materias.get(position).getMateria().getProgramaAnalitico());
+                    NprogramaAnalitico analitico=new NprogramaAnalitico();
+                    analitico.setTemas(temarios);
+                    Materias.get(position).getMateria().setProgramaAnalitico(analitico);
+                    adapterTemario adapterTemario=new adapterTemario(Materias.get(position).getMateria().getProgramaAnalitico().getTemas());
                     recyclerViewTemario.setAdapter(adapterTemario);
 
                     recyclerViewTemario.setLayoutManager(new LinearLayoutManager(itemView.getContext()));

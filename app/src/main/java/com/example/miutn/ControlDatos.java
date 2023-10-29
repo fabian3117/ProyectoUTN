@@ -10,6 +10,10 @@ import android.util.Log;
 import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.NMateria;
+import com.example.miutn.network.models.NMateriasCursando;
+import com.example.miutn.network.models.NprogramaAnalitico;
+import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Profile;
 import com.example.miutn.network.models.Temario;
 
@@ -24,6 +28,8 @@ public class ControlDatos {
     private final static  String sharedPreferenceKeyObtenerMateriasCursadas="ObtenerMateriasCursadas";
     private final static  String sharedPreferenceKeyObtenerProgramaAnalitico="programaAnalitico";
     private final static String sharedPreferenceNameContainer="MiPreferencia";
+    private final static String sharedPreferenceKeyObtenerProgramaAnal="programaAnaliticoNuevaVersion";
+    private final static String sharedPreferenceKeyObtenerPerfil="PERFIL";
     private final static String sharedPreferenceKeyTemarioRecomendado="listaKey";
     private final static String sharedPreferenceKeyFechasExamenes="KeyFechasExam";
     private final static String sharedPreferenceKeyObtenerMateriasCursando="KeyMateriasCursando";
@@ -163,9 +169,8 @@ public class ControlDatos {
         //-->   True : Se guardo correctamente -- False : No se guardo  <--
         return (sharedPreferences.contains(sharedPreferenceKeyFechasExamenes));
     }
-    public static ArrayList<MateriasCursando> ObtencionObtenerMateriasCursando(Context context){
-        ArrayList<MateriasCursando> salida=new ArrayList<>();
-
+    public static ArrayList<NMateriasCursando> ObtencionObtenerMateriasCursando(Context context){
+        ArrayList<NMateriasCursando> salida=new ArrayList<>();
         SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
         String listaSerializada  = sharedPreferences.getString(sharedPreferenceKeyObtenerMateriasCursando, null);
         if (listaSerializada != null) {
@@ -173,7 +178,7 @@ public class ControlDatos {
                 byte[] listaBytes = Base64.decode(listaSerializada, Base64.DEFAULT);
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(listaBytes);
                 ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                ArrayList<MateriasCursando> listaObjetos = (ArrayList<MateriasCursando>) objectInputStream.readObject();
+                ArrayList<NMateriasCursando> listaObjetos = (ArrayList<NMateriasCursando>) objectInputStream.readObject();
                 salida=listaObjetos;
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -215,7 +220,7 @@ public static Profile ObtencionPerfil(Context context){
         }
         return salida;
     }
-    public static boolean GuardarMateriasCursando(Context context,ArrayList<MateriasCursando> MateriasCurse){
+    public static boolean GuardarMateriasCursando(Context context,ArrayList<NMateriasCursando> MateriasCurse){
         SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -233,4 +238,96 @@ public static Profile ObtencionPerfil(Context context){
         return (sharedPreferences.contains(sharedPreferenceKeyObtenerMateriasCursando));
 
 }
+public static boolean GuardarPerfil(Context context, Perfil perfil) {
+    SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
+    try {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(perfil);
+        String listaSerializadaGuardar = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(sharedPreferenceKeyObtenerPerfil, listaSerializadaGuardar);
+        editor.apply();
+    } catch (IOException e) {
+        e.printStackTrace();
+        Log.e("error",e.getMessage());
+    }
+    //-->   True : Se guardo correctamente -- False : No se guardo  <--
+    return (sharedPreferences.contains(sharedPreferenceKeyObtenerPerfil));
+}
+public static Perfil ObtenerPerfil(Context context){
+    Perfil salida=new Perfil();
+    SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
+    String listaSerializada  = sharedPreferences.getString(sharedPreferenceKeyObtenerPerfil, null);
+    if (listaSerializada != null) {
+        try {
+            byte[] listaBytes = Base64.decode(listaSerializada, Base64.DEFAULT);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(listaBytes);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            Perfil listaObjeto = (Perfil) objectInputStream.readObject();
+            salida=listaObjeto;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    return salida;
+}
+public static boolean ExistePerfil(Context context){
+    SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
+    return (sharedPreferences.contains(sharedPreferenceKeyObtenerPerfil));
+}
+public static boolean ActualizarPerfil(Context context,Perfil perfil){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(sharedPreferenceKeyObtenerPerfil);
+        editor.apply();
+        if (sharedPreferences.contains(sharedPreferenceKeyObtenerPerfil)) {
+            //-->   Si sigue en el contenedor es por que no se elimino correctamente    <--
+
+            return false;
+        }
+        return GuardarPerfil(context,perfil);
+    }
+
+    public static boolean GuardarMateriaCursando(Context context, NMateriasCursando materia) {
+
+        ArrayList<NMateriasCursando> materiasCursandoArrayList=ObtencionObtenerMateriasCursando(context);
+        materiasCursandoArrayList.add(materia);
+        GuardarMateriasCursando(context,materiasCursandoArrayList);
+        return true;
+    }
+
+    public static ArrayList<NMateria> ObtencionProgramaAnalitico(Context context) {
+        ArrayList<NMateria> salida=new ArrayList<>();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
+        String listaSerializada  = sharedPreferences.getString(sharedPreferenceKeyObtenerProgramaAnal, null);
+        if (listaSerializada != null) {
+            try {
+                byte[] listaBytes = Base64.decode(listaSerializada, Base64.DEFAULT);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(listaBytes);
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                ArrayList<NMateria> listaObjetos = (ArrayList<NMateria>) objectInputStream.readObject();
+                salida=listaObjetos;
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return salida;
+    }
+    public static boolean GuardarProgramaAnalitico(ArrayList<NMateria> analiticos, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(analiticos);
+            String listaSerializadaGuardar = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(sharedPreferenceKeyObtenerProgramaAnal, listaSerializadaGuardar);
+            editor.apply();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //-->   True : Se guardo correctamente -- False : No se guardo  <--
+        return (sharedPreferences.contains(sharedPreferenceKeyObtenerProgramaAnal));
+    }
 }

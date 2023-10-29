@@ -106,53 +106,57 @@
             android:padding="5dp"
             android:gravity="center"
             android:orientation="vertical">
-
             <!-- Tarjeta 1: Materias Aprobadas -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cardCornerRadius="8dp"
+ <androidx.cardview.widget.CardView
+                android:layout_width="450dp"
+                style="@style/cardProfile"
+                app:cardCornerRadius="10dp"
                 app:cardUseCompatPadding="true"
                 android:id="@+id/CardTest"
-                app:cardBackgroundColor="@color/color_card_perfil"
                 android:layout_margin="5dp">
+     <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:background="#000"
+        android:id="@+id/ViewProfileMateriasAprobadas"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        app:chipCornerRadius="100px"
-                        android:textSize="15sp"
-                        android:id="@+id/chipProfileMateriasAprobadas"
-                        app:chipIcon="@drawable/counter_1"
-                        />
-                    <ImageView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/house"
-                        />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            app:chipCornerRadius="100px"
+            android:textSize="15sp"
+            android:id="@+id/chipProfileMateriasAprobadas"
+            app:chipIcon="@drawable/counter_1"
+            />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Materias Aprobadas"
+            android:textColor="#000"
+            android:textAlignment="center"
+            />
+    </LinearLayout>
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Materias Aprobadas"
-                        android:textColor="@color/color_text_card_profile"
-                        android:textAlignment="center"
-                        />
-                </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
             </androidx.cardview.widget.CardView>
             <!-- Tarjeta 2: Finales Restantes -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="@color/color_card_perfil"
+                style="@style/cardProfile"
+                app:cardCornerRadius="10dp"
                 android:layout_margin="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -186,9 +190,8 @@
             <!-- Tarjeta 3: Podes Cursar -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="@color/color_card_perfil"
+                app:cardCornerRadius="10dp"
+                style="@style/cardProfile"
                 android:layout_margin="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -25,6 +25,7 @@ import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.Materia;
 import com.example.miutn.network.models.MateriasCursando;
+import com.example.miutn.network.models.NMateriasCursando;
 import com.example.miutn.network.models.Temario;
 
 import java.io.ByteArrayInputStream;
@@ -50,8 +51,8 @@ public class principalFragment extends Fragment {
     AdapterMisMaterias adapterMisMateriasHoy=new AdapterMisMaterias();
     //AdapterTemaHoy adapterTemaHoy=new AdapterTemaHoy();
     AdapterTemaHoy adapterTemaHoy=new AdapterTemaHoy();
-    ArrayList<MateriasCursando> materias= new ArrayList<>();
-    ArrayList<MateriasCursando> materiashoy=new ArrayList<>();
+    ArrayList<NMateriasCursando> materias= new ArrayList<>();
+    ArrayList<NMateriasCursando> materiashoy=new ArrayList<>();
     //AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
     AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
     Retrofit retrofit = RetrofitClient.getClient();
@@ -65,14 +66,15 @@ public void ActualizacionDatosContenidosAdapterTemario(ArrayList<Temario> apunte
     adapterTemaHoy.setData(apuntesHoyRecomendaciones);
 
 }
-public void ActualizacionDatosContenidosAdapterMaterias(ArrayList<MateriasCursando> mt){
+
+public void ActualizacionDatosContenidosAdapterMaterias(ArrayList<NMateriasCursando> mt){
     materias=mt;
     adapterMisMaterias.setData(materias);
 }
 public void ActualizacionDatosContenidosAdapterFechasEx(ArrayList<FechasExamenes>fechasExamenes){
         adapterProximasFechas.setData(fechasExamenes);
 }
-public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<MateriasCursando> mathoy){
+public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<NMateriasCursando> mathoy){
      materiashoy=mathoy;
      adapterMisMateriasHoy.setData(mathoy);
 }
@@ -81,7 +83,7 @@ public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<MateriasCur
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TODO MODIFICAR
-        String profileTest="FEDE";
+        String profileTest="FEDE";/*
         Call<ArrayList<MateriasCursando>> call = apiService.obtenerMaterias(profileTest);
         call.enqueue(new Callback<ArrayList<MateriasCursando>>() {
             @Override
@@ -128,7 +130,7 @@ public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<MateriasCur
                 programaAnal.add(temario);
                 materia.setProgramaAnalitico(programaAnal);
             }
-        });
+        });*/
         Date date=new Date();
         SimpleDateFormat simpleDateFormat= new SimpleDateFormat("EEEE", Locale.getDefault());
         String Dia= simpleDateFormat.format(date);
@@ -136,37 +138,7 @@ public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<MateriasCur
         Log.e("DIA",Dia);
         Dia="Lunes";    //TODO ELIMINAR ESTO
         Call<ArrayList<MateriasCursando>> MateriasHoy = apiService.obtenerMateriasHoy(profileTest,Dia);
-        MateriasHoy.enqueue(new Callback<ArrayList<MateriasCursando>>() {
-            @Override
-            public void onResponse(Call<ArrayList<MateriasCursando>> call, Response<ArrayList<MateriasCursando>> response) {
-                if (response.isSuccessful()) {
-                    //ArrayList<MateriasCursando> materiashoy = response.body();
-                    materiashoy = response.body();
-                    ArrayList<String> nameMateryhoy=new ArrayList<>();
-                    if(materiashoy.isEmpty()){
-                        // TODO : Añadir Animacion indicando dia libre
-                        Log.e("MIRA","ESTA VACIO HOY");
-                        return;
-                    }
-                    for(MateriasCursando mater : materiashoy){
-                        nameMateryhoy.add(mater.getMateria().getNombre());
-                    }
-                    adapterMisMateriasHoy.setData(materiashoy);
-                } else {
-                    // Maneja el error de la solicitud, por ejemplo, mostrando un mensaje de error.
-                    Log.e("MIRA","FALLO");
-                }
 
-                //CargaFragment();
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<MateriasCursando>> call, Throwable t) {
-                // Maneja errores de red o excepciones, por ejemplo, mostrando un mensaje de error.
-                Log.e("MIRA","FALLO SEGUNDA FORMA");
-                Log.e("MIRA",t.getMessage());
-            }
-        });
     }
 
     @Override

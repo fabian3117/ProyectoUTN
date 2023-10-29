@@ -21,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:singleSelection="true"
+        android:id="@+id/chipGroupSedeNewClass"
         app:singleLine="true"
         >
         <com.google.android.material.chip.Chip
@@ -30,8 +31,10 @@
             android:clickable="true"
             android:checkable="true"
             android:focusable="true"
+            android:id="@+id/chipNewClassMedrano"
             app:chipBackgroundColor="@color/bg_chip_state_list"
             />
+
         <com.google.android.material.chip.Chip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,6 +43,7 @@
             android:focusable="true"
             app:chipBackgroundColor="@color/bg_chip_state_list"
             android:text="Campus"
+            android:id="@+id/chipNewClassCampus"
             />
 
     </com.google.android.material.chip.ChipGroup>
@@ -70,31 +74,39 @@
     android:layout_width="match_parent"
     app:singleLine="true"
     android:padding="10px"
+    style="@style/chipPersonalizados"
+    android:id="@+id/chipGroupDiaNewClass"
     android:layout_height="wrap_content">
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
+        style="@style/chipPersonalizados"
         android:layout_height="wrap_content"
-        android:text="Lunes"/>
+        android:text="@string/lunes"/>
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Martes"/>
+        style="@style/chipPersonalizados"
+        android:text="@string/martes"/>
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Miercoles"/>
+        style="@style/chipPersonalizados"
+        android:text="@string/miercoles"/>
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jueves"/>
+        style="@style/chipPersonalizados"
+        android:text="@string/jueves"/>
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Viernes"/>
+        style="@style/chipPersonalizados"
+        android:text="@string/viernes"/>
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sabado"/>
+        style="@style/chipPersonalizados"
+        android:text="@string/sabado"/>
 </com.google.android.material.chip.ChipGroup>
 
 </androidx.core.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 package com.example.miutn.fragment;
 
+import android.animation.ValueAnimator;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
@@ -9,17 +10,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.miutn.R;
 import com.example.miutn.enums.Carreras;
+import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Profile;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textview.MaterialTextView;
 
 public class perfilFragment extends Fragment {
-    Profile profile=new Profile();
+    Perfil profile=new Perfil();
 private ImageView profilePic;
 
 private MaterialTextView profileName;
@@ -58,24 +61,43 @@ private Chip chipProfileMateriasAprobadas,chipProfileFinalesRestantes,chipProfil
         chipProfileMateriasAprobadas=v.findViewById(R.id.chipProfileMateriasAprobadas);
         chipProfileCorreo=v.findViewById(R.id.chipProfileCorreo);
         CardTest=v.findViewById(R.id.CardTest);
+        View ViewProfileMateriasAprobadas=v.findViewById(R.id.ViewProfileMateriasAprobadas);
+        ViewGroup.LayoutParams paramsPater=v.findViewById(R.id.CardTest).getLayoutParams();
+AjustePorcentajes(paramsPater.width, ViewProfileMateriasAprobadas);
         CargaTestData();
         return v;
     }
+    void AjustePorcentajes(int anchoMax,View ViewProfileMateriasAprobadas){
+        ViewGroup.LayoutParams params=ViewProfileMateriasAprobadas.getLayoutParams();
+        ViewProfileMateriasAprobadas.setLayoutParams(params);
+        ValueAnimator animator = ValueAnimator.ofInt(0, anchoMax);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(1000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int animatedValue = (int) animation.getAnimatedValue();
+                params.width = animatedValue;
+                ViewProfileMateriasAprobadas.setLayoutParams(params);
+            }
+        });
+        animator.start();
+    }
     void CargaTestData(){
-        numberLegajo.setText(profile.getNumberLegajo());
+        numberLegajo.setText(profile.getLegajo());
         userSIU.setText(profile.getUserSIU());
-        profileName.setText(profile.getName());
-        carrera.setText(profile.getCarrera());
-        chipProfileFinalesRestantes.setText(String.valueOf(profile.getMateriasCursadasRegularizadas().size()-profile.getMateriasCursadasAprobadas().size()));
-        chipProfileMateriasAprobadas.setText(String.valueOf(profile.getMateriasCursadasAprobadas().size()));
-        chipProfileCorreo.setText(String.valueOf(profile.getName()));
+        profileName.setText(profile.getUserName());
+        carrera.setText(profile.getCarrea().getValorAsociado());
+        chipProfileFinalesRestantes.setText(String.valueOf(profile.getMateriasCursadas().size()-profile.getMateriasCursando().size()));
+        chipProfileMateriasAprobadas.setText(String.valueOf(profile.getMateriasCursadas().size()));
+        chipProfileCorreo.setText(String.valueOf(profile.getCorreoInstitucional()));
         chipProfilePodesCursar.setText("5");
 
 
     }
 
 
-    public void ActualizacionDatosContenidosAdapterProfile(Profile profile) {
+    public void ActualizacionDatosContenidosAdapterProfile(Perfil profile) {
         this.profile=profile;
        // CargaTestData();
     }

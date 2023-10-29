@@ -1,20 +1,30 @@
 package com.example.miutn.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
+import com.example.miutn.network.models.NMateria;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 
 public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMateria.ViewHolder> {
+    //  TODO Retorno el nombre y luego el servidor hace el macheo correspondiente   <--
+
     private ArrayList<String> materias;
+    String activado="";
+    private int posicion;
+    public String getMateriaSeleccionada(){
+        return activado;
+    }
 
     public AdapterAgregaMateria(ArrayList<String> materias) {
         this.materias = materias;
@@ -33,7 +43,7 @@ public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMate
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAgregaMateria.ViewHolder holder, int position) {
-holder.nombreMateria.setText(materias.get(position));
+        holder.nombreMateria.setText(materias.get(position));
     }
 
     @Override
@@ -46,6 +56,13 @@ holder.nombreMateria.setText(materias.get(position));
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nombreMateria=itemView.findViewById(R.id.nombreMateria);
+            nombreMateria.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.e("TOCO","BOTON" + buttonView.getText());
+                    activado= String.valueOf(buttonView.getText());
+                }
+            });
         }
     }
 }

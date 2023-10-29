@@ -53,4 +53,10 @@
     <string name="listado_de_materias_que_se_pueden_cursar">Listado de materias que se pueden cursar</string>
     <string name="muestra_las_materias_que_puedo_cursar">Muestra las materias que puedo cursar</string>
     <string name="aca_tendria_que_ir_el_temario_de_la_materia">Aca tendria que ir el Temario de la materia</string>
+    <string name="lunes">Lunes</string>
+    <string name="martes">Martes</string>
+    <string name="miercoles">Miercoles</string>
+    <string name="jueves">Jueves</string>
+    <string name="viernes">Viernes</string>
+    <string name="sabado">Sabado</string>
 </resources>

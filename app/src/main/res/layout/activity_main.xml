@@ -15,17 +15,27 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/Principal">
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/search_bar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:contextClickable="true"
-        android:hint="@string/barrabusqueda"
-        android:textAlignment="center"
-        app:menu="@menu/menu_search_bar"
-        android:textAppearance="@style/Widget.Material3.SearchBar"
-        app:layout_anchor="@id/DivPrin" />
+        android:layout_height="100dp">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:menu="@menu/menu_search_bar"
+                android:hint="@string/barrabusqueda" />
+        </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.search.SearchView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="searchbar_hint"
+            android:id="@+id/SearchView"
+            app:layout_anchor="@id/search_bar">
+        </com.google.android.material.search.SearchView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,6 +44,16 @@
         android:layout_gravity="top"
         android:id="@+id/DivPrin"
         android:layout_marginTop="5px" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationMajor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lottie_rawRes="@raw/animation_0"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatMode="reverse"
+        />
+
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
