@@ -2,6 +2,7 @@ package com.example.miutn.network.models;
 
 import java.io.Serializable;
 
+/** @noinspection unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused */
 public class MateriasCursando implements Serializable {
     String id;
     private Materia materia;
@@ -74,6 +75,6 @@ public class MateriasCursando implements Serializable {
         this.dia = "";
         this.horario = "";
         this.sede = "";
-        temasVistos=0;
+        temasVistos = 0;
     }
 }

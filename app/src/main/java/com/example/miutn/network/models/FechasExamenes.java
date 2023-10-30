@@ -1,13 +1,11 @@
 package com.example.miutn.network.models;
 
-import com.example.miutn.network.models.Materia;
-
 import java.io.Serializable;
-import java.util.Date;
 
-public class FechasExamenes implements Serializable  {
+/** @noinspection unused, unused */
+public class FechasExamenes implements Serializable {
     private String Fecha;
-    private Materia materia;
+    private NMateria materia;
 
     public String getFecha() {
         return Fecha;
@@ -17,11 +15,11 @@ public class FechasExamenes implements Serializable  {
         Fecha = fecha;
     }
 
-    public Materia getMateria() {
+    public NMateria getMateria() {
         return materia;
     }
 
-    public void setMateria(Materia materia) {
+    public void setMateria(NMateria materia) {
         this.materia = materia;
     }
 }

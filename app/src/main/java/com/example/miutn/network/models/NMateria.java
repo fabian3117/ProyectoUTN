@@ -2,24 +2,24 @@ package com.example.miutn.network.models;
 
 import com.example.miutn.enums.Cuatrimestres;
 import com.example.miutn.enums.Modalidad;
-import com.example.miutn.enums.Sedes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** @noinspection FieldMayBeFinal*/
 public class NMateria implements Serializable {
     private String id;
-    private String name,anio;
+    private String name, anio;
     private NprogramaAnalitico programaAnalitico;
 
     private Cuatrimestres cuatrimestre;
     private Modalidad modalidad;
     private ArrayList<String> correlativas;//-->    Para cursar <--
 
-    public NMateria(String id,String name, String anio, NprogramaAnalitico programaAnalitico, Cuatrimestres cuatrimestre, Modalidad modalidad, ArrayList<String> correlativas) {
+    public NMateria(String id, String name, String anio, NprogramaAnalitico programaAnalitico, Cuatrimestres cuatrimestre, Modalidad modalidad, ArrayList<String> correlativas) {
         this.name = name;
         this.anio = anio;
-        this.id=id;
+        this.id = id;
         this.programaAnalitico = programaAnalitico;
         this.cuatrimestre = cuatrimestre;
         this.modalidad = modalidad;
@@ -78,7 +78,7 @@ public class NMateria implements Serializable {
     public NMateria() {
         this.name = "";
         this.anio = "";
-        this.id="";
+        this.id = "";
         this.programaAnalitico = new NprogramaAnalitico();
         this.cuatrimestre = Cuatrimestres.PrimerCuatrimestre;
         this.modalidad = Modalidad.Presencial;

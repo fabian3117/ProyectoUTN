@@ -2,19 +2,20 @@ package com.example.miutn.network.models;
 
 import java.io.Serializable;
 
+/** @noinspection FieldMayBeFinal*/
 public class NMateriasCursando implements Serializable {
     private String id;
     private NMateria materia;
     private Horarios horario;
 
     public NMateriasCursando() {
-        materia=new NMateria();
-        horario=new Horarios();
-        id="";
+        materia = new NMateria();
+        horario = new Horarios();
+        id = "";
     }
 
-    public NMateriasCursando(String id,NMateria materia, Horarios horario) {
-        this.id=id;
+    public NMateriasCursando(String id, NMateria materia, Horarios horario) {
+        this.id = id;
         this.materia = materia;
         this.horario = horario;
     }

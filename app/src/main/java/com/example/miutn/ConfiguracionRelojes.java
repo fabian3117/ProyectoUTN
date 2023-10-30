@@ -2,6 +2,7 @@ package com.example.miutn;
 
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -12,6 +13,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+/** @noinspection FieldMayBeFinal, FieldMayBeFinal, unused */
 public class ConfiguracionRelojes implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private Chip chip;
     private FragmentManager fragmentManager;
@@ -19,7 +21,6 @@ public class ConfiguracionRelojes implements View.OnClickListener, CompoundButto
     public ConfiguracionRelojes(Chip chip, FragmentManager fragmentManager) {
         this.chip = chip;
         this.fragmentManager = fragmentManager;
-        Log.e("RAS","AS");
     }
 
     @Override
@@ -33,18 +34,19 @@ public class ConfiguracionRelojes implements View.OnClickListener, CompoundButto
                         .setInputMode(INPUT_MODE_CLOCK)
                         .build();
         picker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                Log.e("mira","HS:MM "+picker.getHour()+":"+picker.getMinute());
+                Log.e("mira", "HS:MM " + picker.getHour() + ":" + picker.getMinute());
                 //  horaInicio=""+picker.getHour()+":"+picker.getMinute();
-                chip.setText("Inicio "+picker.getHour()+":"+picker.getMinute());
+                chip.setText("Inicio " + picker.getHour() + ":" + picker.getMinute());
             }
         });
-        picker.show(fragmentManager,"tag");
+        picker.show(fragmentManager, "tag");
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Log.e("MIRA","AS");
+        Log.e("MIRA", "AS");
     }
 }

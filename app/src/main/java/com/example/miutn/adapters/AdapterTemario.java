@@ -1,7 +1,6 @@
 package com.example.miutn.adapters;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,42 +20,40 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-import retrofit2.http.Url;
+/** @noinspection unused*/
+public class AdapterTemario extends RecyclerView.Adapter<AdapterTemario.ViewHolder> {
+    ArrayList<Temario> temarios;
 
-public class adapterTemario extends RecyclerView.Adapter<adapterTemario.ViewHolder> {
-ArrayList<Temario> temarios;
-
-    public adapterTemario(ArrayList<Temario> temarios) {
+    public AdapterTemario(ArrayList<Temario> temarios) {
         this.temarios = temarios;
     }
 
-    public adapterTemario() {
-        temarios=new ArrayList<>();
+    public AdapterTemario() {
+        temarios = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public adapterTemario.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterTemario.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View misMateriasView = inflater.inflate(R.layout.recycler_temario, parent, false);
-        adapterTemario.ViewHolder viewHolder = new ViewHolder(misMateriasView);
+        AdapterTemario.ViewHolder viewHolder = new ViewHolder(misMateriasView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull adapterTemario.ViewHolder holder, int position) {
-    holder.temeName.setText(temarios.get(position).getTema());
-    holder.position=position;
-    holder.Temario.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Log.e("Tocamos","POS : "+position);
-            Uri link= Uri.parse(temarios.get(position).getApunte()); //-->   Esta es la direccion del apunte <--
-            Intent intent=new Intent(Intent.ACTION_VIEW,link);
-            v.getContext().startActivity(intent);
-        }
-    });
+    public void onBindViewHolder(@NonNull AdapterTemario.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.temeName.setText(temarios.get(position).getTema());
+        holder.Temario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("Tocamos", "POS : " + position);
+                Uri link = Uri.parse(temarios.get(position).getApunte()); //-->   Esta es la direccion del apunte <--
+                Intent intent = new Intent(Intent.ACTION_VIEW, link);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -67,17 +64,18 @@ ArrayList<Temario> temarios;
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView temeName;
         LinearLayout Temario;
-        int position;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            temeName=itemView.findViewById(R.id.temeName);
-            Temario=itemView.findViewById(R.id.Temario);
+            temeName = itemView.findViewById(R.id.temeName);
+            Temario = itemView.findViewById(R.id.Temario);
             //-->   Si se realiza un click sobre el nombre tengo que ir al apunte   <--
             // TODO Puedo abrir el link directamente o abrir el archivo en una nueva activity   <--
             temeName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Snackbar.make(itemView,"Tocaste : "+temeName.getText(),Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(itemView, "Tocaste : " + temeName.getText(), Snackbar.LENGTH_LONG).show();
                 }
             });
         }

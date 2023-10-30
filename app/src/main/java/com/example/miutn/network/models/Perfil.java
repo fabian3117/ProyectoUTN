@@ -5,9 +5,10 @@ import com.example.miutn.enums.Carreras;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** @noinspection FieldMayBeFinal, SillyAssignment, DataFlowIssue, UnusedAssignment */
 public class Perfil implements Serializable {
     private String id;
-    private String userName,password,profilePic,legajo,userSIU,name,correoInstitucional;
+    private String userName, password, profilePic, legajo, userSIU, name, correoInstitucional;
     private Carreras carrea;
     //-->   Diferencia entre CURSADAS y CURSANDO es que la primera tienen adjunto los horarios  <--
     private ArrayList<NMateria> materiasCursadas;   //-->   Materias CURSADAS en pasado <--
@@ -38,8 +39,8 @@ public class Perfil implements Serializable {
         this.carrea = carrea;
         this.materiasCursadas = materiasCursadas;
         this.materiasCursando = materiasCursando;
-        this.name=name;
-        this.correoInstitucional=correoInstitucional;
+        this.name = name;
+        this.correoInstitucional = correoInstitucional;
     }
 
     public String getName() {
@@ -51,16 +52,16 @@ public class Perfil implements Serializable {
     }
 
     public Perfil() {
-        this.id="";
+        this.id = "";
         this.userName = "userName";
         this.password = "password";
         this.profilePic = "profilePic";
         this.legajo = "legajo";
         this.userSIU = "userSIU";
-        carrea =Carreras.Electronica;
+        carrea = Carreras.Electronica;
         this.materiasCursadas = new ArrayList<>();
         this.materiasCursando = new ArrayList<>();
-        correoInstitucional="";
+        correoInstitucional = "";
     }
 
     public String getUserName() {
@@ -108,7 +109,7 @@ public class Perfil implements Serializable {
     }
 
     public void setCarrea(Carreras carrea) {
-        carrea = carrea;
+        this.carrea = carrea;
     }
 
     public ArrayList<NMateria> getMateriasCursadas() {

@@ -11,18 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
-import com.example.miutn.network.models.NMateria;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 
+/** @noinspection FieldMayBeFinal*/
 public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMateria.ViewHolder> {
     //  TODO Retorno el nombre y luego el servidor hace el macheo correspondiente   <--
 
     private ArrayList<String> materias;
-    String activado="";
-    private int posicion;
-    public String getMateriaSeleccionada(){
+    String activado = "";
+
+    public String getMateriaSeleccionada() {
         return activado;
     }
 
@@ -37,7 +37,7 @@ public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMate
         LayoutInflater inflater = LayoutInflater.from(context);
         View misMateriasView = inflater.inflate(R.layout.recycler_more_class, parent, false);
 
-        ViewHolder viewHolder =new ViewHolder(misMateriasView);
+        ViewHolder viewHolder = new ViewHolder(misMateriasView);
         return viewHolder;
     }
 
@@ -53,14 +53,15 @@ public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMate
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private Chip nombreMateria;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nombreMateria=itemView.findViewById(R.id.nombreMateria);
+            nombreMateria = itemView.findViewById(R.id.nombreMateria);
             nombreMateria.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.e("TOCO","BOTON" + buttonView.getText());
-                    activado= String.valueOf(buttonView.getText());
+                    Log.e("TOCO", "BOTON" + buttonView.getText());
+                    activado = String.valueOf(buttonView.getText());
                 }
             });
         }

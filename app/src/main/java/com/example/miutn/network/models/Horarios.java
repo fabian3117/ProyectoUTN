@@ -4,9 +4,10 @@ import com.example.miutn.enums.Sedes;
 
 import java.io.Serializable;
 
+/** @noinspection unused, unused, unused, unused, unused */
 public class Horarios implements Serializable {
-    private String dia,horaInicio,horaFin,aula;
-    private Sedes sede=Sedes.Campus;
+    private String dia, horaInicio, horaFin, aula;
+    private Sedes sede;
 
 
     public String getDia() {

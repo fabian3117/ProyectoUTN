@@ -5,8 +5,9 @@ import java.util.ArrayList;
 
 import lombok.Data;
 
+/** @noinspection unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, unused */
 @Data
-public class Materia  implements Serializable {
+public class Materia implements Serializable {
     private String id;
     private String nombre;
     private int anio;
@@ -21,13 +22,13 @@ public class Materia  implements Serializable {
     private ArrayList<Temario> programaAnalitico;
 
     public Materia() {
-        programaAnalitico=new ArrayList<>();
-        materiasAprobadas=new ArrayList<>();
-        materiasCursadas=new ArrayList<>();
-        materiasAprobadasFinal=new ArrayList<>();
-        materiasCursadasFinal=new ArrayList<>();
-        carreras=new ArrayList<>();
-        anio=0;
+        programaAnalitico = new ArrayList<>();
+        materiasAprobadas = new ArrayList<>();
+        materiasCursadas = new ArrayList<>();
+        materiasAprobadasFinal = new ArrayList<>();
+        materiasCursadasFinal = new ArrayList<>();
+        carreras = new ArrayList<>();
+        anio = 0;
     }
 
     public ArrayList<Temario> getProgramaAnalitico() {

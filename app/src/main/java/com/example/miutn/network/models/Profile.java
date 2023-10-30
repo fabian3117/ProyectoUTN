@@ -3,19 +3,17 @@ package com.example.miutn.network.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import lombok.Data;
-
 /**
  * This is model of profile
  */
 
-public class Profile  implements Serializable {
+public class Profile implements Serializable {
     private ArrayList<MateriasCursando> materiasCursandos;
     private ArrayList<MateriasCursando> materiasCursadasAprobadas;
     private ArrayList<MateriasCursando> materiasCursadasRegularizadas;
-    private String numberLegajo,userSIU,name,carrera,correoInstitucional;
+    private String numberLegajo, userSIU, name, carrera, correoInstitucional;
 
-    public Profile(ArrayList<MateriasCursando> materiasCursandos, ArrayList<MateriasCursando> materiasCursadasAprobadas, ArrayList<MateriasCursando> materiasCursadasRegularizadas, String numberLegajo, String userSIU, String name, String carrera,String correoInstitucional) {
+    public Profile(ArrayList<MateriasCursando> materiasCursandos, ArrayList<MateriasCursando> materiasCursadasAprobadas, ArrayList<MateriasCursando> materiasCursadasRegularizadas, String numberLegajo, String userSIU, String name, String carrera, String correoInstitucional) {
         this.materiasCursandos = materiasCursandos;
         this.materiasCursadasAprobadas = materiasCursadasAprobadas;
         this.materiasCursadasRegularizadas = materiasCursadasRegularizadas;
@@ -23,8 +21,9 @@ public class Profile  implements Serializable {
         this.userSIU = userSIU;
         this.name = name;
         this.carrera = carrera;
-        this.correoInstitucional=correoInstitucional;
+        this.correoInstitucional = correoInstitucional;
     }
+
     public Profile() {
         this.materiasCursandos = new ArrayList<>();
         this.materiasCursadasAprobadas = new ArrayList<>();
@@ -33,7 +32,7 @@ public class Profile  implements Serializable {
         this.userSIU = "";
         this.name = "";
         this.carrera = "";
-        this.correoInstitucional="";
+        this.correoInstitucional = "";
     }
 
     public String getCorreoInstitucional() {
