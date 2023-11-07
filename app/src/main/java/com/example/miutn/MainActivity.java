@@ -126,6 +126,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         CargaInicialTest();
+        apiService.materiasAsociadas(Carreras.Electronica).enqueue(new Callback<ArrayList<NMateria>>() {
+            @Override
+            public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
+                if(response.isSuccessful()){
+                    Log.e("SOLICITUD","EXITO");
+
+                }
+                else{
+                    Log.e("SOLICITUD","FALLO");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
+                Log.e("SOLICITUD",t.getMessage());
+            }
+        });
 
     }
 
@@ -207,9 +224,32 @@ public class MainActivity extends AppCompatActivity {
             getApplicationContext().startActivity(intent);
             finish();   //-->   Finalizo esta actividad <--
         }
-        ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(this);
-        fragment.ActualizacionDatosContenidosAdapterTemario(recomendaciones);
+        apiService.obtenerApuntes("FEDE").enqueue(new Callback<ArrayList<Temario>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Temario>> call, Response<ArrayList<Temario>> response) {
+                if(response.isSuccessful()){
+                    ArrayList<Temario> recomendaciones = response.body();
+                    ControlDatos.GuardarRecomendaciones(getApplicationContext(),recomendaciones);
+                    ActualizaRecomendaciones(recomendaciones);
+                }
+                else{
+                    ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
+                   ActualizaRecomendaciones(recomendaciones);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ArrayList<Temario>> call, Throwable t) {
+                ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
+                ActualizaRecomendaciones(recomendaciones);
+            }
+        });
+        //ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(this);
+        //fragment.ActualizacionDatosContenidosAdapterTemario(recomendaciones);
+
+    }
+    public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion){
+        fragment.ActualizacionDatosContenidosAdapterTemario(recomendacion);
     }
 
     public void ObtencionMateriasHoy(Perfil perfil) {

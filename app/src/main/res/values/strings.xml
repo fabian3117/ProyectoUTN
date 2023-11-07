@@ -59,4 +59,5 @@
     <string name="jueves">Jueves</string>
     <string name="viernes">Viernes</string>
     <string name="sabado">Sabado</string>
+    <string name="finales_restantes">Finales Restantes</string>
 </resources>

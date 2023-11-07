@@ -28,4 +28,9 @@
         <item name="android:layout_height">100dp</item>
 
     </style>
+
+    <style name="TextGeneral">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/color_text_card_profile</item>
+    </style>
 </resources>

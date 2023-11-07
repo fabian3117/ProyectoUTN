@@ -51,22 +51,19 @@ public class AdapterMiPrograma extends RecyclerView.Adapter<AdapterMiPrograma.Vi
 
     @Override
     public void onBindViewHolder(@NonNull AdapterMiPrograma.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
-                LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.tryshide, null);
-                Chip textView = view.findViewById(R.id.nameClass);
-               ;
-                textView.setText(materiasDeCarrera.get(position).getName());
-                RecyclerView recyclerViewTemario = view.findViewById(R.id.RecyclerTemario);
-                AdapterTemario adapterTemario = new AdapterTemario(materiasDeCarrera.get(position).getProgramaAnalitico().getTemas());
-                recyclerViewTemario.setAdapter(adapterTemario);
-                recyclerViewTemario.setLayoutManager(new LinearLayoutManager(v.getContext()));
-                sideSheetDialog.setContentView(view);
-                sideSheetDialog.show();
-            }
+        holder.linearLayout.setOnClickListener(v -> {
+            BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
+            LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.tryshide, null);
+            Chip textView = view.findViewById(R.id.nameClass);
+           ;
+            textView.setText(materiasDeCarrera.get(position).getName());
+            RecyclerView recyclerViewTemario = view.findViewById(R.id.RecyclerTemario);
+            AdapterTemario adapterTemario = new AdapterTemario(materiasDeCarrera.get(position).getProgramaAnalitico().getTemas());
+            recyclerViewTemario.setAdapter(adapterTemario);
+            recyclerViewTemario.setLayoutManager(new LinearLayoutManager(v.getContext()));
+            sideSheetDialog.setContentView(view);
+            sideSheetDialog.show();
         });
         holder.materiaName.setText(materiasDeCarrera.get(position).getName());
 

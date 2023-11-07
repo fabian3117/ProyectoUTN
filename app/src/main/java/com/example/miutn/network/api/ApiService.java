@@ -7,6 +7,7 @@ import com.example.miutn.network.models.MateriasCursando;
 import com.example.miutn.network.models.NMateria;
 import com.example.miutn.network.models.NMateriasCursando;
 import com.example.miutn.network.models.Perfil;
+import com.example.miutn.network.models.Temario;
 
 import java.util.ArrayList;
 
@@ -55,4 +56,10 @@ public interface ApiService {
 
     @GET("obtenerFechas")
     Call<ArrayList<FechasExamenes>> obtenerProximasFechas();
+    //-->   Obtener apuntesRecomendados hoy <--
+    @GET("obtenerApuntes/{profile}")
+    Call<ArrayList<Temario>> obtenerApuntes(@Path("profile") String profile);
+
+    @GET("/controladorPrincipal/materias/{carrera}")
+    Call<ArrayList<NMateria>> materiasAsociadas(@Path("carrera") Carreras carrera);
 }

@@ -157,6 +157,7 @@
                 android:layout_height="match_parent"
                 style="@style/cardProfile"
                 app:cardCornerRadius="10dp"
+                app:cardUseCompatPadding="true"
                 android:layout_margin="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,18 +173,11 @@
                         android:id="@+id/chipProfileFinalesRestantes"
                         app:chipIcon="@drawable/counter_1"
                         />
-                    <ImageView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/house"
-                        />
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textColor="@color/color_text_card_profile"
-                        android:text="Finales Restantes"
-                        android:textAlignment="center"
+                        style="@style/TextGeneral"
+                        android:text="@string/finales_restantes"
                         />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -191,6 +185,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 app:cardCornerRadius="10dp"
+                app:cardUseCompatPadding="true"
                 style="@style/cardProfile"
                 android:layout_margin="5dp">
                 <LinearLayout
@@ -218,8 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Podes Cursar"
-                        android:textColor="@color/color_text_card_profile"
-                        android:textAlignment="center"
+                        style="@style/TextGeneral"
                         />
                 </LinearLayout>
 
