@@ -1,5 +1,6 @@
 package com.example.miutn;
 
+import static com.example.miutn.enums.Carreras.Electronica;
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
 import android.annotation.SuppressLint;
@@ -34,6 +35,7 @@ import com.example.miutn.network.models.NMateriasCursando;
 import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Profile;
 import com.example.miutn.network.models.Temario;
+import com.example.miutn.utils.General;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     /** @noinspection unused*/
     FrameLayout sideSheetContainer;
     Retrofit retrofit = RetrofitClient.getClient();
+    public final static String carreraSelect="Electronica";
     ExtendedFloatingActionButton extendedFloatingActionButton;
     ApiService apiService = retrofit.create(ApiService.class);
     BottomSheetDialog sideSheetDialog;
@@ -126,30 +129,37 @@ public class MainActivity extends AppCompatActivity {
         });
 
         CargaInicialTest();
-        apiService.materiasAsociadas(Carreras.Electronica).enqueue(new Callback<ArrayList<NMateria>>() {
+        Carreras el= Carreras.valueOf("Electronica");
+
+       /* apiService.materiasAsociadas(carreraSelect).enqueue(new Callback<ArrayList<NMateria>>() {
             @Override
             public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
                 if(response.isSuccessful()){
                     Log.e("SOLICITUD","EXITO");
+                    ControlDatos.GuardarProgramaAnalitico(response.body(),getApplicationContext());
+                    fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(response.body());
 
                 }
                 else{
                     Log.e("SOLICITUD","FALLO");
+                    fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(ControlDatos.ObtencionProgramaAnalitico(getApplicationContext()));
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
                 Log.e("SOLICITUD",t.getMessage());
+                snackbar.setText("error Obtencion datos");
+                snackbar.show();
             }
         });
-
+*/
     }
 
     public void CargaInicialTest() {
 
         if (ConexionInternetDisponible()) {
-            apiService.obtenerMateriasProgramaAnal(Carreras.Electronica).enqueue(new Callback<ArrayList<NMateria>>() {
+            apiService.obtenerMateriasProgramaAnal(Electronica).enqueue(new Callback<ArrayList<NMateria>>() {
                 @Override
                 public void onResponse(@NonNull Call<ArrayList<NMateria>> call, @NonNull Response<ArrayList<NMateria>> response) {
                     if (response.isSuccessful()) {
@@ -176,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         for (FechasExamenes materia : response.body()) {
                             Log.e("FECHA", materia.getMateria().getName());
                         }
+                        General.fechasExamenes=fechasExamenes;
                     } else {
                         snackbar.setText("Error en obtencion fechas de examen");
                         snackbar.show();
@@ -185,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Call<ArrayList<FechasExamenes>> call, @NonNull Throwable t) {
                     fechasExamenes = ControlDatos.ObtencionFechasExamenes(getApplicationContext());
+                    General.fechasExamenes=fechasExamenes;
                     fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
                 }
             });
@@ -196,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                         perfil = response.body();
                         ControlDatos.GuardarProfile(getApplicationContext(), profile);
                         ObtencionMateriasHoy(perfil);
+                        General.perfil=perfil;
                     } else {
                         snackbar.setText("Error en obtencion de datos de servidor");
                         snackbar.show();
@@ -231,9 +244,11 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<Temario> recomendaciones = response.body();
                     ControlDatos.GuardarRecomendaciones(getApplicationContext(),recomendaciones);
                     ActualizaRecomendaciones(recomendaciones);
+                    General.recomendaciones=recomendaciones;
                 }
                 else{
                     ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
+                    General.recomendaciones=recomendaciones;
                    ActualizaRecomendaciones(recomendaciones);
                 }
             }
@@ -241,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ArrayList<Temario>> call, Throwable t) {
                 ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
+                General.recomendaciones=recomendaciones;
                 ActualizaRecomendaciones(recomendaciones);
             }
         });

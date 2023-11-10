@@ -54,5 +54,6 @@ public class misMateriasFragment extends Fragment {
 
     public void ActualizacionDatosContenidosAdapterMisMaterias_Programa(ArrayList<NMateria> body) {
         programa = body;
+        adapterMisMaterias.setData(programa);
     }
 }

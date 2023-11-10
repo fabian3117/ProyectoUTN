@@ -60,6 +60,6 @@ public interface ApiService {
     @GET("obtenerApuntes/{profile}")
     Call<ArrayList<Temario>> obtenerApuntes(@Path("profile") String profile);
 
-    @GET("/controladorPrincipal/materias/{carrera}")
-    Call<ArrayList<NMateria>> materiasAsociadas(@Path("carrera") Carreras carrera);
+    @GET("controladorPrincipal/materiasT/{carrera}")
+    Call<ArrayList<NMateria>> materiasAsociadas(@Path("carrera") String carrera);
 }
