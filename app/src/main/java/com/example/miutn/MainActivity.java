@@ -10,9 +10,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,10 +65,12 @@ import retrofit2.Retrofit;
 /** @noinspection ALL */
 public class MainActivity extends AppCompatActivity {
     //TODO : MODIFICAR SEGURIDAD PARA UTILIZAR HTTPS
+    //TODO HICE AL REVES -> OBTENER DATOS EN SHAREDPREFERENCE SI NO TENEMOS VAMOS A LOGIN - ACTUALIZAMOS IGUAL  <--
 
     private ActivityMainBinding binding;
     Snackbar snackbar;
     Perfil perfil = new Perfil();
+    LinearLayout contenedorProximasFechas,contenedorMisMateriasHoy;
     principalFragment fragment = new principalFragment();
     static final String ProfileID = "TS";
     misMateriasFragment fragmentMisMat = new misMateriasFragment();
@@ -87,14 +93,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-       // Intent intent = new Intent(this, MainActivity2.class);
-        //startActivity(intent);
+        contenedorProximasFechas=findViewById(R.id.contenedorProximasFechas);
         linkElement();
         CargaFragment();
         View v = findViewById(R.id.ParentView);
         SearchBar views = findViewById(R.id.search_bar);
         SearchView view1 = findViewById(R.id.SearchView);
         view1.setupWithSearchBar(views);
+        view1.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                view1.hide();
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    //TODO VERIFICAR POR QUE ENTRA 2 VECESc
+                    Log.e("ENTRO POR ENTER", String.valueOf(v.getText()));
+
+                }
+                return false;
+            }
+        });
         snackbar = Snackbar.make(v, "", Snackbar.LENGTH_LONG);
 
         binding.lottieAnimationMajor.setVisibility(View.GONE);
@@ -183,11 +202,16 @@ public class MainActivity extends AppCompatActivity {
                         ControlDatos.GuardarFechasExamenes(getApplicationContext(), fechasExamenes);
                         fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
                         assert response.body() != null;
+                        if(fechasExamenes.isEmpty()){
+                            //-->   Oculto todo lo que es el apartado de proximas fechas   <--
+                            contenedorProximasFechas.setVisibility(View.GONE);
+                        }
                         for (FechasExamenes materia : response.body()) {
                             Log.e("FECHA", materia.getMateria().getName());
                         }
                         General.fechasExamenes=fechasExamenes;
                     } else {
+                        contenedorProximasFechas.setVisibility(View.GONE);
                         snackbar.setText("Error en obtencion fechas de examen");
                         snackbar.show();
                     }
@@ -260,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
                 ActualizaRecomendaciones(recomendaciones);
             }
         });
-        //ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(this);
-        //fragment.ActualizacionDatosContenidosAdapterTemario(recomendaciones);
 
     }
     public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion){
@@ -277,7 +299,9 @@ public class MainActivity extends AppCompatActivity {
                 deHoy.add(materiaHoyy);
             }
         }
-        fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
+        if(!deHoy.isEmpty()){
+            fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
+        }
     }
 
     public boolean ConexionInternetDisponible() {
@@ -296,7 +320,6 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(v.getContext());
             @SuppressLint("InflateParams") View bottomSheetView = inflater.inflate(R.layout.side_new_class, null);
             Chip selectorHoursInit = bottomSheetView.findViewById(R.id.chipClassInit);
-            //selectorHoursInit.setOnCheckedChangeListener(new ConfiguracionRelojes(selectorHoursInit,getSupportFragmentManager()));
             selectorHoursInit.setOnClickListener(v1 -> {
                 MaterialTimePicker picker =
                         new MaterialTimePicker.Builder()

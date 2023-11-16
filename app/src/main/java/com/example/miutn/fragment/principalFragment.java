@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ public class principalFragment extends Fragment {
     AdapterTemaHoy adapterTemaHoy = new AdapterTemaHoy();
     ArrayList<NMateriasCursando> materias = new ArrayList<>();
     ArrayList<NMateriasCursando> materiashoy = new ArrayList<>();
+    LinearLayout contenedorMisMateriasHoy;
     //AdapterProximasFechas adapterProximasFechas=new AdapterProximasFechas();
     AdapterProximasFechas adapterProximasFechas = new AdapterProximasFechas();
     Retrofit retrofit = RetrofitClient.getClient();
@@ -68,6 +70,7 @@ public class principalFragment extends Fragment {
     public void ActualizacionDatosContenidosAdapterMateriasHoy(ArrayList<NMateriasCursando> mathoy) {
         materiashoy = mathoy;
         adapterMisMateriasHoy.setData(mathoy);
+        contenedorMisMateriasHoy.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -151,6 +154,7 @@ public class principalFragment extends Fragment {
         RecyclerMismateriasHoy.setLayoutManager(new LinearLayoutManager(v.getContext()));
         RecyclerProximasFechas = v.findViewById(R.id.RecyclerProximasFechas);
         RecyclerTemasHoy = v.findViewById(R.id.RecyclerTemasHoy);
+        contenedorMisMateriasHoy=v.findViewById(R.id.contenedorMisMateriasHoy);
         //-->    TODO Aca esta la obtencion de apuntes para hoy/recomendados <--
         temarios = ControlDatos.ObtenerRecomendaciones(v.getContext());
         RecyclerTemasHoy.setAdapter(adapterTemaHoy);
