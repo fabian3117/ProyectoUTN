@@ -60,4 +60,14 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sabado</string>
     <string name="finales_restantes">Finales Restantes</string>
+    <string name="registrarme">Registrarme</string>
+    <string name="olvide_mi_clave">Olvide mi clave</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="mensaje_bienvenida">Bienvenido! \n Iniciemos con algunos datos</string>
+    <string name="correo">Correo</string>
+    <string name="ingenieria">Ingenieria</string>
+    <string name="nombre_usuario">Nombre usuario</string>
+    <string name="usuario">Usuario</string>
+    <string name="clave">Clave</string>
+    <string name="bienvenido">Bienvenido!</string>
 </resources>

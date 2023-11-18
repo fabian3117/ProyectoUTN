@@ -8,6 +8,7 @@ import com.example.miutn.network.models.NMateria;
 import com.example.miutn.network.models.NMateriasCursando;
 import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Temario;
+import com.example.miutn.security.Credenciales;
 
 import java.util.ArrayList;
 
@@ -62,4 +63,9 @@ public interface ApiService {
 
     @GET("controladorPrincipal/materiasT/{carrera}")
     Call<ArrayList<NMateria>> materiasAsociadas(@Path("carrera") String carrera);
+
+    //-->   End-Point seccion   <--
+    @POST("seccionInicio")
+    Call<Perfil> inicioSeccion(@Body Credenciales credenciales); //-->   TODO VERIFICAR QUE ESTE CALCULANDO HASH Y ENVIANDO ESO  <--
+
 }

@@ -4,10 +4,14 @@ import static com.example.miutn.enums.Carreras.Electronica;
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,10 +20,13 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,7 +73,9 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
     //TODO : MODIFICAR SEGURIDAD PARA UTILIZAR HTTPS
     //TODO HICE AL REVES -> OBTENER DATOS EN SHAREDPREFERENCE SI NO TENEMOS VAMOS A LOGIN - ACTUALIZAMOS IGUAL  <--
-
+    private static final String CHANNEL_ID = "my_channel_id";
+    private static final CharSequence CHANNEL_NAME = "My Channel";
+    private static final String CHANNEL_DESCRIPTION = "My Channel Description";
     private ActivityMainBinding binding;
     Snackbar snackbar;
     Perfil perfil = new Perfil();
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     /** @noinspection unused*/
     FrameLayout sideSheetContainer;
+    ArrayList<NMateria> programaAnalitico=new ArrayList<>();
     Retrofit retrofit = RetrofitClient.getClient();
     public final static String carreraSelect="Electronica";
     ExtendedFloatingActionButton extendedFloatingActionButton;
@@ -114,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        showNotification(getApplicationContext(),"titulo","contenido");
         snackbar = Snackbar.make(v, "", Snackbar.LENGTH_LONG);
 
         binding.lottieAnimationMajor.setVisibility(View.GONE);
@@ -176,7 +187,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CargaInicialTest() {
+        perfil=ControlDatos.ObtenerPerfil(getApplicationContext());
 
+        //TODO MODIFICAR EL !
+        if(perfil.getId().isEmpty()){
+            //--->  Descarga toda la informacion de la web  <--
+            snackbar.setText("Error No informacion en app");
+            snackbar.show();
+            Intent intent=new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+        }
+        else{
+            fechasExamenes=ControlDatos.ObtencionFechasExamenes(getApplicationContext());
+            programaAnalitico=ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
+            ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
+            ArrayList<NMateriasCursando> materiasCursando = ControlDatos.ObtencionObtenerMateriasCursando(getApplicationContext());
+
+                                //-->   Actualizaciones de fragment <--
+            ObtencionMateriasHoy(perfil);
+            fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(programaAnalitico);
+            fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
+            fragment.ActualizacionDatosContenidosAdapterMaterias(perfil.getMateriasCursando());
+            ArrayList<NMateria> analiticos = ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
+            fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias(analiticos, perfil.getMateriasCursando());
+            framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
+            ActualizaRecomendaciones(recomendaciones);
+        }
+/*
         if (ConexionInternetDisponible()) {
             apiService.obtenerMateriasProgramaAnal(Electronica).enqueue(new Callback<ArrayList<NMateria>>() {
                 @Override
@@ -284,12 +321,58 @@ public class MainActivity extends AppCompatActivity {
                 ActualizaRecomendaciones(recomendaciones);
             }
         });
-
+ */
     }
     public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion){
         fragment.ActualizacionDatosContenidosAdapterTemario(recomendacion);
     }
+    public void NotificacionTest(){
 
+
+    }
+    private static void createNotificationChannel(Context context) {
+        // Check if the device is running Android 8.0 (Oreo) or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription(General.canalDescripcion);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    public void showNotification(Context context, String title, String content) {
+        // Create a Notification channel (required for Android 8.0 and higher)
+        createNotificationChannel(context);
+        RemoteViews notificacionPersonalizada=new RemoteViews(getPackageName(),R.layout.notificaciones_test);
+        notificacionPersonalizada.setTextViewText(R.id.NotificacionCosa,"MODIFICO CODIGO");
+        //Intent chromeIntent = context.getPackageManager().getLaunchIntentForPackage("com.android.chrome");
+
+        RemoteViews notificacionPersonalizadaExpandida=new RemoteViews(getPackageName(),R.layout.notificacion_expandida_text);
+        notificacionPersonalizadaExpandida.setTextViewText(R.id.NotificacionExpandidaDescripcion,"Descripcion de algo- Hoy tienes Info1");
+        Intent appIntent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent =  PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_IMMUTABLE);
+        notificacionPersonalizadaExpandida.setOnClickPendingIntent(R.id.NotificationButtonTouch,pendingIntent);
+
+        // Create a NotificationCompat.Builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, General.canalNotificaciones)
+                .setSmallIcon(R.drawable.iconprofile)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setCustomContentView(notificacionPersonalizada)
+                .setCustomBigContentView(notificacionPersonalizadaExpandida)
+                .setCustomHeadsUpContentView(notificacionPersonalizadaExpandida)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Show the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(1, builder.build());
+    }
     public void ObtencionMateriasHoy(Perfil perfil) {
         Calendar calendar = Calendar.getInstance();
         String dia = new SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.getTime());
@@ -302,6 +385,8 @@ public class MainActivity extends AppCompatActivity {
         if(!deHoy.isEmpty()){
             fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
         }
+
+
     }
 
     public boolean ConexionInternetDisponible() {
@@ -357,27 +442,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 for (Integer dk : chipGroup.getCheckedChipIds()) {
-                    String d = "";
-                    switch (dk) {
-                        case 1:
-                            d = "Lunes";
-                            break;
-                        case 2:
-                            d = "Martes";
-                            break;
-                        case 3:
-                            d = "Miercoles";
-                            break;
-                        case 4:
-                            d = "Jueves";
-                            break;
-                        case 5:
-                            d = "Vierenes";
-                            break;
-                        case 6:
-                            d = "Sabado";
-                            break;
-                    }
+                    String d = obtenerDia(dk);
                     Log.e("CAMBIO OPCION", d);
                     diasCursa.add(d);
                 }
@@ -396,7 +461,7 @@ public class MainActivity extends AppCompatActivity {
                 NMateriasCursando toServer = new NMateriasCursando();
                 toServer.setHorario(horario);
                 toServer.setMateria(materia);
-                apiService.guardarNuevaMateria("NUEVO", toServer).enqueue(new ControlaGuardado(getApplicationContext()));
+                apiService.guardarNuevaMateria(perfil.getId(), toServer).enqueue(new ControlaGuardado(getApplicationContext()));
                 snackbar.show();
             });
             RecyclerView recyclerView = bottomSheetView.findViewById(R.id.listaMateriaPuedeCursar);
@@ -419,10 +484,43 @@ public class MainActivity extends AppCompatActivity {
         salida.add("AM 2");
         return salida;
     }
+    public ArrayList<String> puedoCursarNuevaVersion(ArrayList<NMateria> programaAnalitico,ArrayList<NMateriasCursando> misMaterias){
+        ArrayList<String> salida=new ArrayList<>();
+        for(NMateria materiaRequisito : programaAnalitico) {
+            if (materiaRequisito.getCorrelativas().contains(misMaterias)) {
+                salida.add(materiaRequisito.getName());
+        }
+        }
+        return salida;
+    }
 
     public void CargaFragment() {
 
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentPrincipalx, fragment).commit();
 
+    }
+    public String obtenerDia(Integer dk){
+        String d = "";
+        switch (dk) {
+            case 1:
+                d = "Lunes";
+                break;
+            case 2:
+                d = "Martes";
+                break;
+            case 3:
+                d = "Miercoles";
+                break;
+            case 4:
+                d = "Jueves";
+                break;
+            case 5:
+                d = "Vierenes";
+                break;
+            case 6:
+                d = "Sabado";
+                break;
+        }
+        return d;
     }
 }

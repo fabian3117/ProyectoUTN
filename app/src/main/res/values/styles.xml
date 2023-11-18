@@ -33,4 +33,17 @@
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/color_text_card_profile</item>
     </style>
+
+    <style name="TextoRegistro">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextoBienvenida">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
 </resources>

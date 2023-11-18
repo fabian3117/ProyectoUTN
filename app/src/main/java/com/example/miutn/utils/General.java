@@ -10,4 +10,8 @@ public class General {
     public static Perfil perfil;
     public static ArrayList<FechasExamenes> fechasExamenes;
     public static ArrayList<Temario> recomendaciones;
+
+    public static final String canalNotificaciones="MiUTN";
+    public static final String canalDescripcion="Sistema notificaciones MiUTN";
+
 }

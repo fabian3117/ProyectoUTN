@@ -17,7 +17,9 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        //setContentView(R.layout.activity_main2);
+        setContentView(R.layout.android_small___1);
+        /*
         TextView view = findViewById(R.id.TextPrueba);
         View ViewTextPorcentaje = findViewById(R.id.ViewTextPorcentaje);
         LinearLayout LinearLayoutControl = findViewById(R.id.LinearLayoutControl);
@@ -44,5 +46,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
         animator.start();
 //        view.setupWithSearchBar(view);
+    */
     }
+
 }
