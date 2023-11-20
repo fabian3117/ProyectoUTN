@@ -377,11 +377,11 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         String dia = new SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.getTime());
         ArrayList<NMateriasCursando> deHoy = new ArrayList<>();
-        for (NMateriasCursando materiaHoyy : perfil.getMateriasCursando()) {
+/*        for (NMateriasCursando materiaHoyy : perfil.getMateriasCursando()) {
             if (materiaHoyy.getHorario().getDia().equals(dia)) {
                 deHoy.add(materiaHoyy);
             }
-        }
+        }*/
         if(!deHoy.isEmpty()){
             fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
         }

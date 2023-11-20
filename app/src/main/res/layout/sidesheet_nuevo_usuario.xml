@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="end"
+    style="@style/Widget.Material3.SideSheet.Modal"
+    app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="100px"
+    android:gravity="center">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Materias Aprobadas|Promocionadas"
+        android:textAlignment="center"
+        />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupLoginNuevoUsuario"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.chip.ChipGroup>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sidesheetSiguente"
+        android:text="@string/continuar"
+        android:layout_margin="10dp"
+        />
+
+</LinearLayout>

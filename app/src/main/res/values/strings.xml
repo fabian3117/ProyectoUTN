@@ -70,4 +70,5 @@
     <string name="usuario">Usuario</string>
     <string name="clave">Clave</string>
     <string name="bienvenido">Bienvenido!</string>
+    <string name="continuar">Continuar</string>
 </resources>

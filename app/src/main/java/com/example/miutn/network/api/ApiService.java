@@ -11,6 +11,7 @@ import com.example.miutn.network.models.Temario;
 import com.example.miutn.security.Credenciales;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -65,7 +66,17 @@ public interface ApiService {
     Call<ArrayList<NMateria>> materiasAsociadas(@Path("carrera") String carrera);
 
     //-->   End-Point seccion   <--
+
+    /**
+     * Inicia seccion enviando las credenciales
+     * @param credenciales
+     * @return la respuesta en caso de inicio de seccion correcto es mi perfil
+     */
     @POST("seccionInicio")
     Call<Perfil> inicioSeccion(@Body Credenciales credenciales); //-->   TODO VERIFICAR QUE ESTE CALCULANDO HASH Y ENVIANDO ESO  <--
+    @POST("verificaUsuarioExistente")
+    Call<ArrayList<NMateria>> existeUsuario(@Body Map<String,String> datos);    //-->   TODO Envio Par NombreUsuario-Correo <--
 
+    @POST("nuevoUsuario")
+    Call<Perfil> crearUsuario(@Body Map<String,String> datos);
 }

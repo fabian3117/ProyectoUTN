@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 /** @noinspection unused*/
 public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.ViewHolder> {
-    private ArrayList<NMateriasCursando> Materias;
+    private ArrayList<NMateriasCursando> Materias=new ArrayList<>();
     //private Context context;
 
 
@@ -68,6 +68,10 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
 
     @Override
     public int getItemCount() {
+        //todo solucion de negro
+        if(Materias==null){
+            return 0;
+        }
         return Materias.size();
     }
 
