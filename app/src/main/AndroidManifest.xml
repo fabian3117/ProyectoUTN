@@ -19,6 +19,7 @@
         <activity
             android:name=".Login"
             android:screenOrientation="nosensor"
+            android:hardwareAccelerated="true"
             android:exported="false" />
         <activity
             android:name=".MainActivity2"

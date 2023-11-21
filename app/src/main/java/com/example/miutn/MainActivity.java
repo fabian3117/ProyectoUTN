@@ -188,21 +188,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void CargaInicialTest() {
         perfil=ControlDatos.ObtenerPerfil(getApplicationContext());
-
-        //TODO MODIFICAR EL !
+        //-->   Tener un ID vacio implica que no tenemos datos entonces vamos a login   <--
         if(perfil.getId().isEmpty()){
             //--->  Descarga toda la informacion de la web  <--
             snackbar.setText("Error No informacion en app");
             snackbar.show();
             Intent intent=new Intent(MainActivity.this, Login.class);
             startActivity(intent);
+            finish();
         }
         else{
             fechasExamenes=ControlDatos.ObtencionFechasExamenes(getApplicationContext());
             programaAnalitico=ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
+            //todo no tenemos programa analitico en memoria <--
             ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
             ArrayList<NMateriasCursando> materiasCursando = ControlDatos.ObtencionObtenerMateriasCursando(getApplicationContext());
-
+//todo utilizar programa analitico para llenar el sidesheet
                                 //-->   Actualizaciones de fragment <--
             ObtencionMateriasHoy(perfil);
             fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(programaAnalitico);
@@ -377,11 +378,11 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         String dia = new SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.getTime());
         ArrayList<NMateriasCursando> deHoy = new ArrayList<>();
-/*        for (NMateriasCursando materiaHoyy : perfil.getMateriasCursando()) {
+        for (NMateriasCursando materiaHoyy : perfil.getMateriasCursando()) {
             if (materiaHoyy.getHorario().getDia().equals(dia)) {
                 deHoy.add(materiaHoyy);
             }
-        }*/
+        }
         if(!deHoy.isEmpty()){
             fragment.ActualizacionDatosContenidosAdapterMateriasHoy(deHoy);
         }

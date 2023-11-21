@@ -1,6 +1,8 @@
 package com.example.miutn;
 
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,7 +43,7 @@ import retrofit2.Retrofit;
 public class Login extends AppCompatActivity {
 LinearLayout loginLinearRegistrar,loginInicioSeccion;
 //Button loginRegister;
-TextView loginRegistrarme,loginTengoCuenta;
+TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
     Retrofit retrofit = RetrofitClient.getClient();
     Snackbar snackbar;
     ApiService apiService = retrofit.create(ApiService.class);
@@ -52,6 +54,48 @@ TextView loginRegistrarme,loginTengoCuenta;
         loginLinearRegistrar=findViewById(R.id.loginLinearRegistrar);   //-->   Se encarga del manejo de la vista del registro y toma de datos  <--
         loginInicioSeccion=findViewById(R.id.loginInicioSeccion);       //-->   Se encarga del manejo de la vista del inicio de seccion         <--
         loginRegistrarme=findViewById(R.id.loginRegistrarme);
+        loginOlvideClave=findViewById(R.id.loginOlvideClave);
+        //todo abro el sidesheet al tocar olvideclave
+        loginOlvideClave.setOnClickListener(v->{
+            BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
+            LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.sidesheet_olvide_clave, null);
+            TextInputLayout correo=view.findViewById(R.id.loginRestaurarClave);
+            sideSheetDialog.setContentView(view);
+            sideSheetDialog.show();
+            Button button=view.findViewById(R.id.loginBtnRestaurarClave);
+            button.setOnClickListener(v1->{
+                if(correo.getEditText().getText().toString().isEmpty()){
+                    correo.setError("Ingresa correo");
+                    correo.setErrorEnabled(true);
+                    return;
+                }
+                //todo deshabilito interfaz para no saturar servidor    <--
+                button.setEnabled(false);
+                apiService.restaurarClave(correo.getEditText().getText().toString()).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()){
+                            Log.e("Transmicion","Correcta A : "+response.body());
+                            snackbar.setText("Verifica tu correo");
+                            snackbar.show();
+                        }
+                        else {
+                            Log.e("Transmicion","Correcta B : ");
+                            correo.setErrorEnabled(true);
+                            correo.setError("Verifica");
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                    snackbar.setText("Error con la conexion reintenta luego");
+                        Log.e("Transmicion","Falla A : "+t.getMessage());
+                    snackbar.show();
+                    }
+                });
+                //todo envio datos a servidor
+            });
+        });
         //-->   TODO personalizar snackbar  <--
         snackbar=Snackbar.make(getWindow().getDecorView(),"",Snackbar.LENGTH_LONG);
         snackbar.getView().setBackgroundColor(Color.parseColor("#80000000"));
@@ -106,10 +150,32 @@ TextView loginRegistrarme,loginTengoCuenta;
                     if (response.isSuccessful()){
                         //-->   TODO Recordar el tema del sideSheet <--
                         Perfil perfil=response.body();
-                        ControlDatos.GuardarPerfil(getApplicationContext(),perfil);
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        getApplicationContext().startActivity(intent);
-                        finish();
+
+                        //-->   todo tengo problemas por la obtencion del programa analitico    <--
+                        apiService.obtenerMateriasProgramaAnal(perfil.getCarrea()).enqueue(new Callback<ArrayList<NMateria>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
+                                if(response.isSuccessful()){
+                                    ControlDatos.GuardarPerfil(getApplicationContext(),perfil);
+                                    ControlDatos.GuardarProgramaAnalitico(response.body(),getApplicationContext());
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    getApplicationContext().startActivity(intent);
+                                    finish();
+                                }
+                                else{
+                                    snackbar.setText("Eror con servidor");
+                                    snackbar.show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
+                                snackbar.setText("Eror "+t.getMessage());
+                                snackbar.show();
+                            }
+                        });
+
                     }
                     else {
                         Log.e("MIRA","ERROR");
@@ -144,9 +210,15 @@ TextView loginRegistrarme,loginTengoCuenta;
             //TODO enviar datos al servidor buscando que no este registrado <--
             Map<String,String> datos=new HashMap<>();
             TextInputLayout loginUser=findViewById(R.id.loginUser);
+            TextInputLayout loginUserName=findViewById(R.id.loginNombre);
             TextInputLayout loginCorreo=findViewById(R.id.loginCorreo);
             TextInputLayout loginCarrear=findViewById(R.id.loginCarrear);
+            TextInputLayout loginUserPas=findViewById(R.id.loginUserPas);
+            TextInputLayout loginUserLegajo=findViewById(R.id.loginUserLegajo);
+            String clave=CreacionHash.sha256(loginUserPas.getEditText().getText().toString());
             datos.put("usuario",loginUser.getEditText().getText().toString());
+            datos.put("nombre",loginUserName.getEditText().getText().toString());
+            datos.put("legajo",loginUserLegajo.getEditText().getText().toString());
             datos.put("correo",loginCorreo.getEditText().getText().toString());
             datos.put("carrera",loginCarrear.getEditText().getText().toString());
             apiService.existeUsuario(datos).enqueue(new Callback<ArrayList<NMateria>>() {
@@ -175,7 +247,7 @@ TextView loginRegistrarme,loginTengoCuenta;
                             Log.e("MIRA","ENVIANDO SERVIRO");
                             Map<String,String> datosRegistro=new HashMap<>();
                             datosRegistro.put("usuario",loginUser.getEditText().getText().toString());
-                            datosRegistro.put("correo",loginCorreo.getEditText().getText().toString());
+                            datosRegistro.put("correo",loginCorreo.getEditText().getText().toString()+"@frba.utn.edu.ar");
                             datosRegistro.put("carrera",loginCarrear.getEditText().getText().toString());
                             ArrayList<String> materiasSeleccionadas=new ArrayList<>();
                             for(Integer i:chipGroupLoginNuevoUsuario.getCheckedChipIds()){
@@ -188,9 +260,9 @@ TextView loginRegistrarme,loginTengoCuenta;
                             for(int i=0;i<materiasSeleccionadas.size();i++){
                                 datosRegistro.put("materia"+i,materiasSeleccionadas.get(i));
                             }
-                            datosRegistro.put("hash","5555");
-                            datosRegistro.put("nombre","5555");
-                            datosRegistro.put("legajo","5555");
+                            datosRegistro.put("hash",clave);
+                            datosRegistro.put("nombre",loginUserName.getEditText().getText().toString());
+                            datosRegistro.put("legajo",loginUserLegajo.getEditText().getText().toString());
                             apiService.crearUsuario(datosRegistro).enqueue(new Callback<Perfil>() {
                                 @Override
                                 public void onResponse(Call<Perfil> call, Response<Perfil> response) {
@@ -239,7 +311,9 @@ TextView loginRegistrarme,loginTengoCuenta;
         TextInputLayout loginUserName=findViewById(R.id.loginNombre);
         TextInputLayout loginCorreo=findViewById(R.id.loginCorreo);
         TextInputLayout loginUser=findViewById(R.id.loginUser);
+        TextInputLayout loginUserPas=findViewById(R.id.loginUserPas);
         TextInputLayout loginCarrear=findViewById(R.id.loginCarrear);
+        TextInputLayout loginUserLegajo=findViewById(R.id.loginUserLegajo);
        // TextInputLayout loginUserPass=findViewById(R.id.loginUserPass);
         if(loginUserName.getEditText().getText().length()==0){
             loginUserName.setError("Ingresa nombre");
@@ -248,7 +322,8 @@ TextView loginRegistrarme,loginTengoCuenta;
         else{
             loginUserName.setErrorEnabled(false);
         }
-        if(loginCorreo.getEditText().getText().length()==0 || !loginCorreo.getEditText().getText().toString().contains("@")){
+        if(loginCorreo.getEditText().getText().length()==0){
+            //-->   Yo añado el @frba.utn.edu.ar
             loginCorreo.setError("Verifica correo");
             return false;
         }
@@ -270,6 +345,22 @@ TextView loginRegistrarme,loginTengoCuenta;
         else{
             loginCarrear.setErrorEnabled(false);
         }
+
+        if(loginUserPas.getEditText().getText().length()==0 ){
+            loginCarrear.setError("Introduce clave");
+            return false;
+        }
+        else{
+            loginUserPas.setErrorEnabled(false);
+        }
+        if(loginUserLegajo.getEditText().getText().length()==0 ){
+            loginCarrear.setError("Introduce legajo");
+            return false;
+        }
+        else{
+            loginUserLegajo.setErrorEnabled(false);
+        }
+
         return true;
 
     }

@@ -79,4 +79,6 @@ public interface ApiService {
 
     @POST("nuevoUsuario")
     Call<Perfil> crearUsuario(@Body Map<String,String> datos);
+    @POST("restaurarClave")
+    Call<Void> restaurarClave(@Body String correo);
 }

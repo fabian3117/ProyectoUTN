@@ -71,4 +71,7 @@
     <string name="clave">Clave</string>
     <string name="bienvenido">Bienvenido!</string>
     <string name="continuar">Continuar</string>
+    <string name="tengo_cuenta">Tengo Cuenta</string>
+    <string name="legajo">Legajo</string>
+    <string name="restaurar">Restaurar</string>
 </resources>
