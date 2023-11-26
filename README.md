@@ -1,4 +1,5 @@
-# MiUTN
+# MiUTN 📚 👌👍
+
 ### Problemática
 Durante mi experiencia como estudiante universitario, noté una fragmentación significativa en el material de estudio, así como dificultades para acceder a apuntes para mis materias. Esta no era solo una dificultad personal, sino una situación común entre todos los `estudiantes`. Por ende, decidí abordar este problema mediante la `tecnología`.
 
