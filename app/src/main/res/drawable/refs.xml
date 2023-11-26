@@ -1,0 +1,5 @@
+<!-- rounded_snackbar_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="8dp" /> <!-- Ajusta el radio de las esquinas según sea necesario -->
+    <solid android:color="#323232" /> <!-- Ajusta el color de fondo según sea necesario -->
+</shape>

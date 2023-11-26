@@ -12,10 +12,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
@@ -42,7 +44,7 @@ import retrofit2.Retrofit;
 
 public class Login extends AppCompatActivity {
 LinearLayout loginLinearRegistrar,loginInicioSeccion;
-//Button loginRegister;
+    ImageView imageView;
 TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
     Retrofit retrofit = RetrofitClient.getClient();
     Snackbar snackbar;
@@ -55,7 +57,6 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
         loginInicioSeccion=findViewById(R.id.loginInicioSeccion);       //-->   Se encarga del manejo de la vista del inicio de seccion         <--
         loginRegistrarme=findViewById(R.id.loginRegistrarme);
         loginOlvideClave=findViewById(R.id.loginOlvideClave);
-        //todo abro el sidesheet al tocar olvideclave
         loginOlvideClave.setOnClickListener(v->{
             BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
             LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -77,7 +78,8 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if(response.isSuccessful()){
                             Log.e("Transmicion","Correcta A : "+response.body());
-                            snackbar.setText("Verifica tu correo");
+                            TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                            ss.setText("Verifica tu correo");
                             snackbar.show();
                         }
                         else {
@@ -88,7 +90,9 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                     }
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                    snackbar.setText("Error con la conexion reintenta luego");
+                        TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                        ss.setText("ERS");
+//                    snackbar.setText("Error con la conexion reintenta luego");
                         Log.e("Transmicion","Falla A : "+t.getMessage());
                     snackbar.show();
                     }
@@ -97,15 +101,19 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
             });
         });
         //-->   TODO personalizar snackbar  <--
-        snackbar=Snackbar.make(getWindow().getDecorView(),"",Snackbar.LENGTH_LONG);
+       snackbar=Snackbar.make(getWindow().getDecorView(),"",Snackbar.LENGTH_LONG);
+         Snackbar.SnackbarLayout snackbarLayout= (Snackbar.SnackbarLayout) snackbar.getView();
+        View snackView =getWindow().getLayoutInflater().inflate(R.layout.snackbar_layout, null);
+        /* TextView Pruebasnar=snackView.findViewById(R.id.Pruebasnar);
+        imageView=snackView.findViewById(R.id.Pruebasnar2);
+        imageView.setImageResource(R.drawable.baseline_sentiment_dissatisfied_24);
+        Pruebasnar.setText("Falla");*/
+       // snackView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_snackbar_background));
+
+        snackbarLayout.addView(snackView, 0);
+
         snackbar.getView().setBackgroundColor(Color.parseColor("#80000000"));
-        View snackbarView = snackbar.getView();
-
-        // Obtener el TextView dentro del Snackbar
-        TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-
-        // Configurar el TextView para centrar el texto
-        textView.setGravity(Gravity.CENTER);
+        snackbar.show();
 
         loginRegistrarme.setOnClickListener(v -> {
             loginLinearRegistrar.setVisibility(View.VISIBLE);
@@ -141,7 +149,8 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
             //-->   TODO Enviar a servidor los datos    <--
             //-->   API server
             Credenciales credenciales=new Credenciales(String.valueOf(loginUserName.getEditText().getText()),String.valueOf(loginUserPass.getEditText().getText()));
-            snackbar.setText("Iniciando seccion \n aguarde");
+            TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+            ss.setText("Iniciando seccion \n aguarde");
             snackbar.show();
             //-->   TODO cambiar el snackbar por un progress bar    <--
             apiService.inicioSeccion(credenciales).enqueue(new Callback<Perfil>() {
@@ -157,21 +166,29 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                             public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
                                 if(response.isSuccessful()){
                                     ControlDatos.GuardarPerfil(getApplicationContext(),perfil);
-                                    ControlDatos.GuardarProgramaAnalitico(response.body(),getApplicationContext());
+                                    ArrayList<NMateria> programa=response.body();
+                                    for(NMateria materia: programa){
+                                        Log.e("OBTENCION PROGRAMA",materia.getName());
+                                    }
+                                    //todo Generar descarga del material podria utilizar task o algo para descargar el material
+
+                                    ControlDatos.GuardarProgramaAnalitico(programa,getApplicationContext());
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     getApplicationContext().startActivity(intent);
                                     finish();
                                 }
                                 else{
-                                    snackbar.setText("Eror con servidor");
+                                    TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                                    ss.setText("Ups algo salio mal :( \n reintenta luego");
                                     snackbar.show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
-                                snackbar.setText("Eror "+t.getMessage());
+                                TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                                ss.setText(""+t.getMessage());
                                 snackbar.show();
                             }
                         });
@@ -181,7 +198,8 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                         Log.e("MIRA","ERROR");
                         try {
                            // Log.e("ERROR",response.errorBody().string());
-                            snackbar.setText(""+response.errorBody().string());
+                            TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                            ss.setText(""+response.errorBody().string());
                             snackbar.show();
                         } catch (IOException e) {
                             throw new RuntimeException(e);
@@ -191,23 +209,18 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
 
                 @Override
                 public void onFailure(Call<Perfil> call, Throwable t) {
-                    //TODO Mostrar SnackBar
                     Log.e("Error inicio seccion",t.getMessage());
-                    snackbar.setText("Error en inicio de seccion verifica datos");
+                    TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                    ss.setText(":/ Algo fallo en inicio de seccion");
                     snackbar.show();
                 }
             });
-          //  Log.e("MIRA calculo de HASH", CreacionHash.sha256(String.valueOf(loginUserPass.getEditText().getText())));
         });
-
-        //TODO Registro de usuario  <--
         Button loginRegister=findViewById(R.id.loginRegister);
         loginRegister.setOnClickListener(v->{
-            //TODO verificar campos completos
             if(!verificaCampos()){
                 return;
             }
-            //TODO enviar datos al servidor buscando que no este registrado <--
             Map<String,String> datos=new HashMap<>();
             TextInputLayout loginUser=findViewById(R.id.loginUser);
             TextInputLayout loginUserName=findViewById(R.id.loginNombre);
@@ -225,7 +238,6 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                 @Override
                 public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
                     if (response.isSuccessful()){
-                        //-->   todo Mostrar sideSheet con la informacion   <--
                         BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
                         LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View view = inflater.inflate(R.layout.sidesheet_nuevo_usuario, null);
@@ -233,18 +245,14 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                         ChipGroup chipGroupLoginNuevoUsuario=view.findViewById(R.id.chipGroupLoginNuevoUsuario);
                         ArrayList<NMateria> materias=response.body();
                         for(NMateria materia : materias){
-                            Log.e("Mat",materia.getName());
                             Chip chip=new Chip(v.getContext());
                             chip.setText(materia.getName());
                             chip.setCheckable(true);
                             chipGroupLoginNuevoUsuario.addView(chip);
-
                         }
                         sideSheetDialog.setContentView(view);
                         sideSheetDialog.show();
                         siguente.setOnClickListener(v->{
-                            //TODO envio toda la informacion a servidor y caso satifactorio registro    <--
-                            Log.e("MIRA","ENVIANDO SERVIRO");
                             Map<String,String> datosRegistro=new HashMap<>();
                             datosRegistro.put("usuario",loginUser.getEditText().getText().toString());
                             datosRegistro.put("correo",loginCorreo.getEditText().getText().toString()+"@frba.utn.edu.ar");
@@ -267,9 +275,6 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                                 @Override
                                 public void onResponse(Call<Perfil> call, Response<Perfil> response) {
                                     if (response.isSuccessful()){
-                                        Log.e("REGISTRO","COMPLETO");
-                                        //Todo registro finalizado con exito    <--
-                                        //todo falta añadir correo institucional - nombre usuario
                                         Perfil perfil=response.body();
                                         ControlDatos.GuardarPerfil(getApplicationContext(),perfil);
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -292,17 +297,18 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
 
                     }
                     else{
-                        Log.e("Existencia","ERROR RARO");
                         //-->   Usuario ya registrado   <--
-                        snackbar.setText("Este usuario ya se encuentra registrado");
+                        TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                        ss.setText(":| Usuario ya registrado");
                         snackbar.show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
-                snackbar.setText("Error en conexion a internet verificar");
-                snackbar.show();
+                    TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
+                    ss.setText(":/ Ups Error en conexion a internet");
+                    snackbar.show();
                 }
             });
         });
@@ -314,7 +320,6 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
         TextInputLayout loginUserPas=findViewById(R.id.loginUserPas);
         TextInputLayout loginCarrear=findViewById(R.id.loginCarrear);
         TextInputLayout loginUserLegajo=findViewById(R.id.loginUserLegajo);
-       // TextInputLayout loginUserPass=findViewById(R.id.loginUserPass);
         if(loginUserName.getEditText().getText().length()==0){
             loginUserName.setError("Ingresa nombre");
             return false;

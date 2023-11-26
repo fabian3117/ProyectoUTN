@@ -61,6 +61,15 @@
         android:id="@+id/listaMateriaPuedeCursar"
         android:contentDescription="@string/listado_de_materias_que_se_pueden_cursar"
         />
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newClassChipGroup"
+        android:clickable="true"
+        app:singleSelection="true"
+
+        android:contextClickable="true"
+        />
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

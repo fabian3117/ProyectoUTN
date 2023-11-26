@@ -1,8 +1,11 @@
 package com.example.miutn.adapters;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.miutn.MainActivity;
 import com.example.miutn.R;
+import com.example.miutn.network.api.VistaMarkdown;
 import com.example.miutn.network.models.Temario;
 
 import java.util.ArrayList;
@@ -47,11 +52,23 @@ public class AdapterTemaHoy extends RecyclerView.Adapter<AdapterTemaHoy.ViewHold
         holder.downloadIssueToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri link = Uri.parse(temarios.get(position).getApunte()); //-->   Esta es la direccion del apunte <--
+                String documentID=temarios.get(position).getId();
+
+                Intent intent=new Intent(v.getContext(), VistaMarkdown.class);
+                Bundle bundle=new Bundle();
+                bundle.getString("nameFile",documentID);
+                intent.putExtra("documentID",documentID);
+
+                v.getContext().startActivity(intent);
+                //v.getContext().finish();
+                /*Uri link = Uri.parse(temarios.get(position).getApunte()); //-->   Esta es la direccion del apunte <--
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
                 v.getContext().startActivity(intent);
+
+
+                 */
             }
-        });
+            });
         holder.descriptionIssueToday.setText(temarios.get(position).getDescription());
         holder.nameIssueToday.setText(temarios.get(position).getTema());
         holder.seenIssueToday.setOnClickListener(new View.OnClickListener() {

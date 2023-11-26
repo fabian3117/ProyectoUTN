@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <drawable name="rounded_snackbar_background" >
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="8dp" /> <!-- Ajusta el radio de las esquinas según sea necesario -->
+            <solid android:color="#323232" /> <!-- Ajusta el color de fondo según sea necesario -->
+        </shape>
+    </drawable>
+</resources>

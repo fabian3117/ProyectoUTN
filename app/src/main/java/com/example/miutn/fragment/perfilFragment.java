@@ -15,9 +15,13 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.miutn.R;
+import com.example.miutn.network.models.NMateria;
 import com.example.miutn.network.models.Perfil;
+import com.example.miutn.utils.General;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textview.MaterialTextView;
+
+import java.util.ArrayList;
 
 /** @noinspection FieldMayBeFinal*/
 public class perfilFragment extends Fragment {
@@ -32,6 +36,7 @@ public class perfilFragment extends Fragment {
 
     private CardView CardTest;
     private int porcentaje = 50;
+    ArrayList<NMateria> programaAnalitico=new ArrayList<>();
 
     public perfilFragment() {
         // Required empty public constructor
@@ -63,7 +68,7 @@ public class perfilFragment extends Fragment {
         CardTest = v.findViewById(R.id.CardTest);
         View ViewProfileMateriasAprobadas = v.findViewById(R.id.ViewProfileMateriasAprobadas);
         @SuppressLint("CutPasteId") ViewGroup.LayoutParams paramsPater = v.findViewById(R.id.CardTest).getLayoutParams();
-        AjustePorcentajes(paramsPater.width, ViewProfileMateriasAprobadas);
+        //AjustePorcentajes(paramsPater.width, ViewProfileMateriasAprobadas);
         CargaTestData();
         return v;
     }
@@ -90,11 +95,13 @@ public class perfilFragment extends Fragment {
         userSIU.setText(profile.getUserSIU());
         profileName.setText(profile.getUserName());
         carrera.setText(profile.getCarrea().getValorAsociado());
-        chipProfileFinalesRestantes.setText(String.valueOf(profile.getMateriasCursadas().size() - profile.getMateriasCursando().size()));
+
+        chipProfileFinalesRestantes.setText(String.valueOf(Math.abs(profile.getMateriasCursadas().size() - profile.getMateriasCursando().size())));
         chipProfileMateriasAprobadas.setText(String.valueOf(profile.getMateriasCursadas().size()));
         chipProfileCorreo.setText(String.valueOf(profile.getCorreoInstitucional()));
-        chipProfilePodesCursar.setText("5");
-
+    //    chipProfilePodesCursar.setText((General.puedoCursarNuevaVersion(programaAnalitico, profile.getMateriasCursadas())).size());
+        ArrayList<NMateria> ss=(General.puedoCursarNuevaVersion(programaAnalitico, profile.getMateriasCursadas()));
+        chipProfilePodesCursar.setText(""+ss.size());
 
     }
 

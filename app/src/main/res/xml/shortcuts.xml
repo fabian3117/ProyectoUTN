@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/download"
+        android:shortcutDisabledMessage="@string/short_others"
+        android:shortcutId="compose"
+        android:shortcutShortLabel="@string/short_shortcut">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.miutn"
+            android:targetClass="com.example.miutn.MainActivity" >
+            <parameter
+                android:name="exercise.name"
+                android:key="exerciseType"/>
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/download"
+        android:shortcutDisabledMessage="@string/eventDescription"
+        android:shortcutId="Eventos"
+        android:shortcutShortLabel="@string/events">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.miutn"
+            android:targetClass="com.example.miutn.MainActivity2" >
+            <parameter
+                android:name="exercise.name"
+                android:key="exerciseType"/>
+        </intent>
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/download"
+        android:shortcutDisabledMessage="@string/eventDescription"
+        android:shortcutId="MarkDown"
+        android:shortcutShortLabel="@string/title_activity_vista_markdown">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.miutn"
+            android:targetClass="com.example.miutn.network.api.VistaMarkdown" >
+            <extra
+                android:name="documentID"
+                android:value="probandomark.md"/>
+        </intent>
+    </shortcut>
+
+    <capability android:name="actions.intent.START_EXERCISE">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.miutn"
+            android:targetClass="com.example.miutn.MainActivity2">
+            <parameter
+                android:name="exercise.name"
+                android:key="exerciseType"/>
+        </intent>
+    </capability>
+</shortcuts>

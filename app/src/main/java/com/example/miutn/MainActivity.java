@@ -38,6 +38,7 @@ import com.example.miutn.fragment.perfilFragment;
 import com.example.miutn.fragment.principalFragment;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
+import com.example.miutn.network.api.VistaMarkdown;
 import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.Horarios;
 import com.example.miutn.network.models.Materia;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         View v = findViewById(R.id.ParentView);
         SearchBar views = findViewById(R.id.search_bar);
         SearchView view1 = findViewById(R.id.SearchView);
-        view1.setupWithSearchBar(views);
+        binding.SearchView.setupWithSearchBar(binding.searchBar);
         view1.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -200,8 +201,21 @@ public class MainActivity extends AppCompatActivity {
         else{
             fechasExamenes=ControlDatos.ObtencionFechasExamenes(getApplicationContext());
             programaAnalitico=ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
-            //todo no tenemos programa analitico en memoria <--
             ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
+            //-->   Añado recomendaciones falzas   <--<--
+            //todo añadir recomendaciones y incluir ciclo de actualizacion  <--
+            Temario tema=new Temario();
+            tema.setApunte("ts");
+            tema.setDescription("Sss");
+            tema.setTema("aaaa");
+            tema.setId("prueba.md");
+            Temario tema0=new Temario();
+            tema0.setApunte("Segundo");
+            tema0.setDescription("DEscrip");
+            tema0.setTema("orueba");
+            tema0.setId("probandomark.md");
+            recomendaciones.add(tema);
+            recomendaciones.add(tema0);
             ArrayList<NMateriasCursando> materiasCursando = ControlDatos.ObtencionObtenerMateriasCursando(getApplicationContext());
 //todo utilizar programa analitico para llenar el sidesheet
                                 //-->   Actualizaciones de fragment <--
@@ -406,6 +420,18 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(v.getContext());
             @SuppressLint("InflateParams") View bottomSheetView = inflater.inflate(R.layout.side_new_class, null);
             Chip selectorHoursInit = bottomSheetView.findViewById(R.id.chipClassInit);
+            ChipGroup pruebaChipgroup=bottomSheetView.findViewById(R.id.newClassChipGroup);
+            Snackbar snackbar1=Snackbar.make(v.getRootView(),"ASS",Snackbar.LENGTH_LONG);
+            snackbar1.getView().setElevation(800f);
+            snackbar1.show();
+            ArrayList<NMateria> paraCursar=General.puedoCursarNuevaVersion(programaAnalitico, perfil.getMateriasCursadas());
+            for(NMateria materia:paraCursar){
+                Chip chip=new Chip(v.getContext());
+                chip.setText(materia.getName());
+                chip.setCheckable(true);
+                pruebaChipgroup.addView(chip);
+            }
+
             selectorHoursInit.setOnClickListener(v1 -> {
                 MaterialTimePicker picker =
                         new MaterialTimePicker.Builder()
@@ -450,25 +476,22 @@ public class MainActivity extends AppCompatActivity {
                 String horaIn = selectorHoursInit.getText().toString().replace("Inicio ", "");
                 String horaFn = chipClassFinish.getText().toString().replace("Fin ", "");
                 RecyclerView view = bottomSheetView.findViewById(R.id.listaMateriaPuedeCursar);
-                AdapterAgregaMateria adapterAgregaMateria = (AdapterAgregaMateria) view.getAdapter();
-                assert adapterAgregaMateria != null;
-                String materiaName = adapterAgregaMateria.getMateriaSeleccionada();
-                NMateria materia = new NMateria();
+                //-->   Mi error esta aca estoy obteniendo el chipGroup del dia <--
+                NMateria materia=chipSeleccionadas(bottomSheetView.findViewById(R.id.newClassChipGroup));
                 Horarios horario = new Horarios();
+                //todo aca nos quedamos
+                //@aca estamos falta modificar esto para que sea compatible con chips
+                //todo Modificar el codigo para que actualize los datos usando la db    <--
+
                 horario.setDia((!diasCursa.isEmpty()) ? diasCursa.get(0) : "");
                 horario.setHoraInicio(horaIn);
                 horario.setHoraFin(horaFn);
-                materia.setName(materiaName);
                 NMateriasCursando toServer = new NMateriasCursando();
                 toServer.setHorario(horario);
                 toServer.setMateria(materia);
                 apiService.guardarNuevaMateria(perfil.getId(), toServer).enqueue(new ControlaGuardado(getApplicationContext()));
                 snackbar.show();
             });
-            RecyclerView recyclerView = bottomSheetView.findViewById(R.id.listaMateriaPuedeCursar);
-            AdapterAgregaMateria adapterAgregaMateria = new AdapterAgregaMateria(PuedoCursar(materiasCursadas, programaAnal));
-            recyclerView.setAdapter(adapterAgregaMateria);
-            recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
             sideSheetDialog = new BottomSheetDialog(MainActivity.this);
             sideSheetDialog.setContentView(bottomSheetView);
             sideSheetDialog.show();
@@ -476,24 +499,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** @noinspection unused, unused */
-    public ArrayList<String> PuedoCursar(ArrayList<Materia> misMaterias, ArrayList<Materia> programaAnal) {
-        ArrayList<String> salida = new ArrayList<>();
-        //-->    Va a procesar el servidor no yo...
-        salida.add("Informatica 1");
-        salida.add("AGA");
-        salida.add("AM 1");
-        salida.add("AM 2");
-        return salida;
-    }
-    public ArrayList<String> puedoCursarNuevaVersion(ArrayList<NMateria> programaAnalitico,ArrayList<NMateriasCursando> misMaterias){
-        ArrayList<String> salida=new ArrayList<>();
-        for(NMateria materiaRequisito : programaAnalitico) {
-            if (materiaRequisito.getCorrelativas().contains(misMaterias)) {
-                salida.add(materiaRequisito.getName());
-        }
+    public ArrayList<NMateria> PuedoCursar(ArrayList<Materia> misMaterias, ArrayList<Materia> programaAnal) {
+        ArrayList<NMateria> salida=new ArrayList<>();
+        // todo modifico por que no necesito un recycler puedo utilizar chip group
+        for(int i=0;i<5;i++) {
+            NMateria tes = new NMateria();
+            tes.setName("PR");
+            salida.add(tes);
         }
         return salida;
     }
+
 
     public void CargaFragment() {
 
@@ -523,5 +539,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return d;
+    }
+    public NMateria chipSeleccionadas(ChipGroup chipGroup){
+        NMateria salida=new NMateria();
+        for(Integer i:chipGroup.getCheckedChipIds()){
+            Chip checkedChip = chipGroup.findViewById(i);
+            if(checkedChip!=null){
+                salida.setId(String.valueOf(checkedChip.getId()));
+                salida.setName(String.valueOf(checkedChip.getText()));
+            }
+        }
+        return salida;
     }
 }

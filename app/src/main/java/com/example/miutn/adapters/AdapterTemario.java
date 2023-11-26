@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
+import com.example.miutn.network.api.VistaMarkdown;
 import com.example.miutn.network.models.Temario;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -48,9 +50,11 @@ public class AdapterTemario extends RecyclerView.Adapter<AdapterTemario.ViewHold
         holder.Temario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("Tocamos", "POS : " + position);
-                Uri link = Uri.parse(temarios.get(position).getApunte()); //-->   Esta es la direccion del apunte <--
-                Intent intent = new Intent(Intent.ACTION_VIEW, link);
+                String documentID=temarios.get(position).getApunte();
+                Intent intent=new Intent(v.getContext(), VistaMarkdown.class);
+                Bundle bundle=new Bundle();
+                bundle.getString("nameFile",documentID);
+                intent.putExtra("documentID",documentID);
                 v.getContext().startActivity(intent);
             }
         });

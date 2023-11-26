@@ -9,18 +9,24 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/testicono2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/testicono2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MiUtn"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".network.api.VistaMarkdown"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_vista_markdown"
+            android:theme="@style/Theme.MiUtn.Fullscreen" />
+        <activity
             android:name=".Login"
-            android:screenOrientation="nosensor"
+            android:exported="false"
             android:hardwareAccelerated="true"
-            android:exported="false" />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".MainActivity2"
             android:exported="false" />
@@ -35,6 +41,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
     </application>
 

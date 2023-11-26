@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ConstraintLayout="http://schemas.android.com/apk/res-auto">
+
+        <ImageView
+            android:id="@+id/Pruebasnar2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/rounded_image_background"
+            android:src="@drawable/baseline_sentiment_very_satisfied_24"
+            ConstraintLayout:layout_constraintBottom_toBottomOf="parent"
+            ConstraintLayout:layout_constraintStart_toStartOf="parent"
+            ConstraintLayout:layout_constraintTop_toTopOf="parent"
+            ConstraintLayout:layout_constraintVertical_bias="0.062" />
+
+        <TextView
+            android:id="@+id/Pruebasnar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="=)"
+            ConstraintLayout:layout_constraintBottom_toBottomOf="parent"
+            ConstraintLayout:layout_constraintEnd_toEndOf="parent"
+            ConstraintLayout:layout_constraintHorizontal_bias="0.442"
+            ConstraintLayout:layout_constraintStart_toEndOf="@+id/Pruebasnar2"
+            ConstraintLayout:layout_constraintTop_toTopOf="parent"
+            ConstraintLayout:layout_constraintVertical_bias="0.214" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,22 +11,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
+import com.example.miutn.network.models.NMateria;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 
 /** @noinspection FieldMayBeFinal*/
 public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMateria.ViewHolder> {
     //  TODO Retorno el nombre y luego el servidor hace el macheo correspondiente   <--
+//todo Modificar esto para manejar a NMaterias ya fue el consumo de memoria
+    private ArrayList<NMateria> materias;
+    NMateria activado=new NMateria();
 
-    private ArrayList<String> materias;
-    String activado = "";
-
-    public String getMateriaSeleccionada() {
+    public NMateria getMateriaSeleccionada() {
         return activado;
     }
 
-    public AdapterAgregaMateria(ArrayList<String> materias) {
+    public AdapterAgregaMateria(ArrayList<NMateria> materias) {
         this.materias = materias;
     }
 
@@ -43,7 +45,7 @@ public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMate
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAgregaMateria.ViewHolder holder, int position) {
-        holder.nombreMateria.setText(materias.get(position));
+        holder.nombreMateria.setText(materias.get(position).getName());
     }
 
     @Override
@@ -53,15 +55,21 @@ public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMate
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private Chip nombreMateria;
+        public ChipGroup pruebaChipgroup;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nombreMateria = itemView.findViewById(R.id.nombreMateria);
+            pruebaChipgroup=itemView.findViewById(R.id.pruebaChipgroup);
+            Chip tes=new Chip(itemView.getContext());
+            tes.setText("Prueba");
+            pruebaChipgroup.addView(tes);
             nombreMateria.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Log.e("TOCO", "BOTON" + buttonView.getText());
-                    activado = String.valueOf(buttonView.getText());
+                    //todo modificar este por el codigo que ya tengo en login
+//                    activado = String.valueOf(buttonView.getText());
                 }
             });
         }

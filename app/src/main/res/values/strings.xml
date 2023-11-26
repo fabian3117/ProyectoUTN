@@ -74,4 +74,12 @@
     <string name="tengo_cuenta">Tengo Cuenta</string>
     <string name="legajo">Legajo</string>
     <string name="restaurar">Restaurar</string>
+    <string name="long_shortcut">long test</string>
+    <string name="short_shortcut">Perfil</string>
+    <string name="short_others">others</string>
+    <string name="eventDescription">Descripcion eventos\n</string>
+    <string name="events">Proximos Eventos</string>
+    <string name="title_activity_vista_markdown">VistaMarkdown</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

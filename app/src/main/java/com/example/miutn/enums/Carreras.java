@@ -4,7 +4,8 @@ import androidx.annotation.NonNull;
 
 public enum Carreras {
     Electronica("IngenieriaElectronica"),
-    Mecanica("IngenieriaMecanica");
+    Mecanica("IngenieriaMecanica"),
+    Ingreso("Ingreso");
 
     /** @noinspection unused*/
     /** @noinspection FieldMayBeFinal*/
