@@ -25,6 +25,18 @@ En el siguente video se visualiza la interfaz para el login-registro de usuario.
 Se utiliza `lottiefiles` para la visualizacion de animacion en formato `json`. 
 
 https://github.com/fabian3117/MiUTN/assets/34560661/5579b2c3-876d-4e75-8e94-6758a290cb0f
+
+## Visualizacion de apuntes
+Para esta vista utilize un perfil como estudiante de ingreso de ingenieria. Donde el temario esta en formato `Markdown`.
+> En este momento los archivos tienen que añadirse posterior a instalacion de aplicacion.
+# Pasos
+1. Localizar carpeta \data\data\com.example.miutn\files utilizando `explorador de android studio`
+2. Crear 4 archivos (`probandomark.md` - `prueba.md` - `IngresoVidaUni.md` - `IngresoFuncionLineal.md` ) El contenido de los 4 archivos es irrelevante solo importa su existencia.
+
+
+https://github.com/fabian3117/ProyectoUTN/assets/34560661/ff674dca-16c7-4c56-9b7e-bb17f49e38c9
+
+
 ### Tecnologias
 - Springboot
 - Springboot mail
