@@ -3,9 +3,7 @@ package com.example.miutn.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miutn.R;
-import com.example.miutn.network.api.VistaMarkdown;
+import com.example.miutn.activitys.VistaMarkdown;
 import com.example.miutn.network.models.Temario;
 import com.google.android.material.snackbar.Snackbar;
 

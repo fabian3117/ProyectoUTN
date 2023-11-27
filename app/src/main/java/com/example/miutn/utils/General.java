@@ -4,6 +4,8 @@ import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.NMateria;
 import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Temario;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,7 @@ public class General {
     public static ArrayList<Temario> recomendaciones;
 
     public static final String canalNotificaciones="MiUTN";
+    public static final CharSequence nombreCanal = "MiUtn_Canal";
     public static final String canalDescripcion="Sistema notificaciones MiUTN";
     public static  ArrayList<NMateria> puedoCursarNuevaVersion(ArrayList<NMateria> programaAnalitico, ArrayList<NMateria> misMaterias){
         ArrayList<NMateria> salida=new ArrayList<>();
@@ -43,5 +46,16 @@ public class General {
             }
         }
         return true;
+    }
+    public static NMateria chipSeleccionadas(ChipGroup chipGroup){
+        NMateria salida=new NMateria();
+        for(Integer i:chipGroup.getCheckedChipIds()){
+            Chip checkedChip = chipGroup.findViewById(i);
+            if(checkedChip!=null){
+                salida.setId(String.valueOf(checkedChip.getId()));
+                salida.setName(String.valueOf(checkedChip.getText()));
+            }
+        }
+        return salida;
     }
 }

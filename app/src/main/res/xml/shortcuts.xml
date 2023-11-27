@@ -9,7 +9,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.example.miutn"
-            android:targetClass="com.example.miutn.MainActivity" >
+            android:targetClass="com.example.miutn.activitys.MainActivity" >
             <parameter
                 android:name="exercise.name"
                 android:key="exerciseType"/>
@@ -41,10 +41,12 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.example.miutn"
-            android:targetClass="com.example.miutn.network.api.VistaMarkdown" >
+            android:targetClass="com.example.miutn.activitys.VistaMarkdown" >
             <extra
                 android:name="documentID"
                 android:value="probandomark.md"/>
+            <categories android:name="android.shortcut.conversation" />
+            <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
         </intent>
     </shortcut>
 

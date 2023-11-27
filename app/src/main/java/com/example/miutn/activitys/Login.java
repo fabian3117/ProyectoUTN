@@ -1,14 +1,11 @@
-package com.example.miutn;
+package com.example.miutn.activitys;
 
-
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
+import com.example.miutn.ControlDatos;
+import com.example.miutn.R;
+import com.example.miutn.activitys.MainActivity;
+import com.example.miutn.databinding.ActivityMainBinding;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.NMateria;
@@ -30,7 +30,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +48,7 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
     Retrofit retrofit = RetrofitClient.getClient();
     Snackbar snackbar;
     ApiService apiService = retrofit.create(ApiService.class);
+    private ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -290,7 +290,7 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
 
                                 @Override
                                 public void onFailure(Call<Perfil> call, Throwable t) {
-                                Log.e("REGISTRO",t.getMessage().toString());
+                                Log.e("REGISTRO", t.getMessage());
                                 }
                             });
                         });

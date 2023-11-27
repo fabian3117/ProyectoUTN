@@ -1,17 +1,17 @@
-package com.example.miutn;
+package com.example.miutn.activitys;
 
-import static com.example.miutn.enums.Carreras.Electronica;
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,41 +19,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.miutn.adapters.AdapterAgregaMateria;
+import com.example.miutn.ControlDatos;
+import com.example.miutn.ControlaGuardado;
+import com.example.miutn.R;
 import com.example.miutn.databinding.ActivityMainBinding;
-import com.example.miutn.enums.Carreras;
-import com.example.miutn.fragment.misMateriasFragment;
-import com.example.miutn.fragment.perfilFragment;
-import com.example.miutn.fragment.principalFragment;
 import com.example.miutn.network.api.ApiService;
+import com.example.miutn.fragment.*;
 import com.example.miutn.network.api.RetrofitClient;
-import com.example.miutn.network.api.VistaMarkdown;
-import com.example.miutn.network.models.FechasExamenes;
-import com.example.miutn.network.models.Horarios;
-import com.example.miutn.network.models.Materia;
-import com.example.miutn.network.models.NMateria;
-import com.example.miutn.network.models.NMateriasCursando;
-import com.example.miutn.network.models.Perfil;
-import com.example.miutn.network.models.Profile;
-import com.example.miutn.network.models.Temario;
+
+import com.example.miutn.network.models.*;
 import com.example.miutn.utils.General;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -63,69 +49,49 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
-/** @noinspection ALL */
+/** @noinspection CanBeFinal, CanBeFinal, CanBeFinal, CanBeFinal, CanBeFinal */
 public class MainActivity extends AppCompatActivity {
     //TODO : MODIFICAR SEGURIDAD PARA UTILIZAR HTTPS
     //TODO HICE AL REVES -> OBTENER DATOS EN SHAREDPREFERENCE SI NO TENEMOS VAMOS A LOGIN - ACTUALIZAMOS IGUAL  <--
-    private static final String CHANNEL_ID = "my_channel_id";
-    private static final CharSequence CHANNEL_NAME = "My Channel";
-    private static final String CHANNEL_DESCRIPTION = "My Channel Description";
     private ActivityMainBinding binding;
     Snackbar snackbar;
     Perfil perfil = new Perfil();
-    LinearLayout contenedorProximasFechas,contenedorMisMateriasHoy;
     principalFragment fragment = new principalFragment();
-    static final String ProfileID = "TS";
     misMateriasFragment fragmentMisMat = new misMateriasFragment();
     perfilFragment framentProfile = new perfilFragment();
     ArrayList<FechasExamenes> fechasExamenes = new ArrayList<>();
 
-    /** @noinspection unused*/
     FrameLayout sideSheetContainer;
-    ArrayList<NMateria> programaAnalitico=new ArrayList<>();
+    ArrayList<NMateria> programaAnalitico = new ArrayList<>();
     Retrofit retrofit = RetrofitClient.getClient();
-    public final static String carreraSelect="Electronica";
-    ExtendedFloatingActionButton extendedFloatingActionButton;
     ApiService apiService = retrofit.create(ApiService.class);
     BottomSheetDialog sideSheetDialog;
-    Profile profile = new Profile();
-    ArrayList<Materia> materiasCursadas = new ArrayList<>();
-    ArrayList<Materia> programaAnal = new ArrayList<>();  //-->   Todas las materias de mi carrera    <---
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        contenedorProximasFechas=findViewById(R.id.contenedorProximasFechas);
+        //contenedorProximasFechas = findViewById(R.id.contenedorProximasFechas);
         linkElement();
         CargaFragment();
         View v = findViewById(R.id.ParentView);
-        SearchBar views = findViewById(R.id.search_bar);
-        SearchView view1 = findViewById(R.id.SearchView);
         binding.SearchView.setupWithSearchBar(binding.searchBar);
-        view1.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                view1.hide();
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH
-                        || (event != null && event.getAction() == KeyEvent.ACTION_DOWN
-                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    //TODO VERIFICAR POR QUE ENTRA 2 VECESc
-                    Log.e("ENTRO POR ENTER", String.valueOf(v.getText()));
+        binding.SearchView.getEditText().setOnEditorActionListener((v1, actionId, event) -> {
+            binding.SearchView.hide();
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH
+                    || (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                    && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                //TODO VERIFICAR POR QUE ENTRA 2 VECESc
+                Log.e("ENTRO POR ENTER", String.valueOf(v1.getText()));
 
-                }
-                return false;
             }
+            return false;
         });
-        showNotification(getApplicationContext(),"titulo","contenido");
+        showNotification(getApplicationContext(), "titulo", "contenido");
         snackbar = Snackbar.make(v, "", Snackbar.LENGTH_LONG);
 
         binding.lottieAnimationMajor.setVisibility(View.GONE);
@@ -158,58 +124,32 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
         CargaInicialTest();
-        Carreras el= Carreras.valueOf("Electronica");
 
-       /* apiService.materiasAsociadas(carreraSelect).enqueue(new Callback<ArrayList<NMateria>>() {
-            @Override
-            public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
-                if(response.isSuccessful()){
-                    Log.e("SOLICITUD","EXITO");
-                    ControlDatos.GuardarProgramaAnalitico(response.body(),getApplicationContext());
-                    fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(response.body());
-
-                }
-                else{
-                    Log.e("SOLICITUD","FALLO");
-                    fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(ControlDatos.ObtencionProgramaAnalitico(getApplicationContext()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<NMateria>> call, Throwable t) {
-                Log.e("SOLICITUD",t.getMessage());
-                snackbar.setText("error Obtencion datos");
-                snackbar.show();
-            }
-        });
-*/
     }
 
     public void CargaInicialTest() {
-        perfil=ControlDatos.ObtenerPerfil(getApplicationContext());
+        perfil = ControlDatos.ObtenerPerfil(getApplicationContext());
         //-->   Tener un ID vacio implica que no tenemos datos entonces vamos a login   <--
-        if(perfil.getId().isEmpty()){
+        if (perfil.getId().isEmpty()) {
             //--->  Descarga toda la informacion de la web  <--
             snackbar.setText("Error No informacion en app");
             snackbar.show();
-            Intent intent=new Intent(MainActivity.this, Login.class);
+            Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
             finish();
-        }
-        else{
-            fechasExamenes=ControlDatos.ObtencionFechasExamenes(getApplicationContext());
-            programaAnalitico=ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
+        } else {
+            fechasExamenes = ControlDatos.ObtencionFechasExamenes(getApplicationContext());
+            programaAnalitico = ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
             ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
             //-->   Añado recomendaciones falzas   <--<--
             //todo añadir recomendaciones y incluir ciclo de actualizacion  <--
-            Temario tema=new Temario();
+            Temario tema = new Temario();
             tema.setApunte("ts");
             tema.setDescription("Sss");
             tema.setTema("aaaa");
             tema.setId("prueba.md");
-            Temario tema0=new Temario();
+            Temario tema0 = new Temario();
             tema0.setApunte("Segundo");
             tema0.setDescription("DEscrip");
             tema0.setTema("orueba");
@@ -218,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             recomendaciones.add(tema0);
             ArrayList<NMateriasCursando> materiasCursando = ControlDatos.ObtencionObtenerMateriasCursando(getApplicationContext());
 //todo utilizar programa analitico para llenar el sidesheet
-                                //-->   Actualizaciones de fragment <--
+            //-->   Actualizaciones de fragment <--
             ObtencionMateriasHoy(perfil);
             fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(programaAnalitico);
             fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
@@ -228,151 +168,41 @@ public class MainActivity extends AppCompatActivity {
             framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
             ActualizaRecomendaciones(recomendaciones);
         }
-/*
-        if (ConexionInternetDisponible()) {
-            apiService.obtenerMateriasProgramaAnal(Electronica).enqueue(new Callback<ArrayList<NMateria>>() {
-                @Override
-                public void onResponse(@NonNull Call<ArrayList<NMateria>> call, @NonNull Response<ArrayList<NMateria>> response) {
-                    if (response.isSuccessful()) {
-                        ControlDatos.GuardarProgramaAnalitico(response.body(), getApplicationContext());
-                        fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(response.body());
-                    } else {
-                        Log.e("Programa Analitico", "otro fallo");
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ArrayList<NMateria>> call, @NonNull Throwable t) {
-                    Log.e("Error programa Anal", Objects.requireNonNull(t.getMessage()));
-                }
-            });
-            apiService.obtenerProximasFechas().enqueue(new Callback<ArrayList<FechasExamenes>>() {
-                @Override
-                public void onResponse(@NonNull Call<ArrayList<FechasExamenes>> call, @NonNull Response<ArrayList<FechasExamenes>> response) {
-                    if (response.isSuccessful()) {
-                        fechasExamenes = response.body();
-                        ControlDatos.GuardarFechasExamenes(getApplicationContext(), fechasExamenes);
-                        fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
-                        assert response.body() != null;
-                        if(fechasExamenes.isEmpty()){
-                            //-->   Oculto todo lo que es el apartado de proximas fechas   <--
-                            contenedorProximasFechas.setVisibility(View.GONE);
-                        }
-                        for (FechasExamenes materia : response.body()) {
-                            Log.e("FECHA", materia.getMateria().getName());
-                        }
-                        General.fechasExamenes=fechasExamenes;
-                    } else {
-                        contenedorProximasFechas.setVisibility(View.GONE);
-                        snackbar.setText("Error en obtencion fechas de examen");
-                        snackbar.show();
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ArrayList<FechasExamenes>> call, @NonNull Throwable t) {
-                    fechasExamenes = ControlDatos.ObtencionFechasExamenes(getApplicationContext());
-                    General.fechasExamenes=fechasExamenes;
-                    fragment.ActualizacionDatosContenidosAdapterFechasEx(fechasExamenes);
-                }
-            });
-
-            apiService.descargaPerfil(ProfileID).enqueue(new Callback<Perfil>() {
-                @Override
-                public void onResponse(@NonNull Call<Perfil> call, @NonNull Response<Perfil> response) {
-                    if (response.isSuccessful()) {
-                        perfil = response.body();
-                        ControlDatos.GuardarProfile(getApplicationContext(), profile);
-                        ObtencionMateriasHoy(perfil);
-                        General.perfil=perfil;
-                    } else {
-                        snackbar.setText("Error en obtencion de datos de servidor");
-                        snackbar.show();
-                    }
-                    fragment.ActualizacionDatosContenidosAdapterMaterias(perfil.getMateriasCursando());
-                    ArrayList<NMateria> analiticos = ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
-                    fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias(analiticos, perfil.getMateriasCursando());
-                    framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<Perfil> call,@NonNull Throwable t) {
-                    Log.e("ERORR CONEXION WEB", Objects.requireNonNull(t.getMessage()));
-                    snackbar.setText("Error en conexion a servidor verificar");
-                    snackbar.show();
-                    perfil = ControlDatos.ObtenerPerfil(getApplicationContext());
-                    ObtencionMateriasHoy(perfil);
-                    framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
-                    fragment.ActualizacionDatosContenidosAdapterMaterias(perfil.getMateriasCursando());
-                }
-            });
-        } else if (!ControlDatos.ExistePerfil(getApplicationContext())) {
-            //-->   No tenemos nada <--
-            //-->   Pantalla Inicio seccion <--
-            Intent intent = new Intent(getApplicationContext(), Login.class);
-            getApplicationContext().startActivity(intent);
-            finish();   //-->   Finalizo esta actividad <--
-        }
-        apiService.obtenerApuntes("FEDE").enqueue(new Callback<ArrayList<Temario>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Temario>> call, Response<ArrayList<Temario>> response) {
-                if(response.isSuccessful()){
-                    ArrayList<Temario> recomendaciones = response.body();
-                    ControlDatos.GuardarRecomendaciones(getApplicationContext(),recomendaciones);
-                    ActualizaRecomendaciones(recomendaciones);
-                    General.recomendaciones=recomendaciones;
-                }
-                else{
-                    ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
-                    General.recomendaciones=recomendaciones;
-                   ActualizaRecomendaciones(recomendaciones);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Temario>> call, Throwable t) {
-                ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
-                General.recomendaciones=recomendaciones;
-                ActualizaRecomendaciones(recomendaciones);
-            }
-        });
- */
     }
-    public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion){
+
+    public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion) {
         fragment.ActualizacionDatosContenidosAdapterTemario(recomendacion);
     }
-    public void NotificacionTest(){
 
+    public void NotificacionTest() {
 
     }
+
     private static void createNotificationChannel(Context context) {
-        // Check if the device is running Android 8.0 (Oreo) or higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            channel.setDescription(General.canalDescripcion);
-
-            // Register the channel with the system
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        //-->   Creacion del canal de notificacion
+        NotificationChannel channel = new NotificationChannel(
+                General.canalNotificaciones,
+                General.nombreCanal,
+                NotificationManager.IMPORTANCE_DEFAULT
+        );
+        channel.setDescription(General.canalDescripcion);
+        //--->  Registrar este canal en el sistema  <--
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
+
     public void showNotification(Context context, String title, String content) {
         // Create a Notification channel (required for Android 8.0 and higher)
         createNotificationChannel(context);
-        RemoteViews notificacionPersonalizada=new RemoteViews(getPackageName(),R.layout.notificaciones_test);
-        notificacionPersonalizada.setTextViewText(R.id.NotificacionCosa,"MODIFICO CODIGO");
+        RemoteViews notificacionPersonalizada = new RemoteViews(getPackageName(), R.layout.notificaciones_test);
+        notificacionPersonalizada.setTextViewText(R.id.NotificacionCosa, "MODIFICO CODIGO");
         //Intent chromeIntent = context.getPackageManager().getLaunchIntentForPackage("com.android.chrome");
 
-        RemoteViews notificacionPersonalizadaExpandida=new RemoteViews(getPackageName(),R.layout.notificacion_expandida_text);
-        notificacionPersonalizadaExpandida.setTextViewText(R.id.NotificacionExpandidaDescripcion,"Descripcion de algo- Hoy tienes Info1");
+        RemoteViews notificacionPersonalizadaExpandida = new RemoteViews(getPackageName(), R.layout.notificacion_expandida_text);
+        notificacionPersonalizadaExpandida.setTextViewText(R.id.NotificacionExpandidaDescripcion, "Descripcion de algo- Hoy tienes Info1");
         Intent appIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent =  PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_IMMUTABLE);
-        notificacionPersonalizadaExpandida.setOnClickPendingIntent(R.id.NotificationButtonTouch,pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_IMMUTABLE);
+        notificacionPersonalizadaExpandida.setOnClickPendingIntent(R.id.NotificationButtonTouch, pendingIntent);
 
         // Create a NotificationCompat.Builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, General.canalNotificaciones)
@@ -386,6 +216,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Show the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         notificationManager.notify(1, builder.build());
     }
     public void ObtencionMateriasHoy(Perfil perfil) {
@@ -412,11 +252,9 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void linkElement() {
-        sideSheetContainer = findViewById(R.id.sideSheetContainer);
-        extendedFloatingActionButton = findViewById(R.id.fab);
         ArrayList<String> diasCursa = new ArrayList<>();
 //TODO Terminar esto que es para añadir mas materias
-        extendedFloatingActionButton.setOnClickListener(v -> {
+        binding.fab.setOnClickListener(v -> {
             LayoutInflater inflater = LayoutInflater.from(v.getContext());
             @SuppressLint("InflateParams") View bottomSheetView = inflater.inflate(R.layout.side_new_class, null);
             Chip selectorHoursInit = bottomSheetView.findViewById(R.id.chipClassInit);
@@ -477,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 String horaFn = chipClassFinish.getText().toString().replace("Fin ", "");
                 RecyclerView view = bottomSheetView.findViewById(R.id.listaMateriaPuedeCursar);
                 //-->   Mi error esta aca estoy obteniendo el chipGroup del dia <--
-                NMateria materia=chipSeleccionadas(bottomSheetView.findViewById(R.id.newClassChipGroup));
+                @SuppressLint("CutPasteId") NMateria materia=General.chipSeleccionadas(bottomSheetView.findViewById(R.id.newClassChipGroup));
                 Horarios horario = new Horarios();
                 //todo aca nos quedamos
                 //@aca estamos falta modificar esto para que sea compatible con chips
@@ -497,20 +335,6 @@ public class MainActivity extends AppCompatActivity {
             sideSheetDialog.show();
         });
     }
-
-    /** @noinspection unused, unused */
-    public ArrayList<NMateria> PuedoCursar(ArrayList<Materia> misMaterias, ArrayList<Materia> programaAnal) {
-        ArrayList<NMateria> salida=new ArrayList<>();
-        // todo modifico por que no necesito un recycler puedo utilizar chip group
-        for(int i=0;i<5;i++) {
-            NMateria tes = new NMateria();
-            tes.setName("PR");
-            salida.add(tes);
-        }
-        return salida;
-    }
-
-
     public void CargaFragment() {
 
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentPrincipalx, fragment).commit();

@@ -6,7 +6,7 @@ public enum Sedes {
 
     /** @noinspection FieldMayBeFinal*/
     /** @noinspection NonFinalFieldInEnum*/
-    private String valor;
+    private final String valor;
 
     Sedes(String valor) {
         this.valor = valor;

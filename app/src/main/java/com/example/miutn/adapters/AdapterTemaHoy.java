@@ -1,10 +1,7 @@
 package com.example.miutn.adapters;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.miutn.MainActivity;
 import com.example.miutn.R;
-import com.example.miutn.network.api.VistaMarkdown;
+import com.example.miutn.activitys.VistaMarkdown;
 import com.example.miutn.network.models.Temario;
 
 import java.util.ArrayList;

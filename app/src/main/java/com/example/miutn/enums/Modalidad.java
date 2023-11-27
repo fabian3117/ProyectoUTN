@@ -6,7 +6,7 @@ public enum Modalidad {
     Hibrido(3);
     /** @noinspection FieldMayBeFinal*/
     /** @noinspection NonFinalFieldInEnum*/
-    private int valor;
+    private final int valor;
 
     Modalidad(int valor) {
         this.valor = valor;

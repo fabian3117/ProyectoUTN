@@ -11,7 +11,7 @@ public enum Cuatrimestres {
     /** @noinspection unused*/
     /** @noinspection unused*/
     /** @noinspection NonFinalFieldInEnum*/
-    private int valor;
+    private final int valor;
 
     Cuatrimestres(int valor) {
         this.valor = valor;

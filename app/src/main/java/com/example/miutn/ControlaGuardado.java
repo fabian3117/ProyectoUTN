@@ -20,7 +20,7 @@ public class ControlaGuardado implements Callback {
 
     }
 
-    ControlaGuardado(Context context) {
+    public ControlaGuardado(Context context) {
         this.context = context;
     }
 

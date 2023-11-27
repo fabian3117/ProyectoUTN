@@ -56,7 +56,6 @@ public class AdapterMiPrograma extends RecyclerView.Adapter<AdapterMiPrograma.Vi
             LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.tryshide, null);
             Chip textView = view.findViewById(R.id.nameClass);
-           ;
             textView.setText(materiasDeCarrera.get(position).getName());
             RecyclerView recyclerViewTemario = view.findViewById(R.id.RecyclerTemario);
             AdapterTemario adapterTemario = new AdapterTemario(materiasDeCarrera.get(position).getProgramaAnalitico().getTemas());
