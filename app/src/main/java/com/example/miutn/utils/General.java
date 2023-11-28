@@ -1,11 +1,16 @@
 package com.example.miutn.utils;
 
+import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
+
+import com.example.miutn.R;
 import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.NMateria;
 import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Temario;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.util.ArrayList;
 
@@ -17,6 +22,17 @@ public class General {
     public static final String canalNotificaciones="MiUTN";
     public static final CharSequence nombreCanal = "MiUtn_Canal";
     public static final String canalDescripcion="Sistema notificaciones MiUTN";
+    public static String textoMostrarSinExpandir="Notificacion";
+    public static String textoMostrarExpando="Notificacion";
+    public static int icono= R.drawable.iconprofile;
+  /*  public static MaterialTimePicker picker =
+            new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(12)
+                    .setMinute(10)
+                    .setTitleText("Hora Inicio")
+                    .setInputMode(INPUT_MODE_CLOCK)
+                    .build();*/
     public static  ArrayList<NMateria> puedoCursarNuevaVersion(ArrayList<NMateria> programaAnalitico, ArrayList<NMateria> misMaterias){
         ArrayList<NMateria> salida=new ArrayList<>();
         /*for(NMateria materiaRequisito : programaAnalitico) {

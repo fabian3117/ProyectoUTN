@@ -36,6 +36,7 @@ import com.example.miutn.fragment.*;
 import com.example.miutn.network.api.RetrofitClient;
 
 import com.example.miutn.network.models.*;
+import com.example.miutn.notifications.Notificaciones;
 import com.example.miutn.utils.General;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         //contenedorProximasFechas = findViewById(R.id.contenedorProximasFechas);
         linkElement();
         CargaFragment();
-        View v = findViewById(R.id.ParentView);
         binding.SearchView.setupWithSearchBar(binding.searchBar);
         binding.SearchView.getEditText().setOnEditorActionListener((v1, actionId, event) -> {
             binding.SearchView.hide();
@@ -91,8 +91,9 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-        showNotification(getApplicationContext(), "titulo", "contenido");
-        snackbar = Snackbar.make(v, "", Snackbar.LENGTH_LONG);
+        Notificaciones notificaciones= new Notificaciones();
+        notificaciones.showNotification(getApplicationContext(), "titulo", "contenido");
+        snackbar = Snackbar.make(binding.ParentView, "", Snackbar.LENGTH_LONG);
 
         binding.lottieAnimationMajor.setVisibility(View.GONE);
         binding.tabSelector.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -173,61 +174,6 @@ public class MainActivity extends AppCompatActivity {
     public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion) {
         fragment.ActualizacionDatosContenidosAdapterTemario(recomendacion);
     }
-
-    public void NotificacionTest() {
-
-    }
-
-    private static void createNotificationChannel(Context context) {
-        //-->   Creacion del canal de notificacion
-        NotificationChannel channel = new NotificationChannel(
-                General.canalNotificaciones,
-                General.nombreCanal,
-                NotificationManager.IMPORTANCE_DEFAULT
-        );
-        channel.setDescription(General.canalDescripcion);
-        //--->  Registrar este canal en el sistema  <--
-        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-    }
-
-    public void showNotification(Context context, String title, String content) {
-        // Create a Notification channel (required for Android 8.0 and higher)
-        createNotificationChannel(context);
-        RemoteViews notificacionPersonalizada = new RemoteViews(getPackageName(), R.layout.notificaciones_test);
-        notificacionPersonalizada.setTextViewText(R.id.NotificacionCosa, "MODIFICO CODIGO");
-        //Intent chromeIntent = context.getPackageManager().getLaunchIntentForPackage("com.android.chrome");
-
-        RemoteViews notificacionPersonalizadaExpandida = new RemoteViews(getPackageName(), R.layout.notificacion_expandida_text);
-        notificacionPersonalizadaExpandida.setTextViewText(R.id.NotificacionExpandidaDescripcion, "Descripcion de algo- Hoy tienes Info1");
-        Intent appIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_IMMUTABLE);
-        notificacionPersonalizadaExpandida.setOnClickPendingIntent(R.id.NotificationButtonTouch, pendingIntent);
-
-        // Create a NotificationCompat.Builder
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, General.canalNotificaciones)
-                .setSmallIcon(R.drawable.iconprofile)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setCustomContentView(notificacionPersonalizada)
-                .setCustomBigContentView(notificacionPersonalizadaExpandida)
-                .setCustomHeadsUpContentView(notificacionPersonalizadaExpandida)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        // Show the notification
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        notificationManager.notify(1, builder.build());
-    }
     public void ObtencionMateriasHoy(Perfil perfil) {
         Calendar calendar = Calendar.getInstance();
         String dia = new SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.getTime());
@@ -271,14 +217,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             selectorHoursInit.setOnClickListener(v1 -> {
+
                 MaterialTimePicker picker =
                         new MaterialTimePicker.Builder()
                                 .setTimeFormat(TimeFormat.CLOCK_24H)
                                 .setHour(12)
-                                .setMinute(10)
                                 .setTitleText("Hora Inicio")
                                 .setInputMode(INPUT_MODE_CLOCK)
                                 .build();
+
+                //MaterialTimePicker picker=General.picker;
                 picker.addOnPositiveButtonClickListener(v11 -> selectorHoursInit.setText("Inicio " + picker.getHour() + ":" + picker.getMinute()));
                 picker.show(getSupportFragmentManager(), "tag");
             });
