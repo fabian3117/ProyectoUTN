@@ -30,8 +30,12 @@ public class ControlaGuardado implements Callback {
         if (response.isSuccessful()) {
             materia = (NMateriasCursando) response.body();
             //-->   TODO    Debo añadirla a las materias que estoy cursando <--
+
             ControlDatos.GuardarMateriaCursando(context, materia);
 
+        }
+        else{
+            Log.e("ERO","no succes B");
         }
     }
 

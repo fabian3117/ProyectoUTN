@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Configuraciones del retrofitClient
  */
 public class RetrofitClient {
-    private static final String urlBase = "http://192.168.0.12:8080";
+    private static final String urlBase = "http://10.3.1.254:8080";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

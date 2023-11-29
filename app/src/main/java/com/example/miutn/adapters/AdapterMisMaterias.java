@@ -63,7 +63,29 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
         holder.position = position;
         holder.materiaSede.setText(Materias.get(position).getHorario().getSede().getValorAsociado());
         holder.chipAnio.setText(String.valueOf(Materias.get(position).getMateria().getAnio()));
+        holder.linearLayout.setOnClickListener(v->{
+            BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
+            LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.tryshide, null);
+            Chip textView = view.findViewById(R.id.nameClass);
+            textView.setText(Materias.get(position).getMateria().getName());
+            TextView textView1 = view.findViewById(R.id.classCampus);
+            textView1.setText(Materias.get(position).getHorario().getDia());
+            Chip sede = view.findViewById(R.id.sedechip);
+            sede.setText(Materias.get(position).getHorario().getSede().getValorAsociado());
+            Chip classHours = view.findViewById(R.id.classHours);
+            classHours.setText(Materias.get(position).getHorario().getHoraFin());
+            RecyclerView recyclerViewTemario = view.findViewById(R.id.RecyclerTemario);
+            NprogramaAnalitico analitico = new NprogramaAnalitico();
+            ArrayList<Temario>materiasCursandos=Materias.get(position).getMateria().getProgramaAnalitico().getTemas();
+            AdapterTemario adapterTemario = new AdapterTemario(Materias.get(position).getMateria().getProgramaAnalitico().getTemas());
+            recyclerViewTemario.setAdapter(adapterTemario);
+            recyclerViewTemario.setLayoutManager(new LinearLayoutManager(v.getContext()));
+            sideSheetDialog.setContentView(view);
+            // View view = View.inflate(R.layout.tryshide, null,null);
+            sideSheetDialog.show();
 
+        });
     }
 
     @Override
@@ -114,8 +136,8 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
+                //todo por aca va el error
+                  /*  BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
                     LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.tryshide, null);
                     Chip textView = view.findViewById(R.id.nameClass);
@@ -144,6 +166,8 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
                     sideSheetDialog.setContentView(view);
                     // View view = View.inflate(R.layout.tryshide, null,null);
                     sideSheetDialog.show();
+
+                   */
                 }
             });
         }

@@ -32,16 +32,13 @@
             android:checkable="true"
             android:focusable="true"
             android:id="@+id/chipNewClassMedrano"
-            app:chipBackgroundColor="@color/bg_chip_state_list"
             />
-
         <com.google.android.material.chip.Chip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:checkable="true"
             android:focusable="true"
-            app:chipBackgroundColor="@color/bg_chip_state_list"
             android:text="Campus"
             android:id="@+id/chipNewClassCampus"
             />
@@ -67,7 +64,6 @@
         android:id="@+id/newClassChipGroup"
         android:clickable="true"
         app:singleSelection="true"
-
         android:contextClickable="true"
         />
     <com.google.android.material.textview.MaterialTextView

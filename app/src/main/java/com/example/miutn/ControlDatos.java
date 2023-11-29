@@ -233,6 +233,11 @@ public class ControlDatos {
     }
 
     public static void GuardarMateriasCursando(Context context, ArrayList<NMateriasCursando> MateriasCurse) {
+        //todo tengo que guardar dentro de perfil.materiaCursando
+        Perfil perfil=ObtenerPerfil(context);
+        perfil.setMateriasCursando(MateriasCurse);
+        GuardarPerfil(context,perfil);
+        /*
         SharedPreferences sharedPreferences = context.getSharedPreferences(sharedPreferenceNameContainer, Context.MODE_PRIVATE);
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -247,7 +252,7 @@ public class ControlDatos {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
         }
         //-->   True : Se guardo correctamente -- False : No se guardo  <--
-        sharedPreferences.contains(sharedPreferenceKeyObtenerMateriasCursando);
+        sharedPreferences.contains(sharedPreferenceKeyObtenerMateriasCursando);*/
 
     }
 
