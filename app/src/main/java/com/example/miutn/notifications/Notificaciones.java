@@ -84,6 +84,16 @@ public class Notificaciones {
     TextoMostrarExpando=General.textoMostrarExpando;
     Icono=General.icono;
     }
+
+    public Notificaciones(String descripcionCanal, String textoMostrarSinExpandir, String textoMostrarExpando, String canalNotif, int importancia, int icono) {
+        DescripcionCanal = descripcionCanal;
+        TextoMostrarSinExpandir = textoMostrarSinExpandir;
+        TextoMostrarExpando = textoMostrarExpando;
+        CanalNotif = canalNotif;
+        Importancia = importancia;
+        Icono = icono;
+    }
+
     private void createNotificationChannel(Context context) {
         //-->   Creacion del canal de notificacion
         NotificationChannel channel = new NotificationChannel(CanalNotif, General.nombreCanal, Importancia);

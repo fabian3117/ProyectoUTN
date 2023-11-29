@@ -45,16 +45,13 @@ public class AdapterTemario extends RecyclerView.Adapter<AdapterTemario.ViewHold
     @Override
     public void onBindViewHolder(@NonNull AdapterTemario.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.temeName.setText(temarios.get(position).getTema());
-        holder.Temario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String documentID=temarios.get(position).getApunte();
-                Intent intent=new Intent(v.getContext(), VistaMarkdown.class);
-                Bundle bundle=new Bundle();
-                bundle.getString("nameFile",documentID);
-                intent.putExtra("documentID",documentID);
-                v.getContext().startActivity(intent);
-            }
+        holder.Temario.setOnClickListener(v -> {
+            String documentID=temarios.get(position).getApunte();
+            Intent intent=new Intent(v.getContext(), VistaMarkdown.class);
+            Bundle bundle=new Bundle();
+            bundle.getString("nameFile",documentID);
+            intent.putExtra("documentID",documentID);
+            v.getContext().startActivity(intent);
         });
     }
 

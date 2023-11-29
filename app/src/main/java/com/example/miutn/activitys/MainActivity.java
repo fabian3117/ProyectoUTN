@@ -7,6 +7,9 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +29,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.miutn.ControlDatos;
 import com.example.miutn.ControlaGuardado;
@@ -37,6 +42,7 @@ import com.example.miutn.network.api.RetrofitClient;
 
 import com.example.miutn.network.models.*;
 import com.example.miutn.notifications.Notificaciones;
+import com.example.miutn.pruebaAutomatizacion;
 import com.example.miutn.utils.General;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
@@ -50,6 +56,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Retrofit;
 
@@ -76,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        PeriodicWorkRequest miTarea = new PeriodicWorkRequest.Builder(
+                pruebaAutomatizacion.class,
+                15, // Repetir cada 15 minutos
+                TimeUnit.MINUTES
+        ).build();
+
+        WorkManager.getInstance(this).enqueue(miTarea);
+
         //contenedorProximasFechas = findViewById(R.id.contenedorProximasFechas);
         linkElement();
         CargaFragment();
