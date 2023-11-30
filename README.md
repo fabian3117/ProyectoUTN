@@ -72,6 +72,11 @@ Para la conexion exitosa del proyecto se debe realizar la siguente configuracion
 private static final String urlBase = "http://{Direccion IP Sevidor springboot}:{Puerto}";
 ```
 ***Importante tener en cuenta que esta utilizando protocolo http y desde `manifest` se permitio eso a fin de poder continuar con el desarrollo sin requerir certificados ssl***
+### Diagramas
+
+![image](https://github.com/fabian3117/ProyectoUTN/assets/34560661/d38ce1c9-99ca-4d23-89f0-06ba4e14031c)
+![image](https://github.com/fabian3117/ProyectoUTN/assets/34560661/f839d499-1ba2-4650-87ae-be6c99aeae9e)
+
 
 ### Tecnologias
 - Springboot
