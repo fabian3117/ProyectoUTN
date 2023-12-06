@@ -82,4 +82,17 @@
     <string name="title_activity_vista_markdown">VistaMarkdown</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="visto">Visto</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="widgetSaludo">Volvamos a repasar :)</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="saludosuperior">SaludoSuperior</string>
+    <string name="title_activity_main3">MainActivity3</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
 </resources>

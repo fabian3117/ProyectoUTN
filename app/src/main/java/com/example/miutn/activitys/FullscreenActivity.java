@@ -1,58 +1,43 @@
 package com.example.miutn.activitys;
 
-import static android.view.View.GONE;
-
 import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Spanned;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
-import com.example.miutn.ControlDatos;
-import com.example.miutn.R;
-import com.example.miutn.genericControlers.ManejoArchivos;
-import com.example.miutn.databinding.ActivityVistaMarkdownBinding;
-import com.example.miutn.network.api.ApiService;
-import com.example.miutn.network.api.RetrofitClient;
-
-import org.commonmark.node.Node;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import io.noties.markwon.Markwon;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import com.example.miutn.databinding.ActivityFullscreenBinding;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class VistaMarkdown extends AppCompatActivity {
-    LottieAnimationView dynamicAnimationView;
-    Retrofit retrofit = RetrofitClient.getClient();
-    ApiService apiService = retrofit.create(ApiService.class);
-
+public class FullscreenActivity extends AppCompatActivity {
+    /**
+     * Whether or not the system UI should be auto-hidden after
+     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
+     */
     private static final boolean AUTO_HIDE = true;
+
+    /**
+     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
+     * user interaction before hiding the system UI.
+     */
     private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
 
+    /**
+     * Some older devices needs a small delay between UI widget updates
+     * and a change of the status and navigation bar.
+     */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
-    TextView fullscreen_content;
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -91,7 +76,6 @@ public class VistaMarkdown extends AppCompatActivity {
     private final Runnable mHideRunnable = new Runnable() {
         @Override
         public void run() {
-            //-->   Esto es para que se oculte el menu de abajo
             hide();
         }
     };
@@ -103,7 +87,6 @@ public class VistaMarkdown extends AppCompatActivity {
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (AUTO_HIDE) {
@@ -119,107 +102,31 @@ public class VistaMarkdown extends AppCompatActivity {
             return false;
         }
     };
-    private ActivityVistaMarkdownBinding binding;
-    ManejoArchivos controladorArchivos=new ManejoArchivos();
+    private ActivityFullscreenBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityVistaMarkdownBinding.inflate(getLayoutInflater());
+        binding = ActivityFullscreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Intent intent=getIntent();
-        String namedocument;
-        dynamicAnimationView= new LottieAnimationView(this);
-        if(intent!=null){
-            String ts=intent.getStringExtra("documentID");
-            if(ts!=null){
-                namedocument=ts;
-            } else {
-                namedocument = "prueba.md";
-            }
-        } else {
-            namedocument = "prueba.md";
-        }
+
         mVisible = true;
         mControlsView = binding.fullscreenContentControls;
         mContentView = binding.fullscreenContent;
-        fullscreen_content=binding.fullscreenContent;
-        String markdownTest2=controladorArchivos.leerArchivo(getApplicationContext(),namedocument);
-        Log.e("ARCHIVOS",markdownTest2);
-        Markwon markwon = Markwon.create(this);
 
-        final Node node = markwon.parse(markdownTest2);
-        final Spanned markdown = markwon.render(node);
-        markwon.setMarkdown(binding.sss, markdownTest2);
-  //      markwon.setMarkdown(binding.fullscreenContent, markdownTest2);
-        markwon.setParsedMarkdown(binding.fullscreenContent, markdown);
-
-        // binding.fullscreenContent.setText(markdownTest);
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //--> Cuando toca el texto    <--
                 toggle();
             }
         });
+
+        // Upon interacting with UI controls, delay any scheduled hide()
+        // operations to prevent the jarring behavior of controls going away
+        // while interacting with the UI.
         binding.dummyButton.setOnTouchListener(mDelayHideTouchListener);
-        AtomicBoolean entrada= new AtomicBoolean(false);
-        binding.dummyButton.setOnClickListener(v->{
-            //-->   Lanzar animacion de carga   <--
-            if(!entrada.get()){
-                showAnimation();
-                entrada.set(true);
-                apiService.temaVisto(namedocument, ControlDatos.ObtenerPerfil(getApplicationContext())).enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()){
-                            Log.e("MIRA","ENTRAMOS TENEMOS QUE INFORMAR PROGRESO");
-                        }
-                        else{
-                            Log.e("MIRA","ENTRAMOS PERO ALGO FALLO VER CODIGO "+response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                    Log.e("MIRA","ERROR");
-                    }
-                });
-                Log.e("MIRA","ENTRAMOS TENEMOS QUE INFORMAR PROGRESO");
-                //-->   Buscar en el temario asociados con ese id y dar por visto el tema   <--
-                //-->   Informar al servidor que se ha visto el tema   <--
-                //-->   En caso de respuesta satisfactoria realizar la modificacion <--
-
-            //    binding.fullscreenContentControls.getRootView().get
-            }
-        });
-    }
-    private void showAnimation() {
-        //-->   todo Optimizar esto   <--
-        // Crear dinámicamente una LottieAnimationView
-
-        dynamicAnimationView.setAnimation(R.raw.loading);
-//        dynamicAnimationView.setAnimation("loading.json"); // Reemplaza con el nombre de tu archivo Lottie
-
-        // Ajustar parámetros de diseño para que la vista ocupe toda la pantalla
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-        );
-
-        // Limpiar el contenedor antes de agregar la vista
-
-        binding.fullscreenContentControls.removeAllViews();
-
-        // Agregar la vista al contenedor
-        binding.fullscreenContentControls.addView(dynamicAnimationView, layoutParams);
-
-        // Hacer la vista visible
-        dynamicAnimationView.setVisibility(View.VISIBLE);
-
-        // Reproducir la animación
-        dynamicAnimationView.playAnimation();
     }
 
     @Override
@@ -246,7 +153,7 @@ public class VistaMarkdown extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        mControlsView.setVisibility(GONE);
+        mControlsView.setVisibility(View.GONE);
         mVisible = false;
 
         // Schedule a runnable to remove the status and navigation bar after a delay

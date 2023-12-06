@@ -26,7 +26,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.example.miutn"
-            android:targetClass="com.example.miutn.MainActivity2" >
+            android:targetClass="com.example.miutn.activitys.MainActivity2" >
             <parameter
                 android:name="exercise.name"
                 android:key="exerciseType"/>
@@ -54,7 +54,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.example.miutn"
-            android:targetClass="com.example.miutn.MainActivity2">
+            android:targetClass="com.example.miutn.activitys.MainActivity2">
             <parameter
                 android:name="exercise.name"
                 android:key="exerciseType"/>

@@ -25,6 +25,7 @@ public class AdapterTemaHoy extends RecyclerView.Adapter<AdapterTemaHoy.ViewHold
         this.temarios = temarios;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(ArrayList<Temario> newData) {
         temarios = newData;
         notifyDataSetChanged();

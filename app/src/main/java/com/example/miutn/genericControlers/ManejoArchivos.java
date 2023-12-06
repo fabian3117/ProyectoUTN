@@ -1,4 +1,4 @@
-package com.example.miutn;
+package com.example.miutn.genericControlers;
 
 import android.content.Context;
 

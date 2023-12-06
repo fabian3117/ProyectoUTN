@@ -62,7 +62,7 @@ public class AdapterAgregaMateria extends RecyclerView.Adapter<AdapterAgregaMate
             nombreMateria = itemView.findViewById(R.id.nombreMateria);
             pruebaChipgroup=itemView.findViewById(R.id.pruebaChipgroup);
             Chip tes=new Chip(itemView.getContext());
-            tes.setText("Prueba");
+            tes.setText("Prue-ba");
             pruebaChipgroup.addView(tes);
             nombreMateria.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

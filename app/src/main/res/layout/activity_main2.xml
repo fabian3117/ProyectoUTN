@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="600dp"
-    tools:context=".MainActivity2"
+    tools:context=".activitys.MainActivity2"
     android:id="@+id/LinearLayoutControl"
     android:foregroundGravity="center"
     android:layout_height="match_parent"

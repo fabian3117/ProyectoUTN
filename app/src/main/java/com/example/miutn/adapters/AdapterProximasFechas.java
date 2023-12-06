@@ -40,8 +40,7 @@ public class AdapterProximasFechas extends RecyclerView.Adapter<AdapterProximasF
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View misMateriasView = inflater.inflate(R.layout.recycler_fechas_examenes, parent, false);
-        AdapterProximasFechas.ViewHolder viewHolder = new AdapterProximasFechas.ViewHolder(misMateriasView);
-        return viewHolder;
+        return new ViewHolder(misMateriasView);
     }
 
     @Override

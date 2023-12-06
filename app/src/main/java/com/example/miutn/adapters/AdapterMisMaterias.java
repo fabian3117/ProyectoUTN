@@ -40,6 +40,7 @@ public class AdapterMisMaterias extends RecyclerView.Adapter<AdapterMisMaterias.
         Materias = new ArrayList<NMateriasCursando>();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(ArrayList<NMateriasCursando> newData) {
         Materias = newData;
         notifyDataSetChanged();

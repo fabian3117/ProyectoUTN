@@ -1,6 +1,7 @@
 package com.example.miutn.activitys;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.miutn.ControlDatos;
 import com.example.miutn.R;
-import com.example.miutn.activitys.MainActivity;
-import com.example.miutn.databinding.ActivityMainBinding;
+import com.example.miutn.databinding.ActivityLoginBinding;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.NMateria;
@@ -42,25 +43,30 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class Login extends AppCompatActivity {
-LinearLayout loginLinearRegistrar,loginInicioSeccion;
     ImageView imageView;
-TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
+//TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
     Retrofit retrofit = RetrofitClient.getClient();
     Snackbar snackbar;
     ApiService apiService = retrofit.create(ApiService.class);
-    private ActivityMainBinding binding;
+    private @NonNull ActivityLoginBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        loginLinearRegistrar=findViewById(R.id.loginLinearRegistrar);   //-->   Se encarga del manejo de la vista del registro y toma de datos  <--
-        loginInicioSeccion=findViewById(R.id.loginInicioSeccion);       //-->   Se encarga del manejo de la vista del inicio de seccion         <--
-        loginRegistrarme=findViewById(R.id.loginRegistrarme);
-        loginOlvideClave=findViewById(R.id.loginOlvideClave);
-        loginOlvideClave.setOnClickListener(v->{
+       // setContentView(R.layout.activity_login);
+        binding=ActivityLoginBinding.inflate(getLayoutInflater());
+        //View view1 = binding.getRoot();
+        setContentView(binding.getRoot());
+        //todo añadir bingin para el manejo de la vista
+        //binding = Inflater.inflate(getLayoutInflater());
+       // loginLinearRegistrar=findViewById(R.id.loginLinearRegistrar);   //-->   Se encarga del manejo de la vista del registro y toma de datos  <--
+        //loginInicioSeccion=findViewById(R.id.loginInicioSeccion);       //-->   Se encarga del manejo de la vista del inicio de seccion         <--
+     //   loginRegistrarme=findViewById(R.id.loginRegistrarme);
+       // loginOlvideClave=findViewById(R.id.loginOlvideClave);
+        binding.loginOlvideClave.setOnClickListener(v->{
             BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
             LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.sidesheet_olvide_clave, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.sidesheet_olvide_clave, null);
             TextInputLayout correo=view.findViewById(R.id.loginRestaurarClave);
             sideSheetDialog.setContentView(view);
             sideSheetDialog.show();
@@ -74,6 +80,7 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                 //todo deshabilito interfaz para no saturar servidor    <--
                 button.setEnabled(false);
                 apiService.restaurarClave(correo.getEditText().getText().toString()).enqueue(new Callback<Void>() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if(response.isSuccessful()){
@@ -97,58 +104,48 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                     snackbar.show();
                     }
                 });
-                //todo envio datos a servidor
             });
         });
-        //-->   TODO personalizar snackbar  <--
        snackbar=Snackbar.make(getWindow().getDecorView(),"",Snackbar.LENGTH_LONG);
          Snackbar.SnackbarLayout snackbarLayout= (Snackbar.SnackbarLayout) snackbar.getView();
-        View snackView =getWindow().getLayoutInflater().inflate(R.layout.snackbar_layout, null);
-        /* TextView Pruebasnar=snackView.findViewById(R.id.Pruebasnar);
-        imageView=snackView.findViewById(R.id.Pruebasnar2);
-        imageView.setImageResource(R.drawable.baseline_sentiment_dissatisfied_24);
-        Pruebasnar.setText("Falla");*/
-       // snackView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_snackbar_background));
-
+        @SuppressLint("InflateParams") View snackView =getWindow().getLayoutInflater().inflate(R.layout.snackbar_layout, null);
         snackbarLayout.addView(snackView, 0);
-
         snackbar.getView().setBackgroundColor(Color.parseColor("#80000000"));
         snackbar.show();
-
-        loginRegistrarme.setOnClickListener(v -> {
-            loginLinearRegistrar.setVisibility(View.VISIBLE);
-            loginInicioSeccion.setVisibility(View.GONE);
+        binding.loginRegistrarme.setOnClickListener(v -> {
+            binding.loginLinearRegistrar.setVisibility(View.VISIBLE);
+            binding.loginInicioSeccion.setVisibility(View.GONE);
         });
-        loginTengoCuenta=findViewById(R.id.loginTengoCuenta);
-        loginTengoCuenta.setOnClickListener(v -> {
+        binding.loginTengoCuenta.setOnClickListener(v -> {
             //-->   Tengo que invertir y mostrar el otro formulario <--
-            loginLinearRegistrar.setVisibility(View.GONE);
-            loginInicioSeccion.setVisibility(View.VISIBLE);
+            binding.loginLinearRegistrar.setVisibility(View.GONE);
+            binding.loginInicioSeccion.setVisibility(View.VISIBLE);
         });
-        Button loginBotonIngresar=findViewById(R.id.loginBotonIngresar);
+        //Button loginBotonIngresar=findViewById(R.id.loginBotonIngresar);
         //-->   Verificaciones boton ingresar   <--
-        loginBotonIngresar.setOnClickListener(v -> {
+        binding.loginBotonIngresar.setOnClickListener(v -> {
             //-->   Verificacion de formularios completos   <--
-            TextInputLayout loginUserPass=findViewById(R.id.loginUserPass);
-            TextInputLayout loginUserName=findViewById(R.id.loginUserName);
-            if(loginUserName.getEditText().getText().length()==0){
-                loginUserName.setError("Ingresa Usuario");
+
+            //TextInputLayout loginUserPass=findViewById(R.id.loginUserPass);
+            //TextInputLayout loginUserName=findViewById(R.id.loginUserName);
+            if(binding.loginUserName.getEditText().getText().length()==0){
+                binding.loginUserName.setError("Ingresa Usuario");
                 return;
             }
             else{
-            loginUserName.setErrorEnabled(false);
+                binding.loginUserName.setErrorEnabled(false);
             }
-            if(loginUserPass.getEditText().getText().length()==0){
-                loginUserPass.setError("Introduci clave");
+            if(binding.loginUserPass.getEditText().getText().length()==0){
+                binding.loginUserPass.setError("Introduci clave");
                 return;
             }
             else{
-                loginUserPass.setErrorEnabled(false);
+                binding.loginUserPass.setErrorEnabled(false);
             }
 
             //-->   TODO Enviar a servidor los datos    <--
             //-->   API server
-            Credenciales credenciales=new Credenciales(String.valueOf(loginUserName.getEditText().getText()),String.valueOf(loginUserPass.getEditText().getText()));
+            Credenciales credenciales=new Credenciales(String.valueOf(binding.loginUserName.getEditText().getText()),String.valueOf(binding.loginUserPass.getEditText().getText()));
             TextView ss=snackbar.getView().findViewById(R.id.Pruebasnar);
             ss.setText("Iniciando seccion \n aguarde");
             snackbar.show();
@@ -222,25 +219,20 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                 return;
             }
             Map<String,String> datos=new HashMap<>();
-            TextInputLayout loginUser=findViewById(R.id.loginUser);
-            TextInputLayout loginUserName=findViewById(R.id.loginNombre);
-            TextInputLayout loginCorreo=findViewById(R.id.loginCorreo);
-            TextInputLayout loginCarrear=findViewById(R.id.loginCarrear);
-            TextInputLayout loginUserPas=findViewById(R.id.loginUserPas);
-            TextInputLayout loginUserLegajo=findViewById(R.id.loginUserLegajo);
-            String clave=CreacionHash.sha256(loginUserPas.getEditText().getText().toString());
-            datos.put("usuario",loginUser.getEditText().getText().toString());
-            datos.put("nombre",loginUserName.getEditText().getText().toString());
-            datos.put("legajo",loginUserLegajo.getEditText().getText().toString());
-            datos.put("correo",loginCorreo.getEditText().getText().toString());
-            datos.put("carrera",loginCarrear.getEditText().getText().toString());
+
+            String clave=CreacionHash.sha256(binding.loginUserPas.getEditText().getText().toString());
+            datos.put("usuario",binding.loginUser.getEditText().getText().toString());
+            datos.put("nombre",binding.loginUserName.getEditText().getText().toString());
+            datos.put("legajo",binding.loginUserLegajo.getEditText().getText().toString());
+            datos.put("correo",binding.loginCorreo.getEditText().getText().toString());
+            datos.put("carrera",binding.loginCarrear.getEditText().getText().toString());
             apiService.existeUsuario(datos).enqueue(new Callback<ArrayList<NMateria>>() {
                 @Override
                 public void onResponse(Call<ArrayList<NMateria>> call, Response<ArrayList<NMateria>> response) {
                     if (response.isSuccessful()){
                         BottomSheetDialog sideSheetDialog = new BottomSheetDialog(v.getContext());
                         LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View view = inflater.inflate(R.layout.sidesheet_nuevo_usuario, null);
+                        @SuppressLint("InflateParams")  View view = inflater.inflate(R.layout.sidesheet_nuevo_usuario, null);
                         Button siguente=view.findViewById(R.id.sidesheetSiguente);
                         ChipGroup chipGroupLoginNuevoUsuario=view.findViewById(R.id.chipGroupLoginNuevoUsuario);
                         ArrayList<NMateria> materias=response.body();
@@ -254,9 +246,9 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                         sideSheetDialog.show();
                         siguente.setOnClickListener(v->{
                             Map<String,String> datosRegistro=new HashMap<>();
-                            datosRegistro.put("usuario",loginUser.getEditText().getText().toString());
-                            datosRegistro.put("correo",loginCorreo.getEditText().getText().toString()+"@frba.utn.edu.ar");
-                            datosRegistro.put("carrera",loginCarrear.getEditText().getText().toString());
+                            datosRegistro.put("usuario",binding.loginUser.getEditText().getText().toString());
+                            datosRegistro.put("correo",binding.loginCorreo.getEditText().getText().toString()+"@frba.utn.edu.ar");
+                            datosRegistro.put("carrera",binding.loginCarrear.getEditText().getText().toString());
                             ArrayList<String> materiasSeleccionadas=new ArrayList<>();
                             for(Integer i:chipGroupLoginNuevoUsuario.getCheckedChipIds()){
                                 Chip checkedChip = chipGroupLoginNuevoUsuario.findViewById(i);
@@ -269,8 +261,8 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
                                 datosRegistro.put("materia"+i,materiasSeleccionadas.get(i));
                             }
                             datosRegistro.put("hash",clave);
-                            datosRegistro.put("nombre",loginUserName.getEditText().getText().toString());
-                            datosRegistro.put("legajo",loginUserLegajo.getEditText().getText().toString());
+                            datosRegistro.put("nombre",binding.loginUserName.getEditText().getText().toString());
+                            datosRegistro.put("legajo",binding.loginUserLegajo.getEditText().getText().toString());
                             apiService.crearUsuario(datosRegistro).enqueue(new Callback<Perfil>() {
                                 @Override
                                 public void onResponse(Call<Perfil> call, Response<Perfil> response) {
@@ -320,53 +312,56 @@ TextView loginRegistrarme,loginTengoCuenta,loginOlvideClave;
         TextInputLayout loginUserPas=findViewById(R.id.loginUserPas);
         TextInputLayout loginCarrear=findViewById(R.id.loginCarrear);
         TextInputLayout loginUserLegajo=findViewById(R.id.loginUserLegajo);
-        if(loginUserName.getEditText().getText().length()==0){
-            loginUserName.setError("Ingresa nombre");
+        if(binding.loginUserName.getEditText().getText().length()==0){
+            binding.loginUserName.setError("Ingresa nombre");
             return false;
         }
         else{
-            loginUserName.setErrorEnabled(false);
+            binding.loginUserName.setErrorEnabled(false);
         }
-        if(loginCorreo.getEditText().getText().length()==0){
+        if(binding.loginCorreo.getEditText().getText().length()==0){
             //-->   Yo añado el @frba.utn.edu.ar
-            loginCorreo.setError("Verifica correo");
+            binding.loginCorreo.setError("Verifica correo");
             return false;
         }
         else{
-            loginCorreo.setErrorEnabled(false);
+            binding.loginCorreo.setErrorEnabled(false);
         }
-        if(loginUser.getEditText().getText().length()==0 ){
-            loginUser.setError("Verifica usuario");
+        if(binding.loginUser.getEditText().getText().length()==0 ){
+            binding.loginUser.setError("Verifica usuario");
             return false;
         }
         else{
-            loginUser.setErrorEnabled(false);
+            binding.loginUser.setErrorEnabled(false);
         }
 
-        if(loginCarrear.getEditText().getText().length()==0 ){
-            loginCarrear.setError("Introduce tu carrera");
+        if(binding.loginCarrear.getEditText().getText().length()==0 ){
+            binding.loginCarrear.setError("Introduce tu carrera");
             return false;
         }
         else{
-            loginCarrear.setErrorEnabled(false);
+            binding.loginCarrear.setErrorEnabled(false);
         }
 
-        if(loginUserPas.getEditText().getText().length()==0 ){
-            loginCarrear.setError("Introduce clave");
+        if(binding.loginUserPas.getEditText().getText().length()==0 ){
+            binding.loginCarrear.setError("Introduce clave");
             return false;
         }
         else{
-            loginUserPas.setErrorEnabled(false);
+            binding.loginUserPas.setErrorEnabled(false);
         }
-        if(loginUserLegajo.getEditText().getText().length()==0 ){
-            loginCarrear.setError("Introduce legajo");
+        if(binding.loginUserLegajo.getEditText().getText().length()==0 ){
+            binding.loginCarrear.setError("Introduce legajo");
             return false;
         }
         else{
-            loginUserLegajo.setErrorEnabled(false);
+            binding.loginUserLegajo.setErrorEnabled(false);
         }
 
         return true;
 
+    }
+
+    public void click(View view) {
     }
 }

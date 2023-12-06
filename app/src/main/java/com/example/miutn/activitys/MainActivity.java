@@ -2,17 +2,9 @@ package com.example.miutn.activitys;
 
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -22,15 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
-import android.widget.RemoteViews;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.example.miutn.ControlDatos;
 import com.example.miutn.ControlaGuardado;
@@ -42,7 +28,6 @@ import com.example.miutn.network.api.RetrofitClient;
 
 import com.example.miutn.network.models.*;
 import com.example.miutn.notifications.Notificaciones;
-import com.example.miutn.pruebaAutomatizacion;
 import com.example.miutn.utils.General;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
@@ -56,7 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
 
 import retrofit2.Retrofit;
 
@@ -64,6 +49,10 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
     //TODO : MODIFICAR SEGURIDAD PARA UTILIZAR HTTPS
     //TODO HICE AL REVES -> OBTENER DATOS EN SHAREDPREFERENCE SI NO TENEMOS VAMOS A LOGIN - ACTUALIZAMOS IGUAL  <--
+    //todo permitir invocar actualizaciones de interfaz de forma externa utilizando brodcast
+    //todo activar brodcast si se pierde conexion a internet o se optiene y mostrar snackbar    <--
+
+    ExecutorService executorService ;
     private ActivityMainBinding binding;
     Snackbar snackbar;
     Perfil perfil = new Perfil();
@@ -83,7 +72,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+       // executorService= Executors.newFixedThreadPool(4);
 
+        //todo Ajustar este lanzamiento de servicio para descarga de archivos asociados <--
+        /*
         PeriodicWorkRequest miTarea = new PeriodicWorkRequest.Builder(
                 pruebaAutomatizacion.class,
                 15, // Repetir cada 15 minutos
@@ -91,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         ).build();
 
         WorkManager.getInstance(this).enqueue(miTarea);
-
+*/
         //contenedorProximasFechas = findViewById(R.id.contenedorProximasFechas);
         linkElement();
         CargaFragment();
@@ -148,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
     public void CargaInicialTest() {
         perfil = ControlDatos.ObtenerPerfil(getApplicationContext());
         //-->   Tener un ID vacio implica que no tenemos datos entonces vamos a login   <--
+        Intent intent1= new Intent(MainActivity.this, VistaMarkdown.class);
+        startActivity(intent1);
+        finish();
+        return;
+        /*
         if (perfil.getId().isEmpty()) {
             //--->  Descarga toda la informacion de la web  <--
             snackbar.setText("Error No informacion en app");
@@ -185,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
             framentProfile.ActualizacionDatosContenidosAdapterProfile(perfil);
             ActualizaRecomendaciones(recomendaciones);
         }
+
+         */
     }
 
     public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion) {
@@ -305,6 +304,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public String obtenerDia(Integer dk){
+        //todo puedo remplazar esto por obtener chip activados - getName(); <--
+        //-->   chipSeleccionadas <--
         String d = "";
         switch (dk) {
             case 1:

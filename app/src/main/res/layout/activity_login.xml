@@ -67,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:onClick="click"
                 android:id="@+id/loginBotonIngresar"
                 style="@style/TextoRegistro"
                 android:text="@string/ingresar"/>
@@ -194,6 +195,7 @@
                 android:id="@+id/loginTengoCuenta"
                 android:layout_height="wrap_content"
                 style="@style/TextoRegistro"
+                android:onClick="click"
                 android:text="@string/tengo_cuenta"/>
         </LinearLayout>
     </FrameLayout>

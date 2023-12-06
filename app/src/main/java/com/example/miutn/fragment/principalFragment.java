@@ -131,7 +131,6 @@ public class principalFragment extends Fragment {
         Log.e("DIAA", new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date()));
         Log.e("DIA", Dia);
         Dia = "Lunes";    //TODO ELIMINAR ESTO
-        Call<ArrayList<MateriasCursando>> MateriasHoy = apiService.obtenerMateriasHoy(profileTest, Dia);
 
     }
 

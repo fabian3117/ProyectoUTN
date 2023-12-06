@@ -1,4 +1,4 @@
-package com.example.miutn;
+package com.example.miutn.activitys;
 
 import android.animation.ValueAnimator;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.miutn.R;
 
 public class MainActivity2 extends AppCompatActivity {
     //TODO Aca probare la barra de busquedas a ver si logro hacerla funcionar   <--

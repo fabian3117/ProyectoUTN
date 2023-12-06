@@ -3,34 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/fullscreenBackgroundColor"
     android:theme="@style/ThemeOverlay.MiUtn.FullscreenContainer"
-    tools:context=".activitys.VistaMarkdown">
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
+    tools:context=".activitys.FullscreenActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:keepScreenOn="false"
+        android:keepScreenOn="true"
         android:text="@string/dummy_content"
-        android:visibility="visible"
-        android:textColor="#FFF"
+        android:textColor="?attr/fullscreenTextColor"
+        android:textSize="50sp"
         android:textStyle="bold" />
-
-    </androidx.core.widget.NestedScrollView>
-
-
-    <TextView
-        android:id="@+id/sss"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:text="asd"
-        />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
@@ -50,10 +39,11 @@
 
             <Button
                 android:id="@+id/dummy_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/visto" />
+                android:text="@string/dummy_button" />
 
         </LinearLayout>
     </FrameLayout>

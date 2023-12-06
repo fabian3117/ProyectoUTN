@@ -1,4 +1,4 @@
-package com.example.miutn;
+package com.example.miutn.services;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;

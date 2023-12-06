@@ -1,5 +1,7 @@
 package com.example.miutn.network.api;
 
+import androidx.annotation.NonNull;
+
 import com.example.miutn.enums.Carreras;
 import com.example.miutn.network.models.FechasExamenes;
 import com.example.miutn.network.models.Materia;
@@ -10,6 +12,7 @@ import com.example.miutn.network.models.Perfil;
 import com.example.miutn.network.models.Temario;
 import com.example.miutn.security.Credenciales;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -25,36 +28,20 @@ import retrofit2.http.Path;
  * @noinspection unused
  */
 public interface ApiService {
-    //-->   Obtengo materias CURSANDO   <--
-    @GET("obtenerMaterias/{profile}")
-    Call<ArrayList<MateriasCursando>> obtenerMaterias(@Path("profile") String profile);
-
-    @GET("obtenerMaterias/{profile}/{dia}")
-    Call<ArrayList<MateriasCursando>> obtenerMateriasHoy(@Path("profile") String profile, @Path("dia") String dia);
 
     //-->   Obtencion de programa analitico <--
-    @PUT("obtenerPrograma")
+    @POST("obtenerPrograma")
     Call<ArrayList<NMateria>> obtenerMateriasProgramaAnal(@Body Carreras carrera);
 
-    //-->   Obtener materias CURSADAS
-    @GET("obtenerMateriasCursadas/{profile}")
-    Call<ArrayList<Materia>> obtenerMateriasCursadas(@Path("profile") String profile);
 
-    //-->   Materias que puedo cursar   <--
-    @GET("puedeCursar/{profile}")
-    Call<ArrayList<String>> obtenerPuedeCursar(@Path("profile") String profile);
 
     @POST("guardarMateria/{profile}")
     Call<NMateriasCursando> guardarNuevaMateria(@Path("profile") String profile, @Body NMateriasCursando nuevaMateria);    //-->   Subi nueva materia al servidor  <--
 
-    @GET("puedoCursar")
-    Call<ArrayList<NMateria>> materiasPuedoCursar();    //-->   Obtener materias que puedo cursar   <--
 
     @POST("CargaPerfil")
     Call<Void> subirPerfil(@Body Perfil perfil);
 
-    @GET("descargarPerfil/{perfilId}")
-    Call<Perfil> descargaPerfil(@Path("perfilId") String perfilId);
 
     @GET("obtenerFechas")
     Call<ArrayList<FechasExamenes>> obtenerProximasFechas();
@@ -81,4 +68,16 @@ public interface ApiService {
     Call<Perfil> crearUsuario(@Body Map<String,String> datos);
     @POST("restaurarClave")
     Call<Void> restaurarClave(@Body String correo);
+    //-->   Voy a pedir un apunte particular ejemplo Fisica1OpticaGeometricaTema1
+
+    /**
+     * Solicito un archivo particular para poder verlo en markdown
+     * @param apunteID  Identificador del apunte
+     * @return String con el contenido del archivo
+     */
+    @GET("apuntes/{apunteID}")
+    Call<String> solicitaApunte(@Path("apunteID") @NonNull String apunteID);
+    @POST("temaVisto/{temaID}")
+    Call<Void> temaVisto(@Path("temaID") @NonNull String temaID, @Body Perfil profile);
+
 }

@@ -1,6 +1,8 @@
 package com.example.miutn.network.models;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +18,8 @@ public class Temario implements Serializable {
     private String tema;
     private String apunte;
     private String description;
+    private LocalDateTime fechaAbierto;
+    private LocalDateTime fechaCerrado;  //-->   Tema visto y finalizado <--
 
     public String getId() {
         return id;
