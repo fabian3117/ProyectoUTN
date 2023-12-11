@@ -7,11 +7,13 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -27,9 +29,23 @@ import com.example.miutn.genericControlers.ManejoArchivos;
 import com.example.miutn.databinding.ActivityVistaMarkdownBinding;
 import com.example.miutn.network.api.ApiService;
 import com.example.miutn.network.api.RetrofitClient;
+import com.example.miutn.network.models.Perfil;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.commonmark.node.Node;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.noties.markwon.Markwon;
@@ -42,6 +58,8 @@ import retrofit2.Retrofit;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
+
+//todo Modoficar par autilizar firebase <--
 public class VistaMarkdown extends AppCompatActivity {
     LottieAnimationView dynamicAnimationView;
     Retrofit retrofit = RetrofitClient.getClient();
@@ -145,14 +163,27 @@ public class VistaMarkdown extends AppCompatActivity {
         mContentView = binding.fullscreenContent;
         fullscreen_content=binding.fullscreenContent;
         String markdownTest2=controladorArchivos.leerArchivo(getApplicationContext(),namedocument);
-        Log.e("ARCHIVOS",markdownTest2);
+      //  Log.e("ARCHIVOS",markdownTest2);
         Markwon markwon = Markwon.create(this);
+        //-->   Tengo que generarme un brodcast <--
+        //todo brodcast para poder informar cuando se descargo el archivo y visualizarlo    <--
 
-        final Node node = markwon.parse(markdownTest2);
-        final Spanned markdown = markwon.render(node);
-        markwon.setMarkdown(binding.sss, markdownTest2);
+
+        //-->   Obtenciond el archivo  <--<--
+        //con firebase
+     //   ManejoArchivos manejoArchivos=new ManejoArchivos();
+      //  namedocument="IngresoFuncionLineal.md";
+        try {
+            TestDescargarArchivos(namedocument,getApplicationContext());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        //final Node node = markwon.parse(markdownTest2);
+       // final Spanned markdown = markwon.render(node);
+       // markwon.setMarkdown(binding.sss, markdownTest2);
   //      markwon.setMarkdown(binding.fullscreenContent, markdownTest2);
-        markwon.setParsedMarkdown(binding.fullscreenContent, markdown);
+     //   markwon.setParsedMarkdown(binding.fullscreenContent, markdown);
 
         // binding.fullscreenContent.setText(markdownTest);
         // Set up the user interaction to manually show or hide the system UI.
@@ -170,11 +201,16 @@ public class VistaMarkdown extends AppCompatActivity {
             if(!entrada.get()){
                 showAnimation();
                 entrada.set(true);
-                apiService.temaVisto(namedocument, ControlDatos.ObtenerPerfil(getApplicationContext())).enqueue(new Callback<Void>() {
+                Perfil perfil=ControlDatos.ObtenerPerfil(getApplicationContext());
+                //todo aun falta terminar de informar cuando el tema fue visualizado ya.
+                /*
+
+                apiService.temaVisto(namedocument, perfil).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()){
                             Log.e("MIRA","ENTRAMOS TENEMOS QUE INFORMAR PROGRESO");
+
                         }
                         else{
                             Log.e("MIRA","ENTRAMOS PERO ALGO FALLO VER CODIGO "+response.code());
@@ -186,15 +222,61 @@ public class VistaMarkdown extends AppCompatActivity {
                     Log.e("MIRA","ERROR");
                     }
                 });
+
                 Log.e("MIRA","ENTRAMOS TENEMOS QUE INFORMAR PROGRESO");
                 //-->   Buscar en el temario asociados con ese id y dar por visto el tema   <--
                 //-->   Informar al servidor que se ha visto el tema   <--
                 //-->   En caso de respuesta satisfactoria realizar la modificacion <--
 
+
+                 */
+
             //    binding.fullscreenContentControls.getRootView().get
             }
         });
     }
+
+    public void TestDescargarArchivos(String archivo,Context context) throws IOException {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageRef = firebaseStorage.getReference();
+        StorageReference pathReference = storageRef.child(archivo);
+        String nombreArchivo = archivo.replace(".md", "").replaceAll("[^a-zA-Z0-9.-]", "_");
+        File localFile = File.createTempFile(archivo.replace(".md",""), "md");
+        ManejoArchivos manejoArchivos=new ManejoArchivos();
+        pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(localFile));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    String contenidoArchivo = stringBuilder.toString();
+                    Log.e("MIRA",contenidoArchivo);
+                    Markwon markwon = Markwon.create(getApplicationContext());
+                    final Node node = markwon.parse(contenidoArchivo);
+                    final Spanned markdown = markwon.render(node);
+                    binding.fullscreenContent.setText(markdown);
+                    markwon.setParsedMarkdown(binding.fullscreenContent, markdown);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("FIREBASE","ERROR");
+                Snackbar snackbar=Snackbar.make(getCurrentFocus(),"FALLO EN CONEXION", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+
+    }
+
+
     private void showAnimation() {
         //-->   todo Optimizar esto   <--
         // Crear dinámicamente una LottieAnimationView
@@ -207,7 +289,6 @@ public class VistaMarkdown extends AppCompatActivity {
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT
         );
-
         // Limpiar el contenedor antes de agregar la vista
 
         binding.fullscreenContentControls.removeAllViews();
@@ -274,6 +355,7 @@ public class VistaMarkdown extends AppCompatActivity {
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
      */
+
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);

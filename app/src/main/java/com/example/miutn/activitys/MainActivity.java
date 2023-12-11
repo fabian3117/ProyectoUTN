@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +30,9 @@ import com.example.miutn.network.api.RetrofitClient;
 import com.example.miutn.network.models.*;
 import com.example.miutn.notifications.Notificaciones;
 import com.example.miutn.utils.General;
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -36,7 +40,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -133,18 +142,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        CargaInicialTest();
+        try {
+            CargaInicialTest();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
-    public void CargaInicialTest() {
+    public void CargaInicialTest() throws IOException {
         perfil = ControlDatos.ObtenerPerfil(getApplicationContext());
         //-->   Tener un ID vacio implica que no tenemos datos entonces vamos a login   <--
-        Intent intent1= new Intent(MainActivity.this, VistaMarkdown.class);
-        startActivity(intent1);
-        finish();
-        return;
-        /*
+        //Intent intent = new Intent(MainActivity.this, VistaMarkdown.class);
+        //startActivity(intent);
+        //finish();
+
+       // TestDescargarArchivos();
         if (perfil.getId().isEmpty()) {
             //--->  Descarga toda la informacion de la web  <--
             snackbar.setText("Error No informacion en app");
@@ -157,21 +170,7 @@ public class MainActivity extends AppCompatActivity {
             programaAnalitico = ControlDatos.ObtencionProgramaAnalitico(getApplicationContext());
             ArrayList<Temario> recomendaciones = ControlDatos.ObtenerRecomendaciones(getApplicationContext());
             //-->   Añado recomendaciones falzas   <--<--
-            //todo añadir recomendaciones y incluir ciclo de actualizacion  <--
-            Temario tema = new Temario();
-            tema.setApunte("ts");
-            tema.setDescription("Sss");
-            tema.setTema("aaaa");
-            tema.setId("prueba.md");
-            Temario tema0 = new Temario();
-            tema0.setApunte("Segundo");
-            tema0.setDescription("DEscrip");
-            tema0.setTema("orueba");
-            tema0.setId("probandomark.md");
-            recomendaciones.add(tema);
-            recomendaciones.add(tema0);
             ArrayList<NMateriasCursando> materiasCursando = ControlDatos.ObtencionObtenerMateriasCursando(getApplicationContext());
-//todo utilizar programa analitico para llenar el sidesheet
             //-->   Actualizaciones de fragment <--
             ObtencionMateriasHoy(perfil);
             fragmentMisMat.ActualizacionDatosContenidosAdapterMisMaterias_Programa(programaAnalitico);
@@ -183,7 +182,34 @@ public class MainActivity extends AppCompatActivity {
             ActualizaRecomendaciones(recomendaciones);
         }
 
-         */
+
+    }
+    public void TestDescargarArchivos() throws IOException {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageRef = firebaseStorage.getReference();
+        String archivo="IngresoFuncionLineal.md";
+        StorageReference pathReference = storageRef.child(archivo);
+       // StorageReference gsReference = firebaseStorage.getReferenceFromUrl("gs://miutn-1834d.appspot.com"+archivo);
+        File localFile = File.createTempFile(archivo.replace(".md",""), "md");
+
+        pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // Local temp file has been created
+                Log.e("FIREBASE","EXITO");
+                Log.e("FIREBASE","taskSnapshot.");
+                if(taskSnapshot.getTask().isSuccessful()){
+                    //-->   Save Files  <--
+
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("FIREBASE","ERROR");
+            }
+        });
+
     }
 
     public void ActualizaRecomendaciones(ArrayList<Temario> recomendacion) {
